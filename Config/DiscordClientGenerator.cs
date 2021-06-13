@@ -11,7 +11,7 @@ namespace Config
 {
     public class DiscordClientGenerator
     {
-        private static readonly string[] PREFIX = new[] { "*" };
+        private static readonly string[] PREFIX = new[] { ":" };
 
         private readonly string _token;
         private readonly DiscordClient _client;
@@ -37,14 +37,17 @@ namespace Config
         private DiscordConfiguration AssembleConfig()
         {
             return new DiscordConfiguration()
-                {
-                    Token = _token,
-                    TokenType = TokenType.Bot,
-                    Intents = DiscordIntents.AllUnprivileged
-                };
+            {
+                Token = _token,
+                TokenType = TokenType.Bot,
+                Intents = DiscordIntents.AllUnprivileged
+            };
         }
 
-        public CommandsNextExtension Commands { get { return _commands; } }
+        public void Register<T>() where T : BaseCommandModule
+        {
+            _commands.RegisterCommands<T>();
+        }
 
         public DiscordClient Client { get { return _client; } }
     }

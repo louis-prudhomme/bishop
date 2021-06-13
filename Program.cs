@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using DSharpPlus;
+
 using Commands;
 using Config;
-using System.Net.Sockets;
 using Bishop.Config;
+using Bishop.Commands;
 
 namespace Bishop
 {
@@ -23,15 +25,17 @@ namespace Bishop
         [STAThread]
         static void Main(string[] args)
         {
+            HerokuConfigurator.Herocul(_fkinHerokuPort);
             Tomato.Tomatoes = new TomatoConfigurator(_tomatoesFilePath)
                 .ReadTomatoesAsync()
                 .Result;
 
             _generator = new DiscordClientGenerator(_token);
-            _generator.Commands.RegisterCommands<Tomato>();
-            _discord = _generator.Client;
 
-            HerokuConfigurator.Herocul(_fkinHerokuPort);
+            _generator.Register<Tomato>();
+            _generator.Register<Diktatur>();
+
+            _discord = _generator.Client;
 
             MainAsync()
                 .GetAwaiter()
