@@ -7,16 +7,24 @@ using DSharpPlus.CommandsNext;
 
 using Commands;
 using Config;
+using GiphyDotNet.Manager;
 
 namespace Bishop
 {
     class Program
     {
-        private static readonly DiscordConfigGenerator _configGenerator = new DiscordConfigGenerator(ConfigurationManager.AppSettings.Get("token"));
+        private static readonly DiscordConfigGenerator _configGenerator = new DiscordConfigGenerator(ConfigurationManager.AppSettings.Get("discord-token"));
+        private static readonly string _tomatoesFilePath = ConfigurationManager.AppSettings.Get("tomatoes");
 
         static void Main(string[] args)
         {
-            MainAsync().GetAwaiter().GetResult();
+            Tomato.Tomatoes = new TomatoConfigurator(_tomatoesFilePath)
+                .ReadTomatoesAsync()
+                .Result;
+
+            MainAsync()
+                .GetAwaiter()
+                .GetResult();
         }
 
         static async Task MainAsync() 

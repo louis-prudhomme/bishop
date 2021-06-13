@@ -1,17 +1,21 @@
-using System;
+﻿using System;
 using DSharpPlus.CommandsNext;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using System.Collections.Generic;
 
 namespace Commands
 {
     public class Tomato : BaseCommandModule
     {
+        public static List<string> Tomatoes;
+        private static Random _rand = new Random();
+
         [Command("tomato"), Aliases("t")]
         public async Task Throw(CommandContext context, DiscordMember member)
         {
-            await context.RespondAsync($"{member.Mention} 🍅 !");
+            await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
         }
     }
 }
