@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using DSharpPlus;
-using DSharpPlus.CommandsNext;
-
 using Commands;
 using Config;
 using System.Net.Sockets;
+using Bishop.Config;
 
 namespace Bishop
 {
     class Program
     {
-        private static readonly DiscordConfigGenerator _configGenerator = new DiscordConfigGenerator(Environment.GetEnvironmentVariable("DISCORD_TOKEN"));
-        private static readonly string _tomatoesFilePath = Environment.GetEnvironmentVariable("TOMATOES_FILE");
-        private static readonly int _fkinHerokuPort = int.Parse(Environment.GetEnvironmentVariable("PORT"));
+        private static readonly string _token = Environment
+            .GetEnvironmentVariable("DISCORD_TOKEN");
+        private static readonly string _tomatoesFilePath = Environment
+            .GetEnvironmentVariable("TOMATOES_FILE");
+        private static readonly string _fkinHerokuPort = Environment
+            .GetEnvironmentVariable("PORT");
+
+        private static DiscordClient _discord;
+        private static DiscordClientGenerator _generator;
 
         [STAThread]
         static void Main(string[] args)
@@ -23,26 +27,20 @@ namespace Bishop
                 .ReadTomatoesAsync()
                 .Result;
 
+            _generator = new DiscordClientGenerator(_token);
+            _generator.Commands.RegisterCommands<Tomato>();
+            _discord = _generator.Client;
+
+            HerokuConfigurator.Herocul(_fkinHerokuPort);
+
             MainAsync()
                 .GetAwaiter()
                 .GetResult();
         }
 
-        static async Task MainAsync() 
+        static async Task MainAsync()
         {
-            var discord = new DiscordClient(_configGenerator.Configuration);
-
-            var commands = discord.UseCommandsNext(new CommandsNextConfiguration() 
-            {
-                StringPrefixes = new[] { "!" }
-            });
-
-            commands.RegisterCommands<Tomato>();
-
-            var l = new TcpListener(_fkinHerokuPort);
-            l.Start();
-
-            await discord.ConnectAsync();
+            await _discord.ConnectAsync();
             await Task.Delay(-1);
         }
     }
