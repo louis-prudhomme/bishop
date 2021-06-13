@@ -14,6 +14,7 @@ namespace Bishop
         private static readonly DiscordConfigGenerator _configGenerator = new DiscordConfigGenerator(Environment.GetEnvironmentVariable("DISCORD_TOKEN"));
         private static readonly string _tomatoesFilePath = Environment.GetEnvironmentVariable("TOMATOES_FILE");
 
+        [STAThread]
         static void Main(string[] args)
         {
             Tomato.Tomatoes = new TomatoConfigurator(_tomatoesFilePath)
