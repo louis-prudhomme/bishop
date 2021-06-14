@@ -7,6 +7,9 @@ using Commands;
 using Config;
 using Bishop.Config;
 using Bishop.Commands;
+using log4net;
+using System.Reflection;
+using log4net.Config;
 
 namespace Bishop
 {
@@ -22,10 +25,18 @@ namespace Bishop
         private static DiscordClient _discord;
         private static DiscordClientGenerator _generator;
 
+        private static readonly ILog _log = LogManager
+            .GetLogger(MethodBase.GetCurrentMethod()
+            .DeclaringType);
+
         [STAThread]
         static void Main(string[] args)
         {
-            HerokuConfigurator.Herocul(_fkinHerokuPort);
+            XmlConfigurator.Configure();
+
+            new HerokuConfigurator(_fkinHerokuPort, _log)
+                .Herocul();
+
             Tomato.Tomatoes = new TomatoConfigurator(_tomatoesFilePath)
                 .ReadTomatoesAsync()
                 .Result;
@@ -38,6 +49,8 @@ namespace Bishop
 
             _discord = _generator.Client;
 
+            _log.Info("Awaiting commands");
+            
             MainAsync()
                 .GetAwaiter()
                 .GetResult();
