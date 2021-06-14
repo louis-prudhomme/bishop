@@ -32,8 +32,9 @@ namespace Bishop
 
             _generator = new DiscordClientGenerator(_token);
 
-            _generator.Register<Tomato>();
             _generator.Register<Diktatur>();
+            _generator.Register<Tomato>();
+            _generator.Register<Vote>();
 
             _discord = _generator.Client;
 
