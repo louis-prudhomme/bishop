@@ -14,9 +14,9 @@ namespace Bishop.Commands
     {
         private static Random _rand = new Random();
 
-        [Command("diktat"), Aliases("d", "rand", "r")]
+        [Command("Random"), Aliases("rand", "r")]
         [Description("Make a random choice")]
-        public async Task Diktat(CommandContext context, params string[] args)
+        public async Task Diktat(CommandContext context, [Description("Options to choose from")] params string[] args)
         {
             await context.RespondAsync($"🎲 ⇒ {args[_rand.Next(args.Length)]}");
         }

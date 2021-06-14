@@ -8,6 +8,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using Microsoft.Extensions.Logging;
 using Bishop.Config;
+using DSharpPlus.CommandsNext.Converters;
 
 namespace Config 
 {
@@ -26,6 +27,7 @@ namespace Config
             _client = new DiscordClient(AssembleConfig());
 
             _commands = _client.UseCommandsNext(AssembleCommands());
+            _commands.SetHelpFormatter<DefaultHelpFormatter>();
         }
 
         private CommandsNextConfiguration AssembleCommands()

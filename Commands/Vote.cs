@@ -21,7 +21,7 @@ namespace Bishop.Commands
 
         [Command("referendum"), Aliases("vote", "v")]
         [Description("Create a poll")]
-        public async Task Referendum(CommandContext context, params string[] args)
+        public async Task Referendum(CommandContext context, [Description("Options to choose from")] params string[] args)
         {
             var messageBuilder = new StringBuilder(MESSAGE_BASE);
 

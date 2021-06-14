@@ -14,7 +14,7 @@ namespace Commands
 
         [Command("tomato"), Aliases("t")]
         [Description("Throw a tomato to @someone")]
-        public async Task Throw(CommandContext context, DiscordMember member)
+        public async Task Throw(CommandContext context, [Description("User to throw the tomato at!")] DiscordMember member)
         {
             await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
         }

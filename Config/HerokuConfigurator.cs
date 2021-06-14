@@ -23,40 +23,17 @@ namespace Bishop.Config
         }
 
         public void Herocul()
-        {
+        { 
+            new TcpListener(IPAddress.Any, _port).Start();
             new Thread(new ThreadStart(Ping)).Start();
         }
 
         private void Ping()
-        {
-            using (var ping = new DisposableTcpListener(_port))
-            {
-                ping.Start();
-            }
-            
-            _log.Info($"Pinged for the {++counter}th time");
+        {            
+            _log.Info($"{++counter}th ping !");
 
             Thread.Sleep(SLEEP_TIME_MILLI);
             Ping();
-        }
-
-        public class DisposableTcpListener : IDisposable
-        {
-            private static readonly IPAddress ADDRESS = IPAddress.Any;
-            private readonly TcpListener _underlying;
-
-            public DisposableTcpListener(int port) 
-            { 
-                _underlying = new TcpListener(ADDRESS, port);
-            }
-
-            public void Dispose()
-            {
-                Stop();
-            }
-
-            public void Start() { _underlying.Start(); }
-            public void Stop() { _underlying.Stop(); }
         }
     }
 }
