@@ -1,4 +1,6 @@
 ﻿using log4net;
+using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -10,6 +12,7 @@ namespace Bishop.Config
 
         private readonly ILog _log;
         private readonly int _port;
+        
 
         private int counter = 0;
 
@@ -21,23 +24,39 @@ namespace Bishop.Config
 
         public void Herocul()
         {
-            new TcpListener(System.Net.IPAddress.Any, _port)
-                .Start();
-
             new Thread(new ThreadStart(Ping)).Start();
         }
 
         private void Ping()
         {
-            using (var ping = new System.Net.NetworkInformation.Ping())
+            using (var ping = new DisposableTcpListener(_port))
             {
-                ping.Send("ping.me");
+                ping.Start();
             }
             
-            _log.Info($"Pinged for the {counter++}th time");
+            _log.Info($"Pinged for the {++counter}th time");
 
             Thread.Sleep(SLEEP_TIME_MILLI);
             Ping();
+        }
+
+        public class DisposableTcpListener : IDisposable
+        {
+            private static readonly IPAddress ADDRESS = IPAddress.Any;
+            private readonly TcpListener _underlying;
+
+            public DisposableTcpListener(int port) 
+            { 
+                _underlying = new TcpListener(ADDRESS, port);
+            }
+
+            public void Dispose()
+            {
+                Stop();
+            }
+
+            public void Start() { _underlying.Start(); }
+            public void Stop() { _underlying.Stop(); }
         }
     }
 }
