@@ -19,7 +19,7 @@ namespace Bishop.Commands
         private static readonly string MESSAGE_BASE = "**Aux urnes !**";
         private static readonly int A_ASCII_INDEX = 97;
 
-        [Command("referendum")]
+        [Command("referendum"), Aliases("vote", "v")]
         [Description("Create a poll")]
         public async Task Referendum(CommandContext context, params string[] args)
         {
