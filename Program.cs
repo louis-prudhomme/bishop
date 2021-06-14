@@ -34,7 +34,7 @@ namespace Bishop
         {
             XmlConfigurator.Configure();
 
-            new HerokuConfigurator(_fkinHerokuPort, _log)
+            new HerokuConfigurator(_fkinHerokuPort)
                 .Herocul();
 
             Tomato.Tomatoes = new TomatoConfigurator(_tomatoesFilePath)
