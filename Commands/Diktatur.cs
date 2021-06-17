@@ -12,9 +12,8 @@ namespace Bishop.Commands
 {
     public class Diktatur : BaseCommandModule
     {
-        private static readonly string BASE_EMOJI_HEX = "U+1F6";
-        private static readonly int MAX_EMOJI_HEX = 644;
-        private static readonly string PADDER = "000";
+        private static readonly int BASE_EMOJI_HEX = 0x1F600;
+        private static readonly int MAXX_EMOJI_HEX = 44;
         private static Random _rand = new Random();
 
 
@@ -29,9 +28,9 @@ namespace Bishop.Commands
         [Description("Picks a random emoji")]
         public async Task DiktatEmoji(CommandContext context)
         {
-            string emojiCode = BASE_EMOJI_HEX + _rand.Next(0, MAX_EMOJI_HEX).ToString(PADDER);
-            
-            await context.RespondAsync($"I’ve picked {char.Parse(emojiCode)}");
+            int emojiCode = BASE_EMOJI_HEX + _rand.Next(0, MAXX_EMOJI_HEX);
+
+            await context.RespondAsync($"I’ve picked {char.ConvertFromUtf32(emojiCode)}");
         }
     }
 }
