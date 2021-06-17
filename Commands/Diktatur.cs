@@ -30,7 +30,7 @@ namespace Bishop.Commands
         {
             int emojiCode = BASE_EMOJI_HEX + _rand.Next(0, MAXX_EMOJI_HEX);
 
-            await context.RespondAsync($"I’ve picked {char.ConvertFromUtf32(emojiCode)}");
+            await context.RespondAsync($"I’ve picked : {char.ConvertFromUtf32(emojiCode)}");
         }
     }
 }
