@@ -8,13 +8,8 @@ namespace Bishop.Config
 {
     class HerokuConfigurator
     {
-        private static readonly int SLEEP_TIME_MILLI = 600000;
-
         private readonly int _port;
         
-
-        private int counter = 0;
-
         public HerokuConfigurator(string port)
         {
             _port = int.Parse(port);
