@@ -10,7 +10,7 @@ namespace Commands
     public class Tomato : BaseCommandModule
     {
         public static List<string> Tomatoes;
-        private static Random _rand = new Random();
+        private static readonly Random _rand = new();
 
         [Command("tomato"), Aliases("t")]
         [Description("Throw a tomato to @someone")]

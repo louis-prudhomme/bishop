@@ -7,7 +7,6 @@ using System.Text.Json.Serialization;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using Microsoft.Extensions.Logging;
-using Bishop.Config;
 using DSharpPlus.CommandsNext.Converters;
 
 namespace Config 

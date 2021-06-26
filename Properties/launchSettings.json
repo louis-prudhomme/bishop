@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Bishop": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DISCORD_TOKEN": "ODU4MzQ5Mzc1NzA4MzMyMDkz.YNc2Jg.Kc9n_1yCjvcODoRXysm3mmSdsFY"
+      }
+    }
+  }
+}

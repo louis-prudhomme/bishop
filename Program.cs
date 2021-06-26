@@ -5,7 +5,6 @@ using DSharpPlus;
 
 using Commands;
 using Config;
-using Bishop.Config;
 using Bishop.Commands;
 using log4net;
 using System.Reflection;
@@ -15,12 +14,9 @@ namespace Bishop
 {
     class Program
     {
+        private static readonly string TOMATO_FILE_PATH = "./Resources/tomatoes.json";
         private static readonly string _token = Environment
             .GetEnvironmentVariable("DISCORD_TOKEN");
-        private static readonly string _tomatoesFilePath = Environment
-            .GetEnvironmentVariable("TOMATOES_FILE");
-        private static readonly string _fkinHerokuPort = Environment
-            .GetEnvironmentVariable("PORT");
 
         private static DiscordClient _discord;
         private static DiscordClientGenerator _generator;
@@ -34,16 +30,13 @@ namespace Bishop
         {
             XmlConfigurator.Configure();
 
-            new HerokuConfigurator(_fkinHerokuPort)
-                .Herocul();
-
-            Tomato.Tomatoes = new TomatoConfigurator(_tomatoesFilePath)
+            Tomato.Tomatoes = new TomatoConfigurator(TOMATO_FILE_PATH)
                 .ReadTomatoesAsync()
                 .Result;
 
             _generator = new DiscordClientGenerator(_token);
 
-            _generator.Register<Diktatur>();
+            _generator.Register<Randomizer>();
             _generator.Register<Tomato>();
             _generator.Register<Vote>();
 
