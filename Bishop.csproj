@@ -6,14 +6,18 @@
     <OldToolsVersion>Current</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Resources\Randy_Man.jpg" />
+    <None Remove="Resources\slenders.json" />
+    <None Remove="Resources\Slenders.png" />
     <None Remove="Resources\tomatoes.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\tomatoes.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-	  <EmbeddedResource Include="Resources\Randy_Man.jpg">
+	  <EmbeddedResource Include="Resources\slenders.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="Resources\Slenders.png">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </EmbeddedResource>
   </ItemGroup>
@@ -28,6 +32,7 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Randy_Man.jpg" />
+    <Resource Include="Resources\slenders.json" />
+    <Resource Include="Resources\Slenders.png" />
   </ItemGroup>
 </Project>

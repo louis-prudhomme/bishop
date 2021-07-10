@@ -15,6 +15,7 @@ namespace Bishop
     class Program
     {
         private static readonly string TOMATO_FILE_PATH = "./Resources/tomatoes.json";
+        private static readonly string STALK_FILE_PATH = "./Resources/slenders.json";
         private static readonly string _token = Environment
             .GetEnvironmentVariable("DISCORD_TOKEN");
 
@@ -32,6 +33,10 @@ namespace Bishop
 
             Tomato.Tomatoes = new TomatoConfigurator(TOMATO_FILE_PATH)
                 .ReadTomatoesAsync()
+                .Result;
+
+            Stalk.Lines = new StalkConfigurator(STALK_FILE_PATH)
+                .ReadStalkAsync()
                 .Result;
 
             _generator = new DiscordClientGenerator(_token);
