@@ -22,8 +22,7 @@ namespace Bishop.Commands.Meter
                     .OfType<Keys>()
                     .FirstOrDefault(key => key
                         .ToString()
-                        .ToUpper()
-                        .Equals(value))));
+                        .Equals(value.ToUpper()))));
 
             return Task.FromResult(Optional.FromNoValue<Keys>());
         }
