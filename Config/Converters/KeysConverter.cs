@@ -1,4 +1,5 @@
-﻿using DSharpPlus.CommandsNext;
+﻿using Bishop.Commands.Meter;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
 using DSharpPlus.Entities;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bishop.Commands.Meter
+namespace Bishop.Config.Converters
 {
     class KeysConverter : IArgumentConverter<Keys>
     {

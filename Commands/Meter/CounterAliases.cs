@@ -4,6 +4,7 @@ using DSharpPlus.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace Bishop.Commands.Meter
         public async Task Score(CommandContext context,
             [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")] Keys key,
             [Description("User to know the score of")] DiscordMember member,
-            [Description("To increment by")] int nb)
+            [Description("To increment by")] long nb)
         {
             await Score(context, member, key, nb);
         }
@@ -34,7 +35,7 @@ namespace Bishop.Commands.Meter
         [Description("Adds a provided value to @someone’s sel score")]
         public async Task ScoreSel(CommandContext context,
             [Description("User to know the sel score of")] DiscordMember member,
-            [Description("To increment by")] int nb)
+            [Description("To increment by")] long nb)
         {
             await Score(context, member, Keys.SEL, nb);
         }
@@ -43,7 +44,7 @@ namespace Bishop.Commands.Meter
         [Description("Adds a provided value to @someone’s sauce score")]
         public async Task ScoreSauce(CommandContext context,
             [Description("User to know the sauce score of")] DiscordMember member,
-            [Description("To increment by")] int nb)
+            [Description("To increment by")] long nb)
         {
             await Score(context, member, Keys.SAUCE, nb);
         }
@@ -52,7 +53,7 @@ namespace Bishop.Commands.Meter
         [Description("Adds a provided value to @someone’s BDM score")]
         public async Task ScoreBdm(CommandContext context,
             [Description("User to know the BDM score of")] DiscordMember member,
-            [Description("To increment by")] int nb)
+            [Description("To increment by")] long nb)
         {
             await Score(context, member, Keys.BDM, nb);
         }

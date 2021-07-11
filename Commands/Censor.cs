@@ -12,7 +12,7 @@ namespace Bishop.Commands
     class Censor : BaseCommandModule
     {
         [Command("delete"), Aliases("d")]
-        [Description("Deletes all the messages")]
+        [Description("Deletes all the messages between the command and the one replied to.")]
         public async Task Delete(CommandContext context)
         {
             if (context.Message.MessageType == DSharpPlus.MessageType.Reply)

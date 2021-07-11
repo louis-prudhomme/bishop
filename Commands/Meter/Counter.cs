@@ -8,6 +8,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.CommandsNext.Attributes;
 using Bishop.Commands.Meter;
+using System.Numerics;
 
 namespace Bishop.Commands.Meter
 {
@@ -63,7 +64,7 @@ namespace Bishop.Commands.Meter
         public async Task Score(CommandContext context,
             [Description("User to know the score of")] DiscordMember member,
             [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")] Keys key,
-            [Description("To increment by")] int nb)
+            [Description("To increment by")] long nb)
         {
             var record = Enumerat.FindAsync(member.Username, key).Result;
             var previous = record.Score;

@@ -9,6 +9,7 @@ using DSharpPlus.CommandsNext;
 using Microsoft.Extensions.Logging;
 using DSharpPlus.CommandsNext.Converters;
 using Bishop.Commands.Meter;
+using Bishop.Config.Converters;
 
 namespace Config
 {

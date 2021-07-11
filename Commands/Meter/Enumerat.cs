@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Bishop.Commands.Meter
         public string Id { get; set; }
         public string User { get; set; }
         public Keys Key { get; set; }
-        public int Score { get; set; }
+        public long Score { get; set; }
 
         private readonly bool _nue = false;
 
@@ -35,17 +36,10 @@ namespace Bishop.Commands.Meter
 
         public async Task Commit()
         {
-            try
-            {
-                if (_nue)
-                    await Collection.InsertOneAsync(this);
-                else await Collection.UpdateOneAsync(GetFilter(User, Key),
-                    Builders<Enumerat>.Update.Set("Score", Score));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            if (_nue)
+                await Collection.InsertOneAsync(this);
+            else await Collection.UpdateOneAsync(GetFilter(User, Key),
+                Builders<Enumerat>.Update.Set("Score", Score));
         }
         public static async Task<List<Enumerat>> FindAllAsync(Keys key)
         {
