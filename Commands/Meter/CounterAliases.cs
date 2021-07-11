@@ -24,7 +24,7 @@ namespace Bishop.Commands.Meter
         [Command("score")]
         [Description("Returns @someone’s score for a specific key")]
         public async Task Score(CommandContext context,
-            [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")] Keys key, 
+            [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")] Keys key,
             [Description("@User to know the score of")] DiscordMember member)
         {
             await Score(context, member, key);

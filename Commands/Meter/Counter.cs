@@ -19,11 +19,11 @@ namespace Bishop.Commands.Meter
             [Description("@User to know the scores of")] DiscordMember member)
         {
             var scores = Enum.GetValues(typeof(Keys))
-            .OfType<Keys>()
-            .Select(key => Enumerat.FindAsync(member.Username, key)
-                .Result)
-            .Where(key => key != null)
-            .Select(key => key.ToString());
+                .OfType<Keys>()
+                .Select(key => Enumerat.FindAsync(member.Username, key)
+                    .Result)
+                .Where(key => key != null)
+                .Select(key => key.ToString());
 
             if (!scores.Any())
                 await context.RespondAsync($"No scores for user {member.Username}");
