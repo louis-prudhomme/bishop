@@ -29,6 +29,7 @@ namespace Bishop.Commands.Meter
             User = user;
             Key = key;
             Score = 0;
+
             _nue = true;
         }
 
@@ -36,7 +37,7 @@ namespace Bishop.Commands.Meter
         {
             try
             {
-                if (isNew)
+                if (_nue)
                     await Collection.InsertOneAsync(this);
                 else await Collection.UpdateOneAsync(GetFilter(User, Key),
                     Builders<Enumerat>.Update.Set("Score", Score));
@@ -73,7 +74,6 @@ namespace Bishop.Commands.Meter
             return $"{User}’s {Key} ⇒ {Score}";
         }
 
-        private bool isNew => _nue;
         private static IMongoCollection<Enumerat> Collection => Mongo.GetDatabase(Database).GetCollection<Enumerat>(CollectionName);
     }
 }
