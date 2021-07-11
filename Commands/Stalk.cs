@@ -12,15 +12,17 @@ namespace Commands
     {
         private static string path = "./Resources/Slenders.png";
         public static Dictionary<string, string> Lines;
+
         [Command("stalk"), Aliases("st")]
         [Description("Invoke a discussion betweden you and one of the five Slenders")]
         public async Task Roast(CommandContext context)
         {
-                await context.RespondAsync(new DiscordMessageBuilder().WithFile(new FileStream(path, FileMode.Open)));
+            await context.RespondAsync(new DiscordMessageBuilder().WithFile(new FileStream(path, FileMode.Open)));
         }
+
         [Command("stalk")]
         [Description("Invoke a discussion betweden you and one of the five Slenders")]
-        public async Task Roast(CommandContext context,[RemainingText] string name)
+        public async Task Roast(CommandContext context, [RemainingText] string name)
         {
             await context.RespondAsync(Lines[name]);
         }

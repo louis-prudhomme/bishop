@@ -9,6 +9,7 @@ using Bishop.Commands;
 using log4net;
 using System.Reflection;
 using log4net.Config;
+using Bishop.Commands.Meter;
 
 namespace Bishop
 {
@@ -16,8 +17,13 @@ namespace Bishop
     {
         private static readonly string TOMATO_FILE_PATH = "./Resources/tomatoes.json";
         private static readonly string STALK_FILE_PATH = "./Resources/slenders.json";
-        private static readonly string _token = Environment
+
+        private static readonly string _discordToken = Environment
             .GetEnvironmentVariable("DISCORD_TOKEN");
+        private static readonly string _mongoToken = Environment
+            .GetEnvironmentVariable("MONGO_TOKEN");
+        private static readonly string _mongoDatabase = Environment
+            .GetEnvironmentVariable("MONGO_DB");
 
         private static DiscordClient _discord;
         private static DiscordClientGenerator _generator;
@@ -39,17 +45,20 @@ namespace Bishop
                 .ReadStalkAsync()
                 .Result;
 
-            _generator = new DiscordClientGenerator(_token);
+            Enumerat.Database = _mongoDatabase;
+            Enumerat.Mongo = new MongoDB.Driver.MongoClient(_mongoToken);
+            _generator = new DiscordClientGenerator(_discordToken);
 
             _generator.Register<Randomizer>();
             _generator.Register<Stalk>();
             _generator.Register<Tomato>();
             _generator.Register<Vote>();
+            _generator.Register<Counter>();
 
             _discord = _generator.Client;
 
             _log.Info("Awaiting commands");
-            
+
             MainAsync()
                 .GetAwaiter()
                 .GetResult();
