@@ -9,9 +9,9 @@ using DSharpPlus.Entities;
 using DSharpPlus.CommandsNext.Attributes;
 using Bishop.Commands.Meter;
 
-namespace Bishop.Commands
+namespace Bishop.Commands.Meter
 {
-    class Counter : BaseCommandModule
+    partial class Counter : BaseCommandModule
     {
         [Command("score"), Aliases("s")]
         [Description("Returns the list of @someone’s scores")]

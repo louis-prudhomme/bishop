@@ -14,7 +14,7 @@ namespace Config
 {
     public class DiscordClientGenerator
     {
-        private static readonly string[] PREFIX = new[] { ":" };
+        private static readonly string[] PREFIX = new[] { ";" };
 
         private readonly string _token;
         private readonly DiscordClient _client;
