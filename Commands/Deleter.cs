@@ -6,7 +6,10 @@ using DSharpPlus.CommandsNext.Attributes;
 
 namespace Bishop.Commands
 {
-    internal class Censor : BaseCommandModule
+    /// <summary>
+    /// This class provides a set of commands to delete messages. 
+    /// </summary>
+    internal class Deleter : BaseCommandModule
     {
         [Command("delete")]
         [Aliases("d")]

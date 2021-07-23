@@ -5,29 +5,33 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Meter
 {
+    /// <summary>
+    /// Aliases for the <c>Counter</c> class.
+    /// See <see cref="Counter"/>
+    /// </summary>
     internal partial class Counter
     {
         [Command("score")]
         [Description("Adds a provided value to @someone’s score")]
         public async Task Score(CommandContext context,
             [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
-            Keys key,
+            MeterCategories meterCategory,
             [Description("User to know the score of")]
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
-            await Score(context, member, key, nb);
+            await Score(context, member, meterCategory, nb);
         }
 
         [Command("score")]
         [Description("Returns @someone’s score for a specific key")]
         public async Task Score(CommandContext context,
             [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
-            Keys key,
+            MeterCategories meterCategory,
             [Description("@User to know the score of")]
             DiscordMember member)
         {
-            await Score(context, member, key);
+            await Score(context, member, meterCategory);
         }
 
         [Command("sel")]
@@ -37,7 +41,7 @@ namespace Bishop.Commands.Meter
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
-            await Score(context, member, Keys.Sel, nb);
+            await Score(context, member, MeterCategories.Sel, nb);
         }
 
         [Command("sauce")]
@@ -47,7 +51,7 @@ namespace Bishop.Commands.Meter
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
-            await Score(context, member, Keys.Sauce, nb);
+            await Score(context, member, MeterCategories.Sauce, nb);
         }
 
         [Command("bdm")]
@@ -57,7 +61,7 @@ namespace Bishop.Commands.Meter
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
-            await Score(context, member, Keys.Bdm, nb);
+            await Score(context, member, MeterCategories.Bdm, nb);
         }
 
         [Command("sel")]
@@ -66,7 +70,7 @@ namespace Bishop.Commands.Meter
             [Description("User to know the sel score of")]
             DiscordMember member)
         {
-            await Score(context, member, Keys.Sel);
+            await Score(context, member, MeterCategories.Sel);
         }
 
         [Command("sauce")]
@@ -75,7 +79,7 @@ namespace Bishop.Commands.Meter
             [Description("User to know the sauce score of")]
             DiscordMember member)
         {
-            await Score(context, member, Keys.Sauce);
+            await Score(context, member, MeterCategories.Sauce);
         }
 
         [Command("bdm")]
@@ -84,7 +88,7 @@ namespace Bishop.Commands.Meter
             [Description("User to know the BDM score of")]
             DiscordMember member)
         {
-            await Score(context, member, Keys.Bdm);
+            await Score(context, member, MeterCategories.Bdm);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Bishop
             _generator.Register<Tomato>();
             _generator.Register<Vote>();
             _generator.Register<Counter>();
-            _generator.Register<Censor>();
+            _generator.Register<Deleter>();
 
             _discord = _generator.Client;
 

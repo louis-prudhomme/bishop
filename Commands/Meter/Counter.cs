@@ -7,6 +7,11 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Meter
 {
+    /// <summary>
+    /// The <c>Counter</c> class provides a set of commands to keep trace of user's deeds.
+    /// This file contains all the general and generic commands ; alias for the commands are
+    /// provided in the separate file <c>CounterAliases.cs</c>.
+    /// </summary>
     internal partial class Counter : BaseCommandModule
     {
         [Command("score")]
@@ -16,9 +21,9 @@ namespace Bishop.Commands.Meter
             [Description("@User to know the scores of")]
             DiscordMember member)
         {
-            var scores = Enum.GetValues(typeof(Keys))
-                .OfType<Keys>()
-                .Select(key => Enumerat.FindAsync(member.Username, key)
+            var scores = Enum.GetValues(typeof(MeterCategories))
+                .OfType<MeterCategories>()
+                .Select(key => Enumerat.FindAsync(member, key)
                     .Result)
                 .Where(key => key != null)
                 .Select(key => key.ToString());
@@ -34,14 +39,14 @@ namespace Bishop.Commands.Meter
         [Description("Returns the list of scores for a certain key")]
         public async Task Score(CommandContext context,
             [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
-            Keys key)
+            MeterCategories meterCategory)
         {
-            var scores = Enumerat.FindAllAsync(key).Result
+            var scores = Enumerat.FindAllAsync(meterCategory).Result
                 .Where(score => score != null)
                 .Select(score => score.ToString());
 
             if (!scores.Any())
-                await context.RespondAsync($"No scores recorded for category {key}");
+                await context.RespondAsync($"No scores recorded for category {meterCategory}");
             else
                 await context.RespondAsync(scores
                     .Aggregate((acc, score) => string.Join("\n", acc, score)));
@@ -53,9 +58,9 @@ namespace Bishop.Commands.Meter
             [Description("@User to know the score of")]
             DiscordMember member,
             [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
-            Keys key)
+            MeterCategories meterCategory)
         {
-            var score = Enumerat.FindAsync(member.Username, key)
+            var score = Enumerat.FindAsync(member, meterCategory)
                 .Result.ToString();
             await context.RespondAsync(score);
         }
@@ -66,10 +71,10 @@ namespace Bishop.Commands.Meter
             [Description("User to know the score of")]
             DiscordMember member,
             [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
-            Keys key,
+            MeterCategories meterCategory,
             [Description("To increment by")] long nb)
         {
-            var record = Enumerat.FindAsync(member.Username, key).Result;
+            var record = Enumerat.FindAsync(member, meterCategory).Result;
             var previous = record.Score;
             record.Score += nb;
 

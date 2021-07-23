@@ -2,9 +2,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Bishop.Commands;
 
 namespace Bishop.Config
 {
+    /// <summary>
+    /// Configures the Tomatoes variables by fetching the relevant information.
+    ///
+    /// See <see cref="Tomato"/>.
+    /// </summary>
     public class TomatoConfigurator
     {
         private readonly string _path;

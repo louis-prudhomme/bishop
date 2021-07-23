@@ -1,6 +1,6 @@
 ﻿namespace Bishop.Commands.Meter
 {
-    public enum Keys
+    public enum MeterCategories
     {
         Bdm,
         Sauce,
