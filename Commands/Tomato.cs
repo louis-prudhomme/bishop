@@ -1,22 +1,24 @@
 ﻿using System;
-using DSharpPlus.CommandsNext;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using System.Collections.Generic;
 
-namespace Commands
+namespace Bishop.Commands
 {
     public class Tomato : BaseCommandModule
     {
-        public static List<string> Tomatoes;
-        private static readonly Random _rand = new();
+        private static readonly Random _RAND = new();
+        public static List<string> Tomatoes { get; set; }
 
-        [Command("tomato"), Aliases("t")]
+        [Command("tomato")]
+        [Aliases("t")]
         [Description("Throw a tomato to @someone")]
-        public async Task Throw(CommandContext context, [Description("User to throw the tomato at!")] DiscordMember member)
+        public async Task Throw(CommandContext context, [Description("User to throw the tomato at!")]
+            DiscordMember member)
         {
-            await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
+            await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[_RAND.Next(Tomatoes.Count)]}");
         }
     }
 }

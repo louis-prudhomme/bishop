@@ -1,48 +1,47 @@
 using System;
-using System.Threading.Tasks;
-
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
+using Bishop.Config.Converters;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
-using Microsoft.Extensions.Logging;
 using DSharpPlus.CommandsNext.Converters;
-using Bishop.Commands.Meter;
-using Bishop.Config.Converters;
 
-namespace Config
+namespace Bishop.Config
 {
     public class DiscordClientGenerator
     {
-        private static readonly string[] PREFIX = new[] { ";" };
-
-        private readonly string _token;
-        private readonly DiscordClient _client;
+        private static readonly string[] _PREFIX = {";"};
 
         private readonly CommandsNextExtension _commands;
 
-        public DiscordClientGenerator(string token)
+        private readonly string _token;
+        private readonly string[] _sigil;
+
+        public DiscordClientGenerator(string token, string sigil)
         {
             _token = token;
-            _client = new DiscordClient(AssembleConfig());
+            _sigil = new[] {sigil};
+            Client = new DiscordClient(AssembleConfig());
 
-            _commands = _client.UseCommandsNext(AssembleCommands());
+            _commands = Client.UseCommandsNext(AssembleCommands());
             _commands.SetHelpFormatter<DefaultHelpFormatter>();
             _commands.RegisterConverter(new KeysConverter());
         }
 
+
+        public DiscordClient Client { get; }
+        public string Sigil => string.Join(" ", _sigil);
+
+
         private CommandsNextConfiguration AssembleCommands()
         {
-            return new CommandsNextConfiguration()
+            return new()
             {
-                StringPrefixes = PREFIX
+                StringPrefixes = _sigil ?? _PREFIX
             };
         }
 
         private DiscordConfiguration AssembleConfig()
         {
-            return new DiscordConfiguration()
+            return new()
             {
                 Token = _token,
                 TokenType = TokenType.Bot,
@@ -54,7 +53,5 @@ namespace Config
         {
             _commands.RegisterCommands<T>();
         }
-
-        public DiscordClient Client { get { return _client; } }
     }
 }

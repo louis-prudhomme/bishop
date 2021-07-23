@@ -1,16 +1,14 @@
-﻿using Bishop.Commands.Meter;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Bishop.Commands.Meter;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
 using DSharpPlus.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bishop.Config.Converters
 {
-    class KeysConverter : IArgumentConverter<Keys>
+    internal class KeysConverter : IArgumentConverter<Keys>
     {
         public Task<Optional<Keys>> ConvertAsync(string value, CommandContext ctx)
         {

@@ -1,28 +1,24 @@
-using System;
-using System.Threading.Tasks;
-
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Config 
+namespace Bishop.Config
 {
-    public class TomatoConfigurator
+    public class StalkConfigurator
     {
         private readonly string _path;
 
-        public TomatoConfigurator(string path)
+        public StalkConfigurator(string path)
         {
             _path = path;
         }
 
-        public async Task<List<string>> ReadTomatoesAsync()
+        public async Task<Dictionary<string, string>> ReadStalkAsync()
         {
-            using (StreamReader sr = File.OpenText(_path))
-            {
-                return await JsonSerializer.DeserializeAsync<List<string>>(sr.BaseStream);
-            };
+            using var sr = File.OpenText(_path);
+            return await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(sr.BaseStream);
+            ;
         }
     }
 }

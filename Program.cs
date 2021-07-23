@@ -1,39 +1,42 @@
 ﻿using System;
-using System.Threading.Tasks;
-
-using DSharpPlus;
-
-using Commands;
-using Config;
-using Bishop.Commands;
-using log4net;
 using System.Reflection;
-using log4net.Config;
+using System.Threading.Tasks;
+using Bishop.Commands;
 using Bishop.Commands.Meter;
+using Bishop.Config;
+using DSharpPlus;
+using log4net;
+using log4net.Config;
+using MongoDB.Driver;
 
 namespace Bishop
 {
-    class Program
+    internal class Program
     {
-        private static readonly string TOMATO_FILE_PATH = "./Resources/tomatoes.json";
-        private static readonly string STALK_FILE_PATH = "./Resources/slenders.json";
+        private const string TOMATO_FILE_PATH = "./Resources/tomatoes.json";
+        private const string STALK_FILE_PATH = "./Resources/slenders.json";
 
-        private static readonly string _discordToken = Environment
+        private static readonly string _DISCORD_TOKEN = Environment
             .GetEnvironmentVariable("DISCORD_TOKEN");
-        private static readonly string _mongoToken = Environment
+
+        private static readonly string _MONGO_TOKEN = Environment
             .GetEnvironmentVariable("MONGO_TOKEN");
-        private static readonly string _mongoDatabase = Environment
+
+        private static readonly string _MONGO_DATABASE = Environment
             .GetEnvironmentVariable("MONGO_DB");
+
+        private static readonly string _COMMAND_SIGIL = Environment
+            .GetEnvironmentVariable("COMMAND_SIGIL");
+
+        private static readonly ILog _LOG = LogManager
+            .GetLogger(MethodBase.GetCurrentMethod()?
+                .DeclaringType);
 
         private static DiscordClient _discord;
         private static DiscordClientGenerator _generator;
 
-        private static readonly ILog _log = LogManager
-            .GetLogger(MethodBase.GetCurrentMethod()
-            .DeclaringType);
-
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             XmlConfigurator.Configure();
 
@@ -45,9 +48,9 @@ namespace Bishop
                 .ReadStalkAsync()
                 .Result;
 
-            Enumerat.Database = _mongoDatabase;
-            Enumerat.Mongo = new MongoDB.Driver.MongoClient(_mongoToken);
-            _generator = new DiscordClientGenerator(_discordToken);
+            Enumerat.Database = _MONGO_DATABASE;
+            Enumerat.Mongo = new MongoClient(_MONGO_TOKEN);
+            _generator = new DiscordClientGenerator(_DISCORD_TOKEN, _COMMAND_SIGIL);
 
             _generator.Register<Randomizer>();
             _generator.Register<Stalk>();
@@ -58,14 +61,15 @@ namespace Bishop
 
             _discord = _generator.Client;
 
-            _log.Info("Awaiting commands");
+            _LOG.Info($"Sigil is {_generator.Sigil}");
+            _LOG.Info("Awaiting commands");
 
             MainAsync()
                 .GetAwaiter()
                 .GetResult();
         }
 
-        static async Task MainAsync()
+        private static async Task MainAsync()
         {
             await _discord.ConnectAsync();
             await Task.Delay(-1);

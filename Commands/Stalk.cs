@@ -1,23 +1,23 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IO;
-using DSharpPlus.CommandsNext;
 using System.Threading.Tasks;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using System.Collections.Generic;
 
-namespace Commands
+namespace Bishop.Commands
 {
     public class Stalk : BaseCommandModule
     {
-        private static string path = "./Resources/Slenders.png";
-        public static Dictionary<string, string> Lines;
+        private const string PATH = "./Resources/Slenders.png";
+        public static Dictionary<string, string> Lines { get; set; }
 
-        [Command("stalk"), Aliases("st")]
+        [Command("stalk")]
+        [Aliases("st")]
         [Description("Invoke a discussion betweden you and one of the five Slenders")]
         public async Task Roast(CommandContext context)
         {
-            await context.RespondAsync(new DiscordMessageBuilder().WithFile(new FileStream(path, FileMode.Open)));
+            await context.RespondAsync(new DiscordMessageBuilder().WithFile(new FileStream(PATH, FileMode.Open)));
         }
 
         [Command("stalk")]

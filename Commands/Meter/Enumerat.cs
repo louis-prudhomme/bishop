@@ -1,29 +1,18 @@
-﻿using MongoDB.Bson;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bishop.Commands.Meter
 {
-    partial class Enumerat
+    internal class Enumerat
     {
-        private const string CollectionName = "meter";
+        private const string COLLECTION_NAME = "meter";
         public static MongoClient Mongo;
         public static string Database;
 
-        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
-        public string Id { get; set; }
-        public string User { get; set; }
-        public Keys Key { get; set; }
-        public long Score { get; set; }
-
-        private readonly bool _nue = false;
+        private readonly bool _nue;
 
         private Enumerat(string user, Keys key)
         {
@@ -34,13 +23,25 @@ namespace Bishop.Commands.Meter
             _nue = true;
         }
 
+        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
+        public string Id { get; set; }
+
+        public string User { get; set; }
+        public Keys Key { get; set; }
+        public long Score { get; set; }
+
+        private static IMongoCollection<Enumerat> Collection =>
+            Mongo.GetDatabase(Database).GetCollection<Enumerat>(COLLECTION_NAME);
+
         public async Task Commit()
         {
             if (_nue)
                 await Collection.InsertOneAsync(this);
-            else await Collection.UpdateOneAsync(GetFilter(User, Key),
-                Builders<Enumerat>.Update.Set("Score", Score));
+            else
+                await Collection.UpdateOneAsync(GetFilter(User, Key),
+                    Builders<Enumerat>.Update.Set("Score", Score));
         }
+
         public static async Task<List<Enumerat>> FindAllAsync(Keys key)
         {
             return await Collection
@@ -51,8 +52,8 @@ namespace Bishop.Commands.Meter
         public static async Task<Enumerat> FindAsync(string user, Keys key)
         {
             return await Collection.Find(GetFilter(user, key))
-                .FirstOrDefaultAsync()
-                ?? new Enumerat(user, key);
+                       .FirstOrDefaultAsync()
+                   ?? new Enumerat(user, key);
         }
 
         private static FilterDefinition<Enumerat> GetFilter(string user, Keys key)
@@ -67,7 +68,5 @@ namespace Bishop.Commands.Meter
         {
             return $"{User}’s {Key} ⇒ {Score}";
         }
-
-        private static IMongoCollection<Enumerat> Collection => Mongo.GetDatabase(Database).GetCollection<Enumerat>(CollectionName);
     }
 }

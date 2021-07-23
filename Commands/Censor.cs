@@ -1,21 +1,19 @@
-﻿using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using DSharpPlus;
+using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
 
 namespace Bishop.Commands
 {
-    class Censor : BaseCommandModule
+    internal class Censor : BaseCommandModule
     {
-        [Command("delete"), Aliases("d")]
+        [Command("delete")]
+        [Aliases("d")]
         [Description("Deletes all the messages between the command and the one replied to.")]
         public async Task Delete(CommandContext context)
         {
-            if (context.Message.MessageType == DSharpPlus.MessageType.Reply)
+            if (context.Message.MessageType == MessageType.Reply)
             {
                 var limit = context.Message;
                 var origin = limit.ReferencedMessage;
@@ -30,19 +28,22 @@ namespace Bishop.Commands
                 await origin.DeleteAsync();
                 await context.RespondAsync($"Removed {futures.Count} 😉");
             }
-            else await context.RespondAsync("You need to answer a message.");
+            else
+            {
+                await context.RespondAsync("You need to answer a message.");
+            }
         }
-        
+
         [Command("delete")]
         [Description("Deletes the n last messages.")]
         public async Task Delete(CommandContext context, int n)
         {
-            if (n <= 0) 
+            if (n <= 0)
             {
                 await context.RespondAsync($"{n} is not a valid number."); // todo cleanify
                 return;
             }
-            
+
             var limit = context.Message;
             var futures = context.Channel
                 .GetMessagesBeforeAsync(limit.Id).Result

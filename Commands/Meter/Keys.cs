@@ -2,9 +2,8 @@
 {
     public enum Keys
     {
-        BDM,
-        SAUCE,
-        SEL
+        Bdm,
+        Sauce,
+        Sel
     }
- 
 }

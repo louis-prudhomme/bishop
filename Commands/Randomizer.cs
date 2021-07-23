@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
 
 namespace Bishop.Commands
 {
     public class Randomizer : BaseCommandModule
     {
-        private static readonly int BASE_EMOJI_HEX = 0x1F600;
-        private static readonly int MAXX_EMOJI_HEX = 44;
-        private static readonly Random _rand = new();
+        private const int BASE_EMOJI_HEX = 0x1F600;
+        private const int MAX_EMOJI_HEX = 44;
+        private static readonly Random _RAND = new();
 
 
-        [Command("Random"), Aliases("rand", "r")]
+        [Command("Random")]
+        [Aliases("rand", "r")]
         [Description("Make a random choice")]
-        public async Task RandomChoice(CommandContext context, [Description("Options to choose from")] params string[] args)
+        public async Task RandomChoice(CommandContext context, [Description("Options to choose from")]
+            params string[] args)
         {
-            await context.RespondAsync($"🎲 ⇒ {args[_rand.Next(args.Length)]}");
+            await context.RespondAsync($"🎲 ⇒ {args[_RAND.Next(args.Length)]}");
         }
 
-        [Command("Randomoji"), Aliases("randmoji", "rj")]
+        [Command("Randomoji")]
+        [Aliases("randmoji", "rj")]
         [Description("Picks a random emoji")]
         public async Task DiktatEmoji(CommandContext context)
         {
-            int emojiCode = BASE_EMOJI_HEX + _rand.Next(0, MAXX_EMOJI_HEX);
+            var emojiCode = BASE_EMOJI_HEX + _RAND.Next(0, MAX_EMOJI_HEX);
 
             await context.RespondAsync($"I’ve picked : {char.ConvertFromUtf32(emojiCode)}");
         }
