@@ -8,7 +8,7 @@ using DSharpPlus.Entities;
 namespace Bishop.Commands
 {
     /// <summary>
-    /// Provides a command to ease voting between options.
+    ///     Provides a command to ease voting between options.
     /// </summary>
     public class Vote : BaseCommandModule
     {
@@ -16,8 +16,9 @@ namespace Bishop.Commands
         private const char EMOJI_PREFIX_PLACEHOLDER = '*';
         private const string MESSAGE_BASE = "**Aux urnes !**";
         private const int A_ASCII_INDEX = 97;
+
         /// <summary>
-        /// Valued at 20 as Discord does not allow more reactions to a message.
+        ///     Valued at 20 as Discord does not allow more reactions to a message.
         /// </summary>
         private const int MAX_POLL_CHOICE = 20;
 
@@ -33,7 +34,8 @@ namespace Bishop.Commands
                     await context.RespondAsync("…Not an easy choice, eh ?");
                     break;
                 case > MAX_POLL_CHOICE:
-                    await context.RespondAsync($"Too much voting options ! Maximum is {MAX_POLL_CHOICE}, got {args.Length}");
+                    await context.RespondAsync(
+                        $"Too much voting options ! Maximum is {MAX_POLL_CHOICE}, got {args.Length}");
                     return;
             }
 
@@ -49,7 +51,7 @@ namespace Bishop.Commands
         }
 
         /// <summary>
-        /// Converts an index into a reaction emoji.
+        ///     Converts an index into a reaction emoji.
         /// </summary>
         /// <param name="client">Discord client.</param>
         /// <param name="index">Index of the reaction emoji.</param>

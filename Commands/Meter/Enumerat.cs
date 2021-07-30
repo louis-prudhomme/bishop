@@ -8,58 +8,60 @@ using MongoDB.Driver;
 namespace Bishop.Commands.Meter
 {
     /// <summary>
-    /// This class represents a @user's score in a certain category. 
+    ///     This class represents a @user's score in a certain category.
     /// </summary>
     internal class Enumerat
     {
         /// <summary>
-        /// Default name of the Mongo collection. Can be overriden by environment variables. <see cref="Program"/>.
+        ///     Default name of the Mongo collection. Can be overriden by environment variables. <see cref="Program" />.
         /// </summary>
         private const string COLLECTION_NAME = "meter";
-        public static MongoClient Mongo { get; set; }
-        public static string Database { get; set; }
 
         /// <summary>
-        /// Used to differentiate new records that must be created in database from those that must be updated 
+        ///     Used to differentiate new records that must be created in database from those that must be updated
         /// </summary>
         private readonly bool _nue;
 
-        private Enumerat(string user, MeterCategories meterCategory)
+        private Enumerat(string user, MeterCategories key)
         {
             User = user;
-            MeterCategory = meterCategory;
+            Key = key;
             Score = 0;
 
             _nue = true;
         }
 
+        public static MongoClient Mongo { get; set; }
+        public static string Database { get; set; }
+
         // Properties must have both accessors, as Mongo will need both to get or set values.
         [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
         public string Id { get; set; }
+
         public string User { get; set; }
-        public MeterCategories MeterCategory { get; set; }
+        public MeterCategories Key { get; set; }
         public long Score { get; set; }
 
         /// <summary>
-        /// Returns the Mongo Collection for the meter.
+        ///     Returns the Mongo Collection for the meter.
         /// </summary>
         private static IMongoCollection<Enumerat> Collection =>
             Mongo.GetDatabase(Database).GetCollection<Enumerat>(COLLECTION_NAME);
 
         /// <summary>
-        /// Commits the present record against the database.
+        ///     Commits the present record against the database.
         /// </summary>
         public async Task Commit()
         {
             if (_nue)
                 await Collection.InsertOneAsync(this);
-            else 
-                await Collection.UpdateOneAsync(GetFilter(User, MeterCategory),
+            else
+                await Collection.UpdateOneAsync(GetFilter(User, Key),
                     Builders<Enumerat>.Update.Set("Score", Score));
         }
 
         /// <summary>
-        /// Returns all the user records for the provided category.
+        ///     Returns all the user records for the provided category.
         /// </summary>
         /// <param name="meterCategory">Category to look for.</param>
         /// <returns>List of all matching records.</returns>
@@ -71,8 +73,8 @@ namespace Bishop.Commands.Meter
         }
 
         /// <summary>
-        /// Fetches the record corresponding to a user and a category
-        /// or creates a new one if the combination does not exist.
+        ///     Fetches the record corresponding to a user and a category
+        ///     or creates a new one if the combination does not exist.
         /// </summary>
         /// <param name="user">Pseudo of the user</param>
         /// <param name="meterCategory">Key of the category</param>
@@ -83,9 +85,9 @@ namespace Bishop.Commands.Meter
                        .FirstOrDefaultAsync()
                    ?? new Enumerat(user.Username, meterCategory);
         }
-        
+
         /// <summary>
-        /// Creates and returns a Mongo filter targeting the combination of the provided username and category.
+        ///     Creates and returns a Mongo filter targeting the combination of the provided username and category.
         /// </summary>
         /// <param name="user">Username to look for.</param>
         /// <param name="meterCategory">Category to look for.</param>
@@ -97,8 +99,8 @@ namespace Bishop.Commands.Meter
                     Builders<Enumerat>.Filter.Eq("User", user),
                     Builders<Enumerat>.Filter.Eq("Key", meterCategory));
         }
-        
-        /// <inheritdoc cref="GetFilter(string,Bishop.Commands.Meter.MeterCategories)"/>
+
+        /// <inheritdoc cref="GetFilter(string,Bishop.Commands.Meter.MeterCategories)" />
         private static FilterDefinition<Enumerat> GetFilter(DiscordUser user, MeterCategories meterCategory)
         {
             return GetFilter(user.Username, meterCategory);
@@ -106,7 +108,7 @@ namespace Bishop.Commands.Meter
 
         public override string ToString()
         {
-            return $"{User}’s {MeterCategory} ⇒ {Score}";
+            return $"{User}’s {Key} ⇒ {Score}";
         }
     }
 }

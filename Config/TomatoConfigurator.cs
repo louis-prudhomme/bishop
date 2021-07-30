@@ -7,9 +7,8 @@ using Bishop.Commands;
 namespace Bishop.Config
 {
     /// <summary>
-    /// Configures the Tomatoes variables by fetching the relevant information.
-    ///
-    /// See <see cref="Tomato"/>.
+    ///     Configures the Tomatoes variables by fetching the relevant information.
+    ///     See <see cref="Tomato" />.
     /// </summary>
     public class TomatoConfigurator
     {

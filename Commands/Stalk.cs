@@ -10,11 +10,12 @@ namespace Bishop.Commands
     public class Stalk : BaseCommandModule
     {
         /// <summary>
-        /// Where to find the slender file.
+        ///     Where to find the slender file.
         /// </summary>
         private const string PATH = "./Resources/Slenders.png";
+
         /// <summary>
-        /// Slenders dialogue lines.
+        ///     Slenders dialogue lines.
         /// </summary>
         public static Dictionary<string, string> Lines { get; set; }
 
@@ -28,7 +29,8 @@ namespace Bishop.Commands
 
         [Command("stalk")]
         [Description("Invoke a discussion between you and one of the five Slenders")]
-        public async Task Discuss(CommandContext context, [Description("Slender to talk with")] [RemainingText] string name)
+        public async Task Discuss(CommandContext context, [Description("Slender to talk with")] [RemainingText]
+            string name)
         {
             await context.RespondAsync(Lines[name]);
         }

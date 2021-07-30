@@ -7,9 +7,8 @@ using Bishop.Commands;
 namespace Bishop.Config
 {
     /// <summary>
-    /// Configures the Stalker variables by fetching the relevant information.
-    ///
-    /// See <see cref="Stalk"/>.
+    ///     Configures the Stalker variables by fetching the relevant information.
+    ///     See <see cref="Stalk" />.
     /// </summary>
     public class StalkConfigurator
     {

@@ -5,6 +5,8 @@ using Bishop.Commands;
 using Bishop.Commands.Meter;
 using Bishop.Config;
 using DSharpPlus;
+using Google.Apis.Drive.v3;
+using Google.Apis.Services;
 using log4net;
 using log4net.Config;
 using MongoDB.Driver;

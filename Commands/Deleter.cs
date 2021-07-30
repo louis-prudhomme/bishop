@@ -7,7 +7,7 @@ using DSharpPlus.CommandsNext.Attributes;
 namespace Bishop.Commands
 {
     /// <summary>
-    /// This class provides a set of commands to delete messages. 
+    ///     This class provides a set of commands to delete messages.
     /// </summary>
     internal class Deleter : BaseCommandModule
     {

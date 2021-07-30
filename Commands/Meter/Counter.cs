@@ -8,9 +8,9 @@ using DSharpPlus.Entities;
 namespace Bishop.Commands.Meter
 {
     /// <summary>
-    /// The <c>Counter</c> class provides a set of commands to keep trace of user's deeds.
-    /// This file contains all the general and generic commands ; alias for the commands are
-    /// provided in the separate file <c>CounterAliases.cs</c>.
+    ///     The <c>Counter</c> class provides a set of commands to keep trace of user's deeds.
+    ///     This file contains all the general and generic commands ; alias for the commands are
+    ///     provided in the separate file <c>CounterAliases.cs</c>.
     /// </summary>
     internal partial class Counter : BaseCommandModule
     {
@@ -26,7 +26,8 @@ namespace Bishop.Commands.Meter
                 .Select(key => Enumerat.FindAsync(member, key)
                     .Result)
                 .Where(key => key != null)
-                .Select(key => key.ToString());
+                .Select(key => key.ToString())
+                .ToList();
 
             if (!scores.Any())
                 await context.RespondAsync($"No scores for user {member.Username}");
@@ -43,7 +44,8 @@ namespace Bishop.Commands.Meter
         {
             var scores = Enumerat.FindAllAsync(meterCategory).Result
                 .Where(score => score != null)
-                .Select(score => score.ToString());
+                .Select(score => score.ToString())
+                .ToList();
 
             if (!scores.Any())
                 await context.RespondAsync($"No scores recorded for category {meterCategory}");
@@ -75,6 +77,7 @@ namespace Bishop.Commands.Meter
             [Description("To increment by")] long nb)
         {
             var record = Enumerat.FindAsync(member, meterCategory).Result;
+
             var previous = record.Score;
             record.Score += nb;
 

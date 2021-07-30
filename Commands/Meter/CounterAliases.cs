@@ -6,8 +6,8 @@ using DSharpPlus.Entities;
 namespace Bishop.Commands.Meter
 {
     /// <summary>
-    /// Aliases for the <c>Counter</c> class.
-    /// See <see cref="Counter"/>
+    ///     Aliases for the <c>Counter</c> class.
+    ///     See <see cref="Counter" />
     /// </summary>
     internal partial class Counter
     {
@@ -37,7 +37,7 @@ namespace Bishop.Commands.Meter
         [Command("sel")]
         [Description("Adds a provided value to @someone’s sel score")]
         public async Task ScoreSel(CommandContext context,
-            [Description("User to know the sel score of")]
+            [Description("User to increment the sel score of")]
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
@@ -47,7 +47,7 @@ namespace Bishop.Commands.Meter
         [Command("sauce")]
         [Description("Adds a provided value to @someone’s sauce score")]
         public async Task ScoreSauce(CommandContext context,
-            [Description("User to know the sauce score of")]
+            [Description("User to increment the sauce score of")]
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
@@ -57,7 +57,7 @@ namespace Bishop.Commands.Meter
         [Command("bdm")]
         [Description("Adds a provided value to @someone’s BDM score")]
         public async Task ScoreBdm(CommandContext context,
-            [Description("User to know the BDM score of")]
+            [Description("User to increment the BDM score of")]
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
@@ -65,7 +65,7 @@ namespace Bishop.Commands.Meter
         }
 
         [Command("sel")]
-        [Description("Adds a provided value to @someone’s sel score")]
+        [Description("Returns the value of @someone’s sel score")]
         public async Task ScoreSel(CommandContext context,
             [Description("User to know the sel score of")]
             DiscordMember member)
@@ -74,7 +74,7 @@ namespace Bishop.Commands.Meter
         }
 
         [Command("sauce")]
-        [Description("Adds a provided value to @someone’s sauce score")]
+        [Description("Returns the value of @someone’s sauce score")]
         public async Task ScoreSauce(CommandContext context,
             [Description("User to know the sauce score of")]
             DiscordMember member)
@@ -83,7 +83,7 @@ namespace Bishop.Commands.Meter
         }
 
         [Command("bdm")]
-        [Description("Adds a provided value to @someone’s BDM score")]
+        [Description("Returns the value of @someone’s BDM score")]
         public async Task ScoreBdm(CommandContext context,
             [Description("User to know the BDM score of")]
             DiscordMember member)

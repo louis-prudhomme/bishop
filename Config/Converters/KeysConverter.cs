@@ -9,8 +9,8 @@ using DSharpPlus.Entities;
 namespace Bishop.Config.Converters
 {
     /// <summary>
-    /// This classes allows conversion of a DSharp command string argument to a <c>Keys</c> enum value.
-    /// It allows transparent use of the <c>Keys</c> enum as parameters of theses functions.
+    ///     This classes allows conversion of a DSharp command string argument to a <c>Keys</c> enum value.
+    ///     It allows transparent use of the <c>Keys</c> enum as parameters of theses functions.
     /// </summary>
     internal class KeysConverter : IArgumentConverter<MeterCategories>
     {
@@ -20,7 +20,8 @@ namespace Bishop.Config.Converters
             // if any match, true
             var isKey = Enum.GetValues(typeof(MeterCategories)).OfType<MeterCategories>()
                 .Select(key => key.ToString())
-                .Any(key => string.Equals(key, value, StringComparison.OrdinalIgnoreCase));
+                .Select(key => key.ToLower())
+                .Any(key => value.ToLower().Equals(key));
 
             // if match, then find the value that matches 
             // cannot do this in one step, as the default value for enum is 0
@@ -28,11 +29,8 @@ namespace Bishop.Config.Converters
                 return Task.FromResult(Optional.FromValue(Enum
                     .GetValues(typeof(MeterCategories))
                     .OfType<MeterCategories>()
-                    .FirstOrDefault(key => string
-                        .Equals(key
-                            .ToString(), 
-                            value, 
-                            StringComparison.OrdinalIgnoreCase))));
+                    .FirstOrDefault(key => key.ToString()
+                        .ToLower().Equals(value))));
 
             return Task.FromResult(Optional.FromNoValue<MeterCategories>());
         }

@@ -6,19 +6,20 @@ using DSharpPlus.CommandsNext.Attributes;
 namespace Bishop.Commands
 {
     /// <summary>
-    /// Provides a set of random-based commands.
+    ///     Provides a set of random-based commands.
     /// </summary>
     public class Randomizer : BaseCommandModule
     {
         /// <summary>
-        /// Hexadecimal value of the first emoji in UTF-8.
+        ///     Hexadecimal value of the first emoji in UTF-8.
         /// </summary>
         private const int BASE_EMOJI_HEX = 0x1F600;
+
         /// <summary>
-        /// Number of emojis we are interested in UTF-8.
+        ///     Number of emojis we are interested in UTF-8.
         /// </summary>
         private const int MAX_EMOJI_HEX = 44;
-        
+
         private static readonly Random _RAND = new();
 
         [Command("Random")]

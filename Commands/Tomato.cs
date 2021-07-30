@@ -8,7 +8,7 @@ using DSharpPlus.Entities;
 namespace Bishop.Commands
 {
     /// <summary>
-    /// Provide a command to send tomatoes to @users.
+    ///     Provide a command to send tomatoes to @users.
     /// </summary>
     public class Tomato : BaseCommandModule
     {

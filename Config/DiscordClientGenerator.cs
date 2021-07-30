@@ -1,4 +1,3 @@
-using System;
 using Bishop.Config.Converters;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -7,19 +6,19 @@ using DSharpPlus.CommandsNext.Converters;
 namespace Bishop.Config
 {
     /// <summary>
-    /// Generates the configuration of the Discord Client.
+    ///     Generates the configuration of the Discord Client.
     /// </summary>
     public class DiscordClientGenerator
     {
         /// <summary>
-        /// Can be overriden by environment variables. See <see cref="Program"/>.
+        ///     Can be overriden by environment variables. See <see cref="Program" />.
         /// </summary>
         private static readonly string[] _PREFIX = {";"};
 
         private readonly CommandsNextExtension _commands;
+        private readonly string[] _sigil;
 
         private readonly string _token;
-        private readonly string[] _sigil;
 
         public DiscordClientGenerator(string token, string sigil)
         {
