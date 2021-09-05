@@ -69,6 +69,7 @@ namespace Bishop.Commands.Meter
         {
             return await Collection
                 .Find(Builders<Enumerat>.Filter.Eq("Key", meterCategory))
+                .SortByDescending(enumerat => enumerat.Score)
                 .ToListAsync();
         }
 
