@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands;
+using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Config;
 using DSharpPlus;
@@ -59,6 +60,7 @@ namespace Bishop
             _generator.Register<Tomato>();
             _generator.Register<Vote>();
             _generator.Register<Counter>();
+            _generator.Register<History>();
             _generator.Register<Deleter>();
 
             _discord = _generator.Client;

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bishop.Commands.History;
 using DSharpPlus.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
@@ -27,6 +29,7 @@ namespace Bishop.Commands.Meter
             User = user;
             Key = key;
             Score = 0;
+            History = new List<Record>();
 
             _nue = true;
         }
@@ -38,9 +41,13 @@ namespace Bishop.Commands.Meter
         [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
         public string Id { get; set; }
 
+        /// <summary>
+        /// Public Get/Set both necessary to deserialize from Mongo
+        /// </summary>
         public string User { get; set; }
         public MeterCategories Key { get; set; }
         public long Score { get; set; }
+        public List<Record> History { get; set; }
 
         /// <summary>
         ///     Returns the Mongo Collection for the meter.
@@ -57,7 +64,9 @@ namespace Bishop.Commands.Meter
                 await Collection.InsertOneAsync(this);
             else
                 await Collection.UpdateOneAsync(GetFilter(User, Key),
-                    Builders<Enumerat>.Update.Set("Score", Score));
+                    Builders<Enumerat>.Update
+                        .Set("Score", Score)
+                        .Set("History", History));
         }
 
         /// <summary>
