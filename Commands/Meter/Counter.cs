@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
@@ -18,9 +17,12 @@ namespace Bishop.Commands.Meter
     {
         [Command("score")]
         [Aliases("s")]
-        [Description("Returns the list of @someone’s scores")]
+        [Description(
+            "Allows interaction with @users’ scores. The scores can be seen by key or by @user, " +
+            "and it is possible to add points to a player in a certain category. " +
+            "It is also possible to add a reason for the point, which will then be in the @user’s history.")]
         public async Task Score(CommandContext context,
-            [Description("@User to know the scores of")]
+            [Description("Target @user")]
             DiscordMember member)
         {
             var scores = Enum.GetValues(typeof(MeterCategories))
@@ -39,9 +41,8 @@ namespace Bishop.Commands.Meter
         }
 
         [Command("score")]
-        [Description("Returns the list of scores for a certain key")]
         public async Task Score(CommandContext context,
-            [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
+            [Description("Target key (must be Sauce/Sel/BDM)")]
             MeterCategories meterCategory)
         {
             var scores = Enumerat.FindAllAsync(meterCategory).Result
@@ -57,11 +58,10 @@ namespace Bishop.Commands.Meter
         }
 
         [Command("score")]
-        [Description("Returns @someone’s score for a specific key")]
         public async Task Score(CommandContext context,
-            [Description("@User to know the score of")]
+            [Description("Target @user")]
             DiscordMember member,
-            [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
+            [Description("Target key (must be Sauce/Sel/BDM)")]
             MeterCategories meterCategory)
         {
             var score = Enumerat.FindAsync(member, meterCategory)
@@ -70,11 +70,10 @@ namespace Bishop.Commands.Meter
         }
 
         [Command("score")]
-        [Description("Adds a provided value to @someone’s score")]
         public async Task Score(CommandContext context,
             [Description("User to add some score to")]
             DiscordMember member,
-            [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
+            [Description("Target key (must be Sauce/Sel/BDM)")]
             MeterCategories meterCategory,
             [Description("To increment by")] long nb)
         {
@@ -88,14 +87,12 @@ namespace Bishop.Commands.Meter
         }
 
         [Command("score")]
-        [Description("Adds a provided value to @someone’s score as well as a specific reason")]
         public async Task Score(CommandContext context,
-            [Description("User to some score to")]
-            DiscordMember member,
-            [Description("Key to list scores of (must be one of BDM/SAUCE/SEL)")]
+            [Description("User to some score to")] DiscordMember member,
+            [Description("Target key (must be Sauce/Sel/BDM)")]
             MeterCategories meterCategory,
             [Description("To increment by")] long nb,
-            [RemainingText, Description("Context for the point(s) addition")] 
+            [RemainingText] [Description("Context for the point(s) addition")]
             string history)
         {
             var record = Enumerat.FindAsync(member, meterCategory).Result;

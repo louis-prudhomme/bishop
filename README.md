@@ -2,7 +2,8 @@
 
 ## Environment variables
 
-Some environment variables are necessary to successfully run the program. They can be set in Visual Studio (Project → Properties → Debug → Add).
+Some environment variables are necessary to successfully run the program. They can be set in Visual Studio (Project →
+Properties → Debug → Add).
 
 ENV VAR | VALUE
 --- | ---

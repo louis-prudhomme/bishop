@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Meter;
@@ -19,7 +18,8 @@ namespace Bishop.Commands.History
         [Description("Returns the list of @someone’s history for a specific key (SAUCE/SEL/BDM)")]
         public async Task Prompt(CommandContext context,
             [Description("@User to know the history of")]
-            DiscordMember member, [Description("Key to know the history of (SAUCE/SEL/BDM")] MeterCategories meterCategory)
+            DiscordMember member,
+            [Description("Key to know the history of (SAUCE/SEL/BDM")] MeterCategories meterCategory)
         {
             try
             {

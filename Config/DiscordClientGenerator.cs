@@ -38,7 +38,7 @@ namespace Bishop.Config
 
         private CommandsNextConfiguration AssembleCommands()
         {
-            return new()
+            return new CommandsNextConfiguration
             {
                 StringPrefixes = _sigil ?? _PREFIX
             };
@@ -46,7 +46,7 @@ namespace Bishop.Config
 
         private DiscordConfiguration AssembleConfig()
         {
-            return new()
+            return new DiscordConfiguration
             {
                 Token = _token,
                 TokenType = TokenType.Bot,

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using DSharpPlus.Entities;
@@ -42,9 +41,10 @@ namespace Bishop.Commands.Meter
         public string Id { get; set; }
 
         /// <summary>
-        /// Public Get/Set both necessary to deserialize from Mongo
+        ///     Public Get/Set both necessary to deserialize from Mongo
         /// </summary>
         public string User { get; set; }
+
         public MeterCategories Key { get; set; }
         public long Score { get; set; }
         public List<Record> History { get; set; }
