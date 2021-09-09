@@ -6,8 +6,9 @@ Some environment variables are necessary to successfully run the program. They c
 
 ENV VAR | VALUE
 --- | ---
+COMMAND_SIGIL | `<any character, except «/»>`
 DISCORD_TOKEN | `<discord token>`
 MONGO_TOKEN | `<mongo token>`
-MONGO_DB | bishop_test
+MONGO_DB | `bishop_test`
 
 

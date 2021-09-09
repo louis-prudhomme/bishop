@@ -90,5 +90,26 @@ namespace Bishop.Commands.Meter
         {
             await Score(context, member, MeterCategories.Bdm);
         }
+
+        [Command("sel")]
+        [Description("Returns all sel scores")]
+        public async Task ScoreSel(CommandContext context)
+        {
+            await Score(context, MeterCategories.Sel);
+        }
+
+        [Command("sauce")]
+        [Description("Returns all sauce scores")]
+        public async Task ScoreSauce(CommandContext context)
+        {
+            await Score(context, MeterCategories.Sauce);
+        }
+
+        [Command("bdm")]
+        [Description("Returns all BDM scores")]
+        public async Task ScoreBdm(CommandContext context)
+        {
+            await Score(context, MeterCategories.Bdm);
+        }
     }
 }
