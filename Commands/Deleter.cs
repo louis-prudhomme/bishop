@@ -30,7 +30,7 @@ namespace Bishop.Commands
                 Task.WaitAll(futures.ToArray());
                 await origin.DeleteAsync();
 
-                if (silentFlag == null) return;
+                if (silentFlag == null || silentFlag.Length == 0) return;
                 await context.RespondAsync($"Removed {futures.Count} 😉");
             } else await context.RespondAsync("You need to answer a message.");
         }
