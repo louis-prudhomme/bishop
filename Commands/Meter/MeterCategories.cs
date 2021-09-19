@@ -3,8 +3,8 @@
     public enum MeterCategories
     {
         Bdm,
-        Beauf,
         Sauce,
-        Sel
+        Sel,
+        Beauf
     }
 }
