@@ -22,8 +22,7 @@ namespace Bishop.Commands.Meter
             "and it is possible to add points to a player in a certain category. " +
             "It is also possible to add a reason for the point, which will then be in the @user’s history.")]
         public async Task Score(CommandContext context,
-            [Description("Target @user")]
-            DiscordMember member)
+            [Description("Target @user")] DiscordMember member)
         {
             var scores = Enum.GetValues(typeof(MeterCategories))
                 .OfType<MeterCategories>()
@@ -59,8 +58,7 @@ namespace Bishop.Commands.Meter
 
         [Command("score")]
         public async Task Score(CommandContext context,
-            [Description("Target @user")]
-            DiscordMember member,
+            [Description("Target @user")] DiscordMember member,
             [Description("Target key (must be Sauce/Sel/BDM)")]
             MeterCategories meterCategory)
         {
@@ -88,28 +86,14 @@ namespace Bishop.Commands.Meter
 
         [Command("score")]
         public async Task Score(CommandContext context,
-            [Description("User to some score to")] DiscordMember member,
+            [Description("User to increment score of")] DiscordMember member,
             [Description("Target key (must be Sauce/Sel/BDM)")]
             MeterCategories meterCategory,
-            [Description("To increment by")] long nb,
             [RemainingText] [Description("Context for the point(s) addition")]
             string history)
         {
-            var record = Enumerat.FindAsync(member, meterCategory).Result;
-
-            var previous = record.Score;
-            record.Score += nb;
-
-            var pieces = history
-                .Split(",")
-                .Select(s => new Record(s))
-                .ToList();
-            if (record.History == null)
-                record.History = pieces;
-            else record.History.AddRange(pieces);
-
-            await record.Commit();
-            await context.RespondAsync($"{record} (from {previous}) (because of *« {history} »*)");
+            await Task.WhenAll(Score(context, member, meterCategory, 1),
+                new History.History().Add(context, HistorySubcommandKey.Add, member, meterCategory, history));
         }
     }
 }

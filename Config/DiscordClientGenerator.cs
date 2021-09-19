@@ -28,7 +28,8 @@ namespace Bishop.Config
 
             _commands = Client.UseCommandsNext(AssembleCommands());
             _commands.SetHelpFormatter<DefaultHelpFormatter>();
-            _commands.RegisterConverter(new KeysConverter());
+            _commands.RegisterConverter(new MeterKeysConverter());
+            _commands.RegisterConverter(new HistorySubcommandKeysConverter());
         }
 
 

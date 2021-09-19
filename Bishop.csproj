@@ -6,9 +6,9 @@
         <OldToolsVersion>Current</OldToolsVersion>
     </PropertyGroup>
     <ItemGroup>
-        <None Remove="Resources\slenders.json"/>
-        <None Remove="Resources\Slenders.png"/>
-        <None Remove="Resources\tomatoes.json"/>
+        <None Remove="Resources\slenders.json" />
+        <None Remove="Resources\Slenders.png" />
+        <None Remove="Resources\tomatoes.json" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Resources\tomatoes.json">
@@ -22,20 +22,20 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="DSharpPlus" Version="4.0.1"/>
-        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.1"/>
-        <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.1"/>
-        <PackageReference Include="Google.Apis.Discovery.v1" Version="1.52.0"/>
-        <PackageReference Include="Google.Apis.Drive.v3" Version="1.52.0.2383"/>
-        <PackageReference Include="log4net" Version="2.0.12"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0"/>
-        <PackageReference Include="MongoDB.Driver" Version="2.12.4"/>
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0"/>
+        <PackageReference Include="DSharpPlus" Version="4.0.1" />
+        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.1" />
+        <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.1" />
+        <PackageReference Include="Google.Apis.Discovery.v1" Version="1.52.0" />
+        <PackageReference Include="Google.Apis.Drive.v3" Version="1.52.0.2383" />
+        <PackageReference Include="log4net" Version="2.0.12" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+        <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     </ItemGroup>
     <ItemGroup>
-        <Resource Include="Resources\slenders.json"/>
-        <Resource Include="Resources\Slenders.png"/>
+        <Resource Include="Resources\slenders.json" />
+        <Resource Include="Resources\Slenders.png" />
     </ItemGroup>
 </Project>
