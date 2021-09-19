@@ -61,6 +61,16 @@ namespace Bishop.Commands.Meter
             await Score(context, member, MeterCategories.Bdm, nb);
         }
 
+        [Command("beauf")]
+        //[Description("Adds a provided value to @someone’s BDM score")]
+        public async Task ScoreBeauf(CommandContext context,
+            [Description("User to increment the beauf score of")]
+            DiscordMember member,
+            [Description("To increment by")] long nb)
+        {
+            await Score(context, member, MeterCategories.Beauf, nb);
+        }
+
         [Command("sel")]
         //[Description("Returns the value of @someone’s sel score")]
         public async Task ScoreSel(CommandContext context,
@@ -88,6 +98,15 @@ namespace Bishop.Commands.Meter
             await Score(context, member, MeterCategories.Bdm);
         }
 
+        [Command("beauf")]
+        //[Description("Returns the value of @someone’s BDM score")]
+        public async Task ScoreBeauf(CommandContext context,
+            [Description("User to know the beauf score of")]
+            DiscordMember member)
+        {
+            await Score(context, member, MeterCategories.Beauf);
+        }
+
         [Command("sel")]
         //[Description("Returns all sel scores")] todo
         public async Task ScoreSel(CommandContext context)
@@ -107,6 +126,52 @@ namespace Bishop.Commands.Meter
         public async Task ScoreBdm(CommandContext context)
         {
             await Score(context, MeterCategories.Bdm);
+        }
+
+        [Command("beauf")]
+        //[Description("Returns all BDM scores")]
+        public async Task ScoreBeauf(CommandContext context)
+        {
+            await Score(context, MeterCategories.Beauf);
+        }
+
+        [Command("sel")]
+        //[Description("Adds a provided value to @someone’s sel score")]
+        public async Task ScoreSel(CommandContext context,
+            [Description("User to increment the sel score of by 1")]
+            DiscordMember member,
+            [Description("Reason for the increment")] string reason)
+        {
+            await Score(context, member, MeterCategories.Sel, reason);
+        }
+
+        [Command("sauce")]
+        public async Task ScoreSauce(CommandContext context,
+            [Description("User to increment the sauce score of by 1")]
+            DiscordMember member,
+            [Description("Reason for the increment")] string reason)
+        {
+            await Score(context, member, MeterCategories.Sauce, reason);
+        }
+
+        [Command("bdm")]
+        //[Description("Adds a provided value to @someone’s BDM score")]
+        public async Task ScoreBdm(CommandContext context,
+            [Description("User to increment the BDM score of by 1")]
+            DiscordMember member,
+            [Description("Reason for the increment")] string reason)
+        {
+            await Score(context, member, MeterCategories.Bdm, reason);
+        }
+
+        [Command("beauf")]
+        //[Description("Adds a provided value to @someone’s BDM score")]
+        public async Task ScoreBeauf(CommandContext context,
+            [Description("User to increment the beauf score of by 1")]
+            DiscordMember member,
+            [Description("Reason for the increment")] string reason)
+        {
+            await Score(context, member, MeterCategories.Beauf, reason);
         }
     }
 }
