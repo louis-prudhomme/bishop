@@ -13,6 +13,7 @@ namespace Bishop.Commands.Meter
     ///     This file contains all the general and generic commands ; alias for the commands are
     ///     provided in the separate file <c>CounterAliases.cs</c>.
     /// </summary>
+
     internal partial class Counter : BaseCommandModule
     {
         [Command("score")]
@@ -86,14 +87,15 @@ namespace Bishop.Commands.Meter
 
         [Command("score")]
         public async Task Score(CommandContext context,
-            [Description("User to increment score of")] DiscordMember member,
+            [Description("User to increment score of")]
+            DiscordMember member,
             [Description("Target key (must be Sauce/Sel/BDM)")]
             MeterCategories meterCategory,
             [RemainingText] [Description("Context for the point(s) addition")]
             string history)
         {
             await Task.WhenAll(Score(context, member, meterCategory, 1),
-                new History.History().Add(context, HistorySubcommandKey.Add, member, meterCategory, history));
+                new History.History().Sub(context, member, meterCategory, history));
         }
     }
 }

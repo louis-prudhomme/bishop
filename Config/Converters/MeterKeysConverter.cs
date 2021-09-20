@@ -14,25 +14,17 @@ namespace Bishop.Config.Converters
     /// </summary>
     internal class MeterKeysConverter : IArgumentConverter<MeterCategories>
     {
-        public Task<Optional<MeterCategories>> ConvertAsync(string value, CommandContext ctx)
+        public async Task<Optional<MeterCategories>> ConvertAsync(string value, CommandContext ctx)
         {
-            // get all the possible enum values and compare them with the parameter
-            // if any match, true
-            var isKey = Enum.GetValues(typeof(MeterCategories)).OfType<MeterCategories>()
-                .Select(key => key.ToString())
-                .Select(key => key.ToLower())
-                .Any(key => value.ToLower().Equals(key));
+            switch (value.ToLower())
+            {
+                case "add": return MeterCategories.Bdm;
+                case "beauf": return MeterCategories.Beauf;
+                case "sauce": return MeterCategories.Sauce;
+                case "sel": return MeterCategories.Sel;
+            }
 
-            // if match, then find the value that matches 
-            // cannot do this in one step, as the default value for enum is 0
-            if (isKey)
-                return Task.FromResult(Optional.FromValue(Enum
-                    .GetValues(typeof(MeterCategories))
-                    .OfType<MeterCategories>()
-                    .FirstOrDefault(key => key.ToString()
-                        .ToLower().Equals(value))));
-
-            return Task.FromResult(Optional.FromNoValue<MeterCategories>());
+            throw new NotImplementedException();
         }
     }
 }
