@@ -14,7 +14,7 @@ namespace Bishop.Commands.Meter
     {
         [Command("score")]
         public async Task Score(CommandContext context,
-            [Description("Target key (must be Sauce/Sel/BDM)")]
+            [Description("Target key (must be BDM/Beauf/Sauce/Sel)")]
             MeterCategories meterCategory,
             [Description("Target @user")] DiscordMember member,
             [Description("To increment by")] long nb)
@@ -24,7 +24,7 @@ namespace Bishop.Commands.Meter
 
         [Command("score")]
         public async Task Score(CommandContext context,
-            [Description("Target key (must be Sauce/Sel/BDM)")]
+            [Description("Target key (must be BDM/Beauf/Sauce/Sel)")]
             MeterCategories meterCategory,
             [Description("Target @user")] DiscordMember member)
         {

@@ -83,6 +83,18 @@ namespace Bishop.Commands.Meter
         }
 
         /// <summary>
+        ///     Returns all the user records with a history.
+        /// </summary>
+        /// <returns>List of all matching records.</returns>
+        public static async Task<List<Enumerat>> FindAllWithHistoryAsync()
+        {
+            return await Collection
+                .Find(Builders<Enumerat>.Filter.Exists("History" ))
+                .SortByDescending(enumerat => enumerat.Score)
+                .ToListAsync();
+        }
+
+        /// <summary>
         ///     Fetches the record corresponding to a user and a category
         ///     or creates a new one if the combination does not exist.
         /// </summary>

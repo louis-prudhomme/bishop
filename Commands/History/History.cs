@@ -12,36 +12,65 @@ namespace Bishop.Commands.History
     /// <summary>
     ///     The <c>History</c> class provides a set of commands to keep trace of user's deeds.
     /// </summary>
+    [Group("history")]
+    [Aliases("hy")]
+    [Description("History-related commands")]
     class History : BaseCommandModule
     {
-        //[Command("history add")]
-        [Description("To see the history of a @member")]
-        [Aliases("hya")]
-        public async Task Sub(CommandContext context,
-            [Description("@User to know the history of")]
-            DiscordMember member,
-            [Description("Key to know the history of (SAUCE/SEL/BDM)")]
-            MeterCategories meterCategory,
-            [Description("Record to add")] string history)
+        [GroupCommand]
+        [Description("Picks a random record to expose")]
+        public async Task Random(CommandContext context)
         {
-            var record = Enumerat.FindAsync(member, meterCategory).Result;
+            try
+            {
+                var enumerat = Enumerat.FindAllWithHistoryAsync().Result
+                    .SelectMany(enumerat => enumerat.History.Select(record => new {enumerat.User, record})).ToList();
+                var picked = enumerat.ElementAt(new Random().Next(0, enumerat.Count));
 
-            if (record.History == null)
-                record.History = new List<Record> {new(history)};
-            else record.History.Add(new Record(history));
-
-            await record.Commit();
-            await context.RespondAsync(
-                $"Added «*{history}*» to {member.Username}’s {meterCategory} history.");
+                await context.RespondAsync($"{picked.record} – {picked.User}");
+            }
+            catch (Exception e)
+            {
+                context.RespondAsync(e.Message);
+            }
         }
 
-        //[Command("history see")]
+        [Command("add")]
+        [Aliases("a")]
         [Description("To add a new record to a @member’s history")]
-        [Aliases("hys")]
-        private async Task See(CommandContext context,
+        public async Task Add(CommandContext context,
+            [Description("@User to add the record to")]
+            DiscordMember member,
+            [Description("Key to add the record to (BDM/Beauf/Sauce/Sel)")]
+            MeterCategories meterCategory,
+            [Description("Record to add"), RemainingText]
+            string history)
+        {
+            try
+            {
+                var record = Enumerat.FindAsync(member, meterCategory).Result;
+
+                if (record.History == null)
+                    record.History = new List<Record> {new(history)};
+                else record.History.Add(new Record(history));
+
+                await record.Commit();
+                await context.RespondAsync(
+                    $"Added «*{history}*» to {member.Username}’s {meterCategory} history.");
+            }
+            catch (Exception e)
+            {
+                await context.RespondAsync(e.Message);
+            }
+        }
+
+        [Command("consult")]
+        [Aliases("c")]
+        [Description("To see the history of a @member")]
+        private async Task Consult(CommandContext context,
             [Description("@User to know the history of")]
             DiscordMember member,
-            [Description("Key to know the history of (SAUCE/SEL/BDM)")]
+            [Description("Key to know the history of (BDM/Beauf/Sauce/Sel)")]
             MeterCategories meterCategory
         )
         {

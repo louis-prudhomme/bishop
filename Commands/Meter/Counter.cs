@@ -42,7 +42,7 @@ namespace Bishop.Commands.Meter
 
         [Command("score")]
         public async Task Score(CommandContext context,
-            [Description("Target key (must be Sauce/Sel/BDM)")]
+            [Description("Target key (must be BDM/Beauf/Sauce/Sel)")]
             MeterCategories meterCategory)
         {
             var scores = Enumerat.FindAllAsync(meterCategory).Result
@@ -60,7 +60,7 @@ namespace Bishop.Commands.Meter
         [Command("score")]
         public async Task Score(CommandContext context,
             [Description("Target @user")] DiscordMember member,
-            [Description("Target key (must be Sauce/Sel/BDM)")]
+            [Description("Target key (must be BDM/Beauf/Sauce/Sel)")]
             MeterCategories meterCategory)
         {
             var score = Enumerat.FindAsync(member, meterCategory)
@@ -72,7 +72,7 @@ namespace Bishop.Commands.Meter
         public async Task Score(CommandContext context,
             [Description("User to add some score to")]
             DiscordMember member,
-            [Description("Target key (must be Sauce/Sel/BDM)")]
+            [Description("Target key (must be BDM/Beauf/Sauce/Sel)")]
             MeterCategories meterCategory,
             [Description("To increment by")] long nb)
         {
@@ -89,13 +89,13 @@ namespace Bishop.Commands.Meter
         public async Task Score(CommandContext context,
             [Description("User to increment score of")]
             DiscordMember member,
-            [Description("Target key (must be Sauce/Sel/BDM)")]
+            [Description("Target key (must be BDM/Beauf/Sauce/Sel)")]
             MeterCategories meterCategory,
             [RemainingText] [Description("Context for the point(s) addition")]
             string history)
         {
             await Task.WhenAll(Score(context, member, meterCategory, 1),
-                new History.History().Sub(context, member, meterCategory, history));
+                new History.History().Add(context, member, meterCategory, history));
         }
     }
 }
