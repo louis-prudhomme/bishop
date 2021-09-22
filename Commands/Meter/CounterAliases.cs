@@ -139,7 +139,7 @@ namespace Bishop.Commands.Meter
         public async Task ScoreSel(CommandContext context,
             [Description("User to increment the sel score of by 1")]
             DiscordMember member,
-            [Description("Reason for the increment")]
+            [RemainingText, Description("Reason for the increment")]
             string reason)
         {
             await Score(context, member, MeterCategories.Sel, reason);
@@ -149,7 +149,7 @@ namespace Bishop.Commands.Meter
         public async Task ScoreSauce(CommandContext context,
             [Description("User to increment the sauce score of by 1")]
             DiscordMember member,
-            [Description("Reason for the increment")]
+            [RemainingText, Description("Reason for the increment")]
             string reason)
         {
             await Score(context, member, MeterCategories.Sauce, reason);
@@ -160,7 +160,7 @@ namespace Bishop.Commands.Meter
         public async Task ScoreBdm(CommandContext context,
             [Description("User to increment the BDM score of by 1")]
             DiscordMember member,
-            [Description("Reason for the increment")]
+            [RemainingText, Description("Reason for the increment")]
             string reason)
         {
             await Score(context, member, MeterCategories.Bdm, reason);
@@ -171,7 +171,7 @@ namespace Bishop.Commands.Meter
         public async Task ScoreBeauf(CommandContext context,
             [Description("User to increment the beauf score of by 1")]
             DiscordMember member,
-            [Description("Reason for the increment")]
+            [RemainingText, Description("Reason for the increment")]
             string reason)
         {
             await Score(context, member, MeterCategories.Beauf, reason);
