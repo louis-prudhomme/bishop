@@ -16,15 +16,15 @@ namespace Bishop.Config.Converters
     {
         public Task<Optional<MeterCategories>> ConvertAsync(string value, CommandContext ctx)
         {
-            switch (value.ToLower())
+             var t = ctx.RespondAsync(value).Result;
+            return value.ToLower() switch
             {
-                case "add": return  Task.FromResult(Optional.FromValue(MeterCategories.Bdm));
-                case "beauf": return Task.FromResult(Optional.FromValue(MeterCategories.Beauf));
-                case "sauce": return Task.FromResult(Optional.FromValue(MeterCategories.Sauce));
-                case "sel": return Task.FromResult(Optional.FromValue(MeterCategories.Sel));
-            }
-
-            return Task.FromResult(Optional.FromNoValue<MeterCategories>());
+                "add" => Task.FromResult(Optional.FromValue(MeterCategories.Bdm)),
+                "beauf" => Task.FromResult(Optional.FromValue(MeterCategories.Beauf)),
+                "sauce" => Task.FromResult(Optional.FromValue(MeterCategories.Sauce)),
+                "sel" => Task.FromResult(Optional.FromValue(MeterCategories.Sel)),
+                _ => Task.FromResult(Optional.FromNoValue<MeterCategories>())
+            };
         }
     }
 }

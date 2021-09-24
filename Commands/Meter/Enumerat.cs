@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using DSharpPlus.Entities;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
@@ -84,7 +85,7 @@ namespace Bishop.Commands.Meter
 
         /// <summary>
         ///     Returns all the user records with a history.
-        /// </summary>
+        /// </summary>  
         /// <returns>List of all matching records.</returns>
         public static async Task<List<Enumerat>> FindAllWithHistoryAsync()
         {

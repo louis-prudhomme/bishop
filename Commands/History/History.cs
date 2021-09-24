@@ -23,16 +23,17 @@ namespace Bishop.Commands.History
         {
             try
             {
-                var enumerat = Enumerat.FindAllWithHistoryAsync().Result
+                var enumerats = Enumerat.FindAllWithHistoryAsync().Result
+                    .Where(enumerat => enumerat.History != null)
                     .SelectMany(enumerat => enumerat.History.Select(record => new {enumerat.User, record}))
                     .ToList();
-                if (enumerat.Count == 0)
+                if (enumerats.Count == 0)
                 {
                     await context.RespondAsync("No history recorded.");
                     return;
                 }
-                
-                var picked = enumerat.ElementAt(new Random().Next(0, enumerat.Count));
+
+                var picked = enumerats.ElementAt(new Random().Next(0, enumerats.Count));
 
                 await context.RespondAsync($"{picked.record} — {picked.User}");
             }
@@ -83,11 +84,13 @@ namespace Bishop.Commands.History
         {
             try
             {
+                await context.RespondAsync("1");
                 var history = Enumerat.FindAsync(member, meterCategory)
                     .Result.History
                     .Select(record => record.ToString())
                     .ToList();
 
+                await context.RespondAsync("2");
                 if (history.Count == 0)
                     await context.RespondAsync(
                         $"No history recorded for category user {member.Username} and {meterCategory}");
@@ -107,23 +110,16 @@ namespace Bishop.Commands.History
             DiscordMember member
         )
         {
-            try
-            {
-                var history = Enumerat.FindAllWithHistoryAsync(member)
-                    .Result.SelectMany(enumerat => enumerat.History)
-                    .Select(record => record.ToString())
-                    .ToList();
+            var history = Enumerat.FindAllWithHistoryAsync(member)
+                .Result.SelectMany(enumerat => enumerat.History)
+                .Select(record => record.ToString())
+                .ToList();
 
-                if (history.Count == 0)
-                    await context.RespondAsync(
-                        $"No history recorded for user {member.Username}");
-                else
-                    await context.RespondAsync(history.ElementAt(new Random().Next(0, history.Count)));
-            }
-            catch (Exception e)
-            {
-                await context.RespondAsync(e.Message);
-            }
+            if (history.Count == 0)
+                await context.RespondAsync(
+                    $"No history recorded for user {member.Username}");
+            else
+                await context.RespondAsync(history.ElementAt(new Random().Next(0, history.Count)));
         }
     }
 }
