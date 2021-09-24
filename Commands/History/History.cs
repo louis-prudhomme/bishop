@@ -81,17 +81,49 @@ namespace Bishop.Commands.History
             MeterCategories meterCategory
         )
         {
-            var history = Enumerat.FindAsync(member, meterCategory)
-                .Result.History
-                .Select(record => record.ToString())
-                .ToList();
+            try
+            {
+                var history = Enumerat.FindAsync(member, meterCategory)
+                    .Result.History
+                    .Select(record => record.ToString())
+                    .ToList();
 
-            if (history.Count == 0)
-                await context.RespondAsync(
-                    $"No history recorded for category user {member.Username} and {meterCategory}");
-            else
-                await context.RespondAsync(history
-                    .Aggregate((acc, h) => string.Join("\n", acc, h)));
+                if (history.Count == 0)
+                    await context.RespondAsync(
+                        $"No history recorded for category user {member.Username} and {meterCategory}");
+                else
+                    await context.RespondAsync(history
+                        .Aggregate((acc, h) => string.Join("\n", acc, h)));
+            }
+            catch (Exception e)
+            {
+                await context.RespondAsync(e.Message);
+            }
+        }
+
+        [Command("consult")]
+        private async Task Consult(CommandContext context,
+            [Description("@User to know the history of")]
+            DiscordMember member
+        )
+        {
+            try
+            {
+                var history = Enumerat.FindAllWithHistoryAsync(member)
+                    .Result.SelectMany(enumerat => enumerat.History)
+                    .Select(record => record.ToString())
+                    .ToList();
+
+                if (history.Count == 0)
+                    await context.RespondAsync(
+                        $"No history recorded for user {member.Username}");
+                else
+                    await context.RespondAsync(history.ElementAt(new Random().Next(0, history.Count)));
+            }
+            catch (Exception e)
+            {
+                await context.RespondAsync(e.Message);
+            }
         }
     }
 }

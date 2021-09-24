@@ -89,7 +89,20 @@ namespace Bishop.Commands.Meter
         public static async Task<List<Enumerat>> FindAllWithHistoryAsync()
         {
             return await Collection
-                .Find(Builders<Enumerat>.Filter.Exists("History" ))
+                .Find(Builders<Enumerat>.Filter.Exists("History"))
+                .SortByDescending(enumerat => enumerat.Score)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        ///     Returns all the user records with a history.
+        /// </summary>
+        /// <returns>List of all matching records.</returns>
+        public static async Task<List<Enumerat>> FindAllWithHistoryAsync(DiscordMember member)
+        {
+            return await Collection
+                .Find(Builders<Enumerat>.Filter.And(Builders<Enumerat>.Filter.Exists("History"),
+                    Builders<Enumerat>.Filter.Eq("User", member.Username)))
                 .SortByDescending(enumerat => enumerat.Score)
                 .ToListAsync();
         }

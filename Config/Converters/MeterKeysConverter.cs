@@ -24,7 +24,7 @@ namespace Bishop.Config.Converters
                 case "sel": return Task.FromResult(Optional.FromValue(MeterCategories.Sel));
             }
 
-            throw new NotImplementedException();
+            return Task.FromResult(Optional.FromNoValue<MeterCategories>());
         }
     }
 }
