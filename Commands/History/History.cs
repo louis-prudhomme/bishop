@@ -24,14 +24,21 @@ namespace Bishop.Commands.History
             try
             {
                 var enumerat = Enumerat.FindAllWithHistoryAsync().Result
-                    .SelectMany(enumerat => enumerat.History.Select(record => new {enumerat.User, record})).ToList();
+                    .SelectMany(enumerat => enumerat.History.Select(record => new {enumerat.User, record}))
+                    .ToList();
+                if (enumerat.Count == 0)
+                {
+                    await context.RespondAsync("No history recorded.");
+                    return;
+                }
+                
                 var picked = enumerat.ElementAt(new Random().Next(0, enumerat.Count));
 
-                await context.RespondAsync($"{picked.record} – {picked.User}");
+                await context.RespondAsync($"{picked.record} — {picked.User}");
             }
             catch (Exception e)
             {
-                context.RespondAsync(e.Message);
+                await context.RespondAsync(e.Message);
             }
         }
 

@@ -16,7 +16,7 @@ namespace Bishop.Commands.History
 
         public override string ToString()
         {
-            return $"*« {Motive} »* — {Date}";
+            return $"*« {Motive} »* – {Date}";
         }
     }
 }
