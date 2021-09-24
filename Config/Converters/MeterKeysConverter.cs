@@ -14,14 +14,14 @@ namespace Bishop.Config.Converters
     /// </summary>
     internal class MeterKeysConverter : IArgumentConverter<MeterCategories>
     {
-        public async Task<Optional<MeterCategories>> ConvertAsync(string value, CommandContext ctx)
+        public Task<Optional<MeterCategories>> ConvertAsync(string value, CommandContext ctx)
         {
             switch (value.ToLower())
             {
-                case "add": return MeterCategories.Bdm;
-                case "beauf": return MeterCategories.Beauf;
-                case "sauce": return MeterCategories.Sauce;
-                case "sel": return MeterCategories.Sel;
+                case "add": return  Task.FromResult(Optional.FromValue(MeterCategories.Bdm));
+                case "beauf": return Task.FromResult(Optional.FromValue(MeterCategories.Beauf));
+                case "sauce": return Task.FromResult(Optional.FromValue(MeterCategories.Sauce));
+                case "sel": return Task.FromResult(Optional.FromValue(MeterCategories.Sel));
             }
 
             throw new NotImplementedException();
