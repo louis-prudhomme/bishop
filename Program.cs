@@ -5,6 +5,7 @@ using Bishop.Commands;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Config;
+using Bishop.Grive;
 using DSharpPlus;
 using log4net;
 using log4net.Config;
@@ -16,6 +17,7 @@ namespace Bishop
     {
         private const string TOMATO_FILE_PATH = "./Resources/tomatoes.json";
         private const string STALK_FILE_PATH = "./Resources/slenders.json";
+        private const string GRIVE_CREDENTIALS_FILE_PATH = "./Resources/credentials.json";
 
         private static readonly string _DISCORD_TOKEN = Environment
             .GetEnvironmentVariable("DISCORD_TOKEN");
@@ -40,6 +42,8 @@ namespace Bishop
         private static void Main(string[] args)
         {
             XmlConfigurator.Configure();
+
+            var tamer = new GriveWrapper(new GriveCredentialManager(GRIVE_CREDENTIALS_FILE_PATH));
 
             Tomato.Tomatoes = new TomatoConfigurator(TOMATO_FILE_PATH)
                 .ReadTomatoesAsync()

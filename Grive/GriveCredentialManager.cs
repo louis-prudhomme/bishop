@@ -7,7 +7,7 @@ using Google.Apis.Util.Store;
 
 namespace Bishop.Grive
 {
-    public class CredentialManager
+    public class GriveCredentialManager
     {
         private static string[] SCOPES = { DriveService.Scope.DriveReadonly };
         private const string TOKEN_FILE_NAME = "token.json";
@@ -15,7 +15,7 @@ namespace Bishop.Grive
         
         public UserCredential Credential { get; }
 
-        public CredentialManager(string toCredentials)
+        public GriveCredentialManager(string toCredentials)
         {
             using var stream = new FileStream(toCredentials, FileMode.Open, FileAccess.Read);
             

@@ -20,6 +20,10 @@
         <EmbeddedResource Include="Resources\Slenders.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
+        <None Remove="Resources\credentials.json" />
+        <EmbeddedResource Include="Resources\credentials.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="DSharpPlus" Version="4.0.1" />
