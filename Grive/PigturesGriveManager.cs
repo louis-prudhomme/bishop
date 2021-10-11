@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Google.Apis.Drive.v3.Data;
+using File = Google.Apis.Drive.v3.Data.File;
 
 namespace Bishop.Grive
 {

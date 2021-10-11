@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using File = Google.Apis.Drive.v3.Data.File;
 
 namespace Bishop.Grive
 {
@@ -54,7 +56,7 @@ namespace Bishop.Grive
         {
             var listRequest = service.Files.List();
             listRequest.PageSize = 10;
-            listRequest.Fields = "nextPageToken, files(id, name)";
+            listRequest.Fields = "nextPageToken, files(id, name, webContentLink, webViewLink)";
             return listRequest;
         }
 
