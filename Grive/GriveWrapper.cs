@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
@@ -11,42 +12,39 @@ namespace Bishop.Grive
 {
     public class GriveWrapper
     {
-        private readonly GriveCredentialManager _griveCredentialManager;
         private const string APP_NAME = "Bishop";
+        
+        private readonly GriveCredentialManager _griveCredentialManager;
+        private readonly DriveService service;
+        public string PigturesFolderId { get; }
 
-        public GriveWrapper(GriveCredentialManager griveCredentialManager)
+        private GriveWrapper(GriveCredentialManager griveCredentialManager)
         {
             _griveCredentialManager = griveCredentialManager;
 
             // Create Drive API service.
-            var service = new DriveService(new BaseClientService.Initializer()
+            service = new DriveService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = griveCredentialManager.Credential,
                 ApplicationName = APP_NAME,
             });
 
-            // Define parameters of request.
+            PigturesFolderId = FetchPigturesFolderId();
+        }
+
+        private string FetchPigturesFolderId()
+        {
             var listRequest = service.Files.List();
-            listRequest.PageSize = 10;
-            listRequest.Fields = "nextPageToken, files(id, name)";
+            listRequest.PageSize = 1;
+            listRequest.Fields = "nextPageToken, files(id)";
+            listRequest.Q = "name contains 'Pigtures'";
+            return listRequest.Execute().Files.First().Id;
+        }
 
-            // List files.
-            var files = listRequest.Execute()
-                .Files;
-            Console.WriteLine("Files:");
-            if (files != null && files.Count > 0)
-            {
-                foreach (var file in files)
-                {
-                    Console.WriteLine("{0} ({1})", file.Name, file.Id);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No files found.");
-            }
-
-            Console.Read();
+        public static GriveWrapper Instance { get; private set; }
+        public static void Init(GriveCredentialManager credentialManager)
+        {
+            Instance = new GriveWrapper(credentialManager);
         }
     }
 }

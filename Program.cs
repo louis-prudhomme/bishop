@@ -43,7 +43,7 @@ namespace Bishop
         {
             XmlConfigurator.Configure();
 
-            var tamer = new GriveWrapper(new GriveCredentialManager(GRIVE_CREDENTIALS_FILE_PATH));
+            GriveWrapper.Init(new GriveCredentialManager(GRIVE_CREDENTIALS_FILE_PATH));
 
             Tomato.Tomatoes = new TomatoConfigurator(TOMATO_FILE_PATH)
                 .ReadTomatoesAsync()

@@ -1,7 +1,9 @@
 using Bishop.Config.Converters;
+using Bishop.Grive;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bishop.Config
 {
@@ -41,7 +43,7 @@ namespace Bishop.Config
         {
             return new CommandsNextConfiguration
             {
-                StringPrefixes = _sigil ?? _PREFIX
+                StringPrefixes = _sigil ?? _PREFIX,
             };
         }
 

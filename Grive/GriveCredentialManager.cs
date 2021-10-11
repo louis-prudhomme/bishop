@@ -9,7 +9,7 @@ namespace Bishop.Grive
 {
     public class GriveCredentialManager
     {
-        private static string[] SCOPES = { DriveService.Scope.DriveReadonly };
+        private static readonly string[] SCOPES = { DriveService.Scope.DriveReadonly };
         private const string TOKEN_FILE_NAME = "token.json";
         private const string USER_NAME = "bishop";
         
@@ -25,9 +25,6 @@ namespace Bishop.Grive
                 USER_NAME,
                 CancellationToken.None,
                 new FileDataStore(TOKEN_FILE_NAME, true)).Result;
-            Console.WriteLine("Credential file saved to: " + TOKEN_FILE_NAME);
         }
-        
-        
     }
 }
