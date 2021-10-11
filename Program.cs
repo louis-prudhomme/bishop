@@ -43,7 +43,7 @@ namespace Bishop
         {
             XmlConfigurator.Configure();
 
-            GriveWrapper.Init(new GriveCredentialManager(GRIVE_CREDENTIALS_FILE_PATH));
+            //GriveWrapper.Init(new GriveCredentialManager(GRIVE_CREDENTIALS_FILE_PATH));
 
             Tomato.Tomatoes = new TomatoConfigurator(TOMATO_FILE_PATH)
                 .ReadTomatoesAsync()
@@ -64,7 +64,7 @@ namespace Bishop
             _generator.Register<Counter>();
             _generator.Register<Deleter>();
             _generator.Register<History>();
-            _generator.Register<Porks>();
+            //_generator.Register<Porks>();
 
             _discord = _generator.Client;
 
