@@ -64,6 +64,7 @@ namespace Bishop
             _generator.Register<Counter>();
             _generator.Register<Deleter>();
             _generator.Register<History>();
+            _generator.Register<Porks>();
 
             _discord = _generator.Client;
 

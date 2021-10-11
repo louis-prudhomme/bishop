@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
@@ -16,7 +17,6 @@ namespace Bishop.Grive
         
         private readonly GriveCredentialManager _griveCredentialManager;
         private readonly DriveService service;
-        public string PigturesFolderId { get; }
 
         private GriveWrapper(GriveCredentialManager griveCredentialManager)
         {
@@ -28,17 +28,41 @@ namespace Bishop.Grive
                 HttpClientInitializer = griveCredentialManager.Credential,
                 ApplicationName = APP_NAME,
             });
-
-            PigturesFolderId = FetchPigturesFolderId();
         }
 
-        private string FetchPigturesFolderId()
+        public async Task<string> FetchFolderIdAsync(string folderName)
+        {
+            var listRequest = GetListRequestWithQ($"name contains '{folderName}' and mimeType = 'application/vnd.google-apps.folder'");
+            var results = await listRequest.ExecuteAsync();
+            return results.Files.First().Id;
+        }
+
+        public async Task<FileList> FetchFilesInFolderAsync(string folderId)
+        {
+            var listRequest = GetListRequestWithQ($"parents in '{folderId}'");
+            return await listRequest.ExecuteAsync();
+        }
+
+        public async Task<File> FetchFileInFolderAsync(string fileName, string folderId)
+        {
+            var listRequest = GetListRequestWithQ($"parents in '{folderId}' and name contains '{fileName}'");
+            var results = await listRequest.ExecuteAsync();
+            return results.Files.First();
+        }
+
+        private FilesResource.ListRequest GetListRequest()
         {
             var listRequest = service.Files.List();
-            listRequest.PageSize = 1;
-            listRequest.Fields = "nextPageToken, files(id)";
-            listRequest.Q = "name contains 'Pigtures'";
-            return listRequest.Execute().Files.First().Id;
+            listRequest.PageSize = 10;
+            listRequest.Fields = "nextPageToken, files(id, name)";
+            return listRequest;
+        }
+
+        private FilesResource.ListRequest GetListRequestWithQ(string q)
+        {
+            var listRequest = GetListRequest();
+            listRequest.Q = q;
+            return listRequest;
         }
 
         public static GriveWrapper Instance { get; private set; }
