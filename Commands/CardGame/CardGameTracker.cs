@@ -29,6 +29,15 @@ namespace Bishop.Commands.CardGame
                 .Select(game => game.ToString())
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
         }
+        
+        [GroupCommand]
+        [Description("Adds a card game to the collection in your name.")]
+        public async Task AddAlias(CommandContext context,
+            [Description("Name of the card game")] [RemainingText]
+            string cardGameName)
+        {
+            await Add(context, cardGameName);
+        }
 
         [Command("from")]
         [Aliases("f", ">")]
