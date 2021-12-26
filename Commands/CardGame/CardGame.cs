@@ -24,7 +24,7 @@ namespace Bishop.Commands.CardGame
 
         public override string ToString()
         {
-            return $"*{Name}*, offered by **{Gifter}** on the {Date}";
+            return $"• *{Name}*, offered by **{Gifter}** on the {Date}";
         }
     }
     
