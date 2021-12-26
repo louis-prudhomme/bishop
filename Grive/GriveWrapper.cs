@@ -15,20 +15,20 @@ namespace Bishop.Grive
 {
     public class GriveWrapper
     {
-        private const string APP_NAME = "Bishop";
+        private const string AppName = "Bishop";
         
         private readonly GriveCredentialManager _griveCredentialManager;
-        private readonly DriveService service;
+        private readonly DriveService _service;
 
         private GriveWrapper(GriveCredentialManager griveCredentialManager)
         {
             _griveCredentialManager = griveCredentialManager;
 
             // Create Drive API service.
-            service = new DriveService(new BaseClientService.Initializer
+            _service = new DriveService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = griveCredentialManager.Credential,
-                ApplicationName = APP_NAME,
+                ApplicationName = AppName,
             });
         }
 
@@ -54,7 +54,7 @@ namespace Bishop.Grive
 
         private FilesResource.ListRequest GetListRequest()
         {
-            var listRequest = service.Files.List();
+            var listRequest = _service.Files.List();
             listRequest.PageSize = 10;
             listRequest.Fields = "nextPageToken, files(id, name, webContentLink, webViewLink)";
             return listRequest;

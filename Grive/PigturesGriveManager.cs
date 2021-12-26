@@ -9,21 +9,21 @@ namespace Bishop.Grive
     public class PigturesGriveManager
     {
         private const string PigturesFolderName = "Pigtures";
-        private readonly string pigturesFolderId;
+        private readonly string _pigturesFolderId;
 
         public PigturesGriveManager()
         {
-            pigturesFolderId = GriveWrapper.Instance.FetchFolderIdAsync(PigturesFolderName).Result;
+            _pigturesFolderId = GriveWrapper.Instance.FetchFolderIdAsync(PigturesFolderName).Result;
         }
 
         public async Task<FileList> ListFiles()
         {
-            return await GriveWrapper.Instance.FetchFilesInFolderAsync(pigturesFolderId);
+            return await GriveWrapper.Instance.FetchFilesInFolderAsync(_pigturesFolderId);
         }
 
         public async Task<File> FetchPig(int id)
         {
-            return await GriveWrapper.Instance.FetchFileInFolderAsync($"Pigture ({id})", pigturesFolderId);
+            return await GriveWrapper.Instance.FetchFileInFolderAsync($"Pigture ({id})", _pigturesFolderId);
         }
     }
 }

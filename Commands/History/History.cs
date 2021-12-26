@@ -84,13 +84,11 @@ namespace Bishop.Commands.History
         {
             try
             {
-                await context.RespondAsync("1");
                 var history = Enumerat.FindAsync(member, meterCategory)
                     .Result.History
                     .Select(record => record.ToString())
                     .ToList();
 
-                await context.RespondAsync("2");
                 if (history.Count == 0)
                     await context.RespondAsync(
                         $"No history recorded for category user {member.Username} and {meterCategory}");
