@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Entities;
 
 namespace Bishop.Commands.CardGame
 {
@@ -40,6 +41,21 @@ namespace Bishop.Commands.CardGame
         public async Task Add(CommandContext context, [RemainingText] string cardGameName)
         {
             var newCardgame = new CardGame(cardGameName, context.Member.Username);
+
+            await CardCollection.AddAsync(newCardgame);
+
+            await context.RespondAsync($"{cardGameName} was added to the collection !");
+        }
+        
+        
+
+        [Command("cardGame")]
+        public async Task Add(CommandContext context, 
+            [Description("User offering the card game")]
+            DiscordMember gifter, 
+            [RemainingText] string cardGameName)
+        {
+            var newCardgame = new CardGame(cardGameName, gifter.Username);
 
             await CardCollection.AddAsync(newCardgame);
 
