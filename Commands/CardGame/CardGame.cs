@@ -10,7 +10,7 @@ namespace Bishop.Commands.CardGame
         public CardGame(string name, string gifter)
         {
             Name = name;
-            Date = DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("fr-FR"));
+            Date = DateTime.Now.ToString("dd/MM/yyyy");
             Gifter = gifter;
         }
         
