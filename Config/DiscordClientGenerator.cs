@@ -1,9 +1,7 @@
 using Bishop.Config.Converters;
-using Bishop.Grive;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bishop.Config
 {
@@ -15,7 +13,7 @@ namespace Bishop.Config
         /// <summary>
         ///     Can be overriden by environment variables. See <see cref="Program" />.
         /// </summary>
-        private static readonly string[] _PREFIX = {";"};
+        private static readonly string[] Prefix = {";"};
 
         private readonly CommandsNextExtension _commands;
         private readonly string[] _sigil;
@@ -43,7 +41,7 @@ namespace Bishop.Config
         {
             return new CommandsNextConfiguration
             {
-                StringPrefixes = _sigil ?? _PREFIX,
+                StringPrefixes = _sigil ?? Prefix,
             };
         }
 

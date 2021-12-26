@@ -2,10 +2,10 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands;
+using Bishop.Commands.CardGame;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Config;
-using Bishop.Grive;
 using DSharpPlus;
 using log4net;
 using log4net.Config;
@@ -15,23 +15,23 @@ namespace Bishop
 {
     internal class Program
     {
-        private const string TOMATO_FILE_PATH = "./Resources/tomatoes.json";
-        private const string STALK_FILE_PATH = "./Resources/slenders.json";
-        private const string GRIVE_CREDENTIALS_FILE_PATH = "./Resources/credentials.json";
+        private const string TomatoFilePath = "./Resources/tomatoes.json";
+        private const string StalkFilePath = "./Resources/slenders.json";
+        private const string GriveCredentialsFilePath = "./Resources/credentials.json";
 
-        private static readonly string _DISCORD_TOKEN = Environment
+        private static readonly string DiscordToken = Environment
             .GetEnvironmentVariable("DISCORD_TOKEN");
 
-        private static readonly string _MONGO_TOKEN = Environment
+        private static readonly string MongoToken = Environment
             .GetEnvironmentVariable("MONGO_TOKEN");
 
-        private static readonly string _MONGO_DATABASE = Environment
+        private static readonly string MongoDatabase = Environment
             .GetEnvironmentVariable("MONGO_DB");
 
-        private static readonly string _COMMAND_SIGIL = Environment
+        private static readonly string CommandSigil = Environment
             .GetEnvironmentVariable("COMMAND_SIGIL");
 
-        private static readonly ILog _LOG = LogManager
+        private static readonly ILog Log = LogManager
             .GetLogger(MethodBase.GetCurrentMethod()?
                 .DeclaringType);
 
@@ -45,17 +45,23 @@ namespace Bishop
 
             //GriveWrapper.Init(new GriveCredentialManager(GRIVE_CREDENTIALS_FILE_PATH));
 
-            Tomato.Tomatoes = new TomatoConfigurator(TOMATO_FILE_PATH)
+            Tomato.Tomatoes = new TomatoConfigurator(TomatoFilePath)
                 .ReadTomatoesAsync()
                 .Result;
 
-            Stalk.Lines = new StalkConfigurator(STALK_FILE_PATH)
+            Stalk.Lines = new StalkConfigurator(StalkFilePath)
                 .ReadStalkAsync()
                 .Result;
 
-            Enumerat.Database = _MONGO_DATABASE;
-            Enumerat.Mongo = new MongoClient(_MONGO_TOKEN);
-            _generator = new DiscordClientGenerator(_DISCORD_TOKEN, _COMMAND_SIGIL);
+            var mongoClient = new MongoClient(MongoToken);
+            
+            Enumerat.Database = MongoDatabase;
+            Enumerat.Mongo = mongoClient;
+
+            CardCollection.Database = MongoDatabase;
+            CardCollection.Mongo = mongoClient;
+            
+            _generator = new DiscordClientGenerator(DiscordToken, CommandSigil);
 
             _generator.Register<Randomizer>();
             _generator.Register<Stalk>();
@@ -64,12 +70,12 @@ namespace Bishop
             _generator.Register<Counter>();
             _generator.Register<Deleter>();
             _generator.Register<History>();
-            //_generator.Register<Porks>();
+            _generator.Register<CardGameTracker>();
 
             _discord = _generator.Client;
 
-            _LOG.Info($"Sigil is {_generator.Sigil}");
-            _LOG.Info("Awaiting commands");
+            Log.Info($"Sigil is {_generator.Sigil}");
+            Log.Info("Awaiting commands");
 
             MainAsync()
                 .GetAwaiter()
