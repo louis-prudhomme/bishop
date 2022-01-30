@@ -25,8 +25,8 @@ namespace Bishop.Commands.Meter
         public async Task Score(CommandContext context,
             [Description("Target @user")] DiscordMember member)
         {
-            var scores = Enum.GetValues(typeof(MeterCategories))
-                .OfType<MeterCategories>()
+            var scores = Enum.GetValues(typeof(MeterCategory))
+                .OfType<MeterCategory>()
                 .Select(key => Enumerat.FindAsync(member, key)
                     .Result)
                 .Where(key => key != null)
@@ -43,7 +43,7 @@ namespace Bishop.Commands.Meter
         [Command("score")]
         public async Task Score(CommandContext context,
             [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-            MeterCategories meterCategory)
+            MeterCategory meterCategory)
         {
             var scores = Enumerat.FindAllAsync(meterCategory).Result
                 .Where(score => score != null)
@@ -61,7 +61,7 @@ namespace Bishop.Commands.Meter
         public async Task Score(CommandContext context,
             [Description("Target @user")] DiscordMember member,
             [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-            MeterCategories meterCategory)
+            MeterCategory meterCategory)
         {
             var score = Enumerat.FindAsync(member, meterCategory)
                 .Result.ToString();
@@ -73,7 +73,7 @@ namespace Bishop.Commands.Meter
             [Description("User to add some score to")]
             DiscordMember member,
             [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-            MeterCategories meterCategory,
+            MeterCategory meterCategory,
             [Description("To increment by")] long nb)
         {
             var record = Enumerat.FindAsync(member, meterCategory).Result;
@@ -90,7 +90,7 @@ namespace Bishop.Commands.Meter
             [Description("User to increment score of")]
             DiscordMember member,
             [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-            MeterCategories meterCategory,
+            MeterCategory meterCategory,
             [RemainingText] [Description("Context for the point(s) addition")]
             string history)
         {

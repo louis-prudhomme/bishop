@@ -12,18 +12,18 @@ namespace Bishop.Config.Converters
     ///     This classes allows conversion of a DSharp command string argument to a <c>Keys</c> enum value.
     ///     It allows transparent use of the <c>Keys</c> enum as parameters of theses functions.
     /// </summary>
-    internal class MeterKeysConverter : IArgumentConverter<MeterCategories>
+    internal class MeterKeysConverter : IArgumentConverter<MeterCategory>
     {
-        public Task<Optional<MeterCategories>> ConvertAsync(string value, CommandContext ctx)
+        public Task<Optional<MeterCategory>> ConvertAsync(string value, CommandContext ctx)
         {
             return value.ToLower() switch
             {
-                "add" => Task.FromResult(Optional.FromValue(MeterCategories.Bdm)),
-                "beauf" => Task.FromResult(Optional.FromValue(MeterCategories.Beauf)),
-                "sauce" => Task.FromResult(Optional.FromValue(MeterCategories.Sauce)),
-                "sel" => Task.FromResult(Optional.FromValue(MeterCategories.Sel)),
-                "rass" => Task.FromResult(Optional.FromValue(MeterCategories.Rass)),
-                _ => Task.FromResult(Optional.FromNoValue<MeterCategories>())
+                "add" => Task.FromResult(Optional.FromValue(MeterCategory.Bdm)),
+                "beauf" => Task.FromResult(Optional.FromValue(MeterCategory.Beauf)),
+                "sauce" => Task.FromResult(Optional.FromValue(MeterCategory.Sauce)),
+                "sel" => Task.FromResult(Optional.FromValue(MeterCategory.Sel)),
+                "rass" => Task.FromResult(Optional.FromValue(MeterCategory.Rass)),
+                _ => Task.FromResult(Optional.FromNoValue<MeterCategory>())
             };
         }
     }

@@ -45,7 +45,7 @@ namespace Bishop.Commands.History
             [Description("@User to add the record to")]
             DiscordMember member,
             [Description("Key to add the record to")]
-            MeterCategories meterCategory,
+            MeterCategory meterCategory,
             [Description("Record to add"), RemainingText]
             string history)
         {
@@ -67,7 +67,7 @@ namespace Bishop.Commands.History
             [Description("@User to know the history of")]
             DiscordMember member,
             [Description("Key to know the history of")]
-            MeterCategories meterCategory
+            MeterCategory meterCategory
         )
         {
                 var history = Enumerat.FindAsync(member, meterCategory)

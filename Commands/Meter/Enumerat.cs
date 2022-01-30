@@ -24,7 +24,7 @@ namespace Bishop.Commands.Meter
         /// </summary>
         private readonly bool _nue;
 
-        private Enumerat(string user, MeterCategories key)
+        private Enumerat(string user, MeterCategory key)
         {
             User = user;
             Key = key;
@@ -46,7 +46,7 @@ namespace Bishop.Commands.Meter
         /// </summary>
         public string User { get; set; }
 
-        public MeterCategories Key { get; set; }
+        public MeterCategory Key { get; set; }
         public long Score { get; set; }
         public List<Record> History { get; set; }
 
@@ -75,7 +75,7 @@ namespace Bishop.Commands.Meter
         /// </summary>
         /// <param name="meterCategory">Category to look for.</param>
         /// <returns>List of all matching records.</returns>
-        public static async Task<List<Enumerat>> FindAllAsync(MeterCategories meterCategory)
+        public static async Task<List<Enumerat>> FindAllAsync(MeterCategory meterCategory)
         {
             return await Collection
                 .Find(Builders<Enumerat>.Filter.Eq("Key", meterCategory))
@@ -115,7 +115,7 @@ namespace Bishop.Commands.Meter
         /// <param name="user">Pseudo of the user</param>
         /// <param name="meterCategory">Key of the category</param>
         /// <returns>The corresponding record or a new one.</returns>
-        public static async Task<Enumerat> FindAsync(DiscordUser user, MeterCategories meterCategory)
+        public static async Task<Enumerat> FindAsync(DiscordUser user, MeterCategory meterCategory)
         {
             return await Collection.Find(GetFilter(user, meterCategory))
                        .FirstOrDefaultAsync()
@@ -128,7 +128,7 @@ namespace Bishop.Commands.Meter
         /// <param name="user">Username to look for.</param>
         /// <param name="meterCategory">Category to look for.</param>
         /// <returns>A Mongo filter.</returns>
-        private static FilterDefinition<Enumerat> GetFilter(string user, MeterCategories meterCategory)
+        private static FilterDefinition<Enumerat> GetFilter(string user, MeterCategory meterCategory)
         {
             return Builders<Enumerat>
                 .Filter.And(
@@ -136,8 +136,8 @@ namespace Bishop.Commands.Meter
                     Builders<Enumerat>.Filter.Eq("Key", meterCategory));
         }
 
-        /// <inheritdoc cref="GetFilter(string,Bishop.Commands.Meter.MeterCategories)" />
-        private static FilterDefinition<Enumerat> GetFilter(DiscordUser user, MeterCategories meterCategory)
+        /// <inheritdoc cref="GetFilter(string,MeterCategory)" />
+        private static FilterDefinition<Enumerat> GetFilter(DiscordUser user, MeterCategory meterCategory)
         {
             return GetFilter(user.Username, meterCategory);
         }
