@@ -5,6 +5,7 @@ using Bishop.Commands;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
+using Bishop.Commands.Meter.Aliases;
 using Bishop.Config;
 using DSharpPlus;
 using log4net;
@@ -17,7 +18,6 @@ namespace Bishop
     {
         private const string TomatoFilePath = "./Resources/tomatoes.json";
         private const string StalkFilePath = "./Resources/slenders.json";
-        private const string GriveCredentialsFilePath = "./Resources/credentials.json";
 
         private static readonly string DiscordToken = Environment
             .GetEnvironmentVariable("DISCORD_TOKEN");
@@ -67,8 +67,15 @@ namespace Bishop
             _generator.Register<Stalk>();
             _generator.Register<Tomato>();
             _generator.Register<Vote>();
-            _generator.Register<Counter>();
             _generator.Register<Deleter>();
+            
+            _generator.Register<Counter>();
+            _generator.Register<BdmCounter>();
+            _generator.Register<BeaufCounter>();
+            _generator.Register<SauceCounter>();
+            _generator.Register<SelCounter>();
+            _generator.Register<RassCounter>();
+            
             _generator.Register<History>();
             _generator.Register<CardGameTracker>();
 

@@ -14,7 +14,7 @@ namespace Bishop.Commands.Meter
     ///     provided in the separate file <c>CounterAliases.cs</c>.
     /// </summary>
 
-    internal partial class Counter : BaseCommandModule
+    public class Counter : BaseCommandModule
     {
         [Command("score")]
         [Aliases("s")]

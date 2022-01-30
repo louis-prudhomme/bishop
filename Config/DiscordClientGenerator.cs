@@ -1,7 +1,9 @@
+using Bishop.Commands.Meter;
 using Bishop.Config.Converters;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bishop.Config
 {
@@ -41,6 +43,9 @@ namespace Bishop.Config
         {
             return new CommandsNextConfiguration
             {
+                Services = new ServiceCollection()
+                .AddSingleton<Counter>()
+                .BuildServiceProvider(),
                 StringPrefixes = _sigil ?? Prefix,
             };
         }
