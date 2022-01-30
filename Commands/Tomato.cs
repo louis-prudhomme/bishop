@@ -12,7 +12,7 @@ namespace Bishop.Commands
     /// </summary>
     public class Tomato : BaseCommandModule
     {
-        private static readonly Random _RAND = new();
+        public Random Rand { private get; set; }
         public static List<string> Tomatoes { get; set; }
 
         [Command("tomato")]
@@ -21,7 +21,7 @@ namespace Bishop.Commands
         public async Task Throw(CommandContext context,
             [Description("User to throw the tomato at!")] DiscordMember member)
         {
-            await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[_RAND.Next(Tomatoes.Count)]}");
+            await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[Rand.Next(Tomatoes.Count)]}");
         }
     }
 }

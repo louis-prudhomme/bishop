@@ -13,14 +13,14 @@ namespace Bishop.Commands
         /// <summary>
         ///     Hexadecimal value of the first emoji in UTF-8.
         /// </summary>
-        private const int BASE_EMOJI_HEX = 0x1F600;
+        private const int BaseEmojiHex = 0x1F600;
 
         /// <summary>
         ///     Number of emojis we are interested in UTF-8.
         /// </summary>
-        private const int MAX_EMOJI_HEX = 44;
+        private const int MaxEmojiHex = 44;
 
-        private static readonly Random _RAND = new();
+        public Random Rand { private get; set; }
 
         [Command("Random")]
         [Aliases("rand", "r")]
@@ -28,7 +28,7 @@ namespace Bishop.Commands
         public async Task RandomChoice(CommandContext context,
             [Description("Options to choose from")] params string[] args)
         {
-            await context.RespondAsync($"🎲 ⇒ {args[_RAND.Next(args.Length)]}");
+            await context.RespondAsync($"🎲 ⇒ {args[Rand.Next(args.Length)]}");
         }
 
         [Command("Randomoji")]
@@ -36,7 +36,7 @@ namespace Bishop.Commands
         [Description("Picks a random emoji")]
         public async Task RandomEmoji(CommandContext context)
         {
-            var emojiCode = BASE_EMOJI_HEX + _RAND.Next(0, MAX_EMOJI_HEX);
+            var emojiCode = BaseEmojiHex + Rand.Next(0, MaxEmojiHex);
 
             await context.RespondAsync($"I’ve picked : {char.ConvertFromUtf32(emojiCode)}");
         }

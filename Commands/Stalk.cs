@@ -12,7 +12,7 @@ namespace Bishop.Commands
         /// <summary>
         ///     Where to find the slender file.
         /// </summary>
-        private const string PATH = "./Resources/Slenders.png";
+        private const string Path = "./Resources/Slenders.png";
 
         /// <summary>
         ///     Slenders dialogue lines.
@@ -24,7 +24,7 @@ namespace Bishop.Commands
         [Description("Invoke a discussion between you and one of the five Slenders")]
         public async Task Roast(CommandContext context)
         {
-            await context.RespondAsync(new DiscordMessageBuilder().WithFile(new FileStream(PATH, FileMode.Open)));
+            await context.RespondAsync(new DiscordMessageBuilder().WithFile(new FileStream(Path, FileMode.Open)));
         }
 
         [Command("stalk")]

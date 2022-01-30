@@ -1,3 +1,4 @@
+using System;
 using Bishop.Commands.Meter;
 using Bishop.Config.Converters;
 using DSharpPlus;
@@ -44,7 +45,8 @@ namespace Bishop.Config
             return new CommandsNextConfiguration
             {
                 Services = new ServiceCollection()
-                .AddSingleton<Counter>()
+                    .AddSingleton<Counter>()
+                    .AddSingleton<Random>()
                 .BuildServiceProvider(),
                 StringPrefixes = _sigil ?? Prefix,
             };
