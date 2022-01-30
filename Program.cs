@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands;
 using Bishop.Commands.CardGame;
+using Bishop.Commands.Helper;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Commands.Meter.Aliases;
@@ -43,8 +44,6 @@ namespace Bishop
         {
             XmlConfigurator.Configure();
 
-            //GriveWrapper.Init(new GriveCredentialManager(GRIVE_CREDENTIALS_FILE_PATH));
-
             Tomato.Tomatoes = new TomatoConfigurator(TomatoFilePath)
                 .ReadTomatoesAsync()
                 .Result;
@@ -57,6 +56,9 @@ namespace Bishop
             
             Enumerat.Database = MongoDatabase;
             Enumerat.Mongo = mongoClient;
+            
+            Repository<RecordEntity>.Database = MongoDatabase;
+            Repository<RecordEntity>.Mongo = mongoClient;
 
             CardCollection.Database = MongoDatabase;
             CardCollection.Mongo = mongoClient;
@@ -78,6 +80,8 @@ namespace Bishop
             
             _generator.Register<History>();
             _generator.Register<CardGameTracker>();
+            
+            _generator.Register<Fukup>();
 
             _discord = _generator.Client;
 

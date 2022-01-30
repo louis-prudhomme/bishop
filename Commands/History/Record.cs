@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Globalization;
+using Bishop.Commands.Helper;
 
 namespace Bishop.Commands.History
 {
-    public class Record
+    public class Record 
     {
         public Record(string motive)
         {
             Date = DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("fr-FR"));
+            
             Motive = motive;
         }
 
