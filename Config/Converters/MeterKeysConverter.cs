@@ -16,7 +16,6 @@ namespace Bishop.Config.Converters
     {
         public Task<Optional<MeterCategories>> ConvertAsync(string value, CommandContext ctx)
         {
-             var t = ctx.RespondAsync(value).Result;
             return value.ToLower() switch
             {
                 "add" => Task.FromResult(Optional.FromValue(MeterCategories.Bdm)),

@@ -17,7 +17,7 @@ namespace Bishop.Commands.Meter
         /// <summary>
         ///     Default name of the Mongo collection. Can be overriden by environment variables. <see cref="Program" />.
         /// </summary>
-        private const string COLLECTION_NAME = "meter";
+        private const string CollectionName = "meter";
 
         /// <summary>
         ///     Used to differentiate new records that must be created in database from those that must be updated
@@ -54,7 +54,7 @@ namespace Bishop.Commands.Meter
         ///     Returns the Mongo Collection for the meter.
         /// </summary>
         private static IMongoCollection<Enumerat> Collection =>
-            Mongo.GetDatabase(Database).GetCollection<Enumerat>(COLLECTION_NAME);
+            Mongo.GetDatabase(Database).GetCollection<Enumerat>(CollectionName);
 
         /// <summary>
         ///     Commits the present record against the database.

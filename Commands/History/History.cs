@@ -17,30 +17,25 @@ namespace Bishop.Commands.History
     [Description("History-related commands")]
     class History : BaseCommandModule
     {
+        public Random Random { private get; set; }
+        
         [GroupCommand]
         [Description("Picks a random record to expose")]
-        public async Task Random(CommandContext context)
+        public async Task PickRandom(CommandContext context)
         {
-            try
+            var enumerats = Enumerat.FindAllWithHistoryAsync().Result
+                .Where(enumerat => enumerat.History != null)
+                .SelectMany(enumerat => enumerat.History.Select(record => new {enumerat.User, record}))
+                .ToList();
+            if (enumerats.Count == 0)
             {
-                var enumerats = Enumerat.FindAllWithHistoryAsync().Result
-                    .Where(enumerat => enumerat.History != null)
-                    .SelectMany(enumerat => enumerat.History.Select(record => new {enumerat.User, record}))
-                    .ToList();
-                if (enumerats.Count == 0)
-                {
-                    await context.RespondAsync("No history recorded.");
-                    return;
-                }
-
-                var picked = enumerats.ElementAt(new Random().Next(0, enumerats.Count));
-
-                await context.RespondAsync($"{picked.record} — {picked.User}");
+                await context.RespondAsync("No history recorded.");
+                return;
             }
-            catch (Exception e)
-            {
-                await context.RespondAsync(e.Message);
-            }
+
+            var picked = enumerats.ElementAt(Random.Next(0, enumerats.Count));
+
+            await context.RespondAsync($"{picked.record} — {picked.User}");
         }
 
         [Command("add")]
@@ -49,13 +44,11 @@ namespace Bishop.Commands.History
         public async Task Add(CommandContext context,
             [Description("@User to add the record to")]
             DiscordMember member,
-            [Description("Key to add the record to (BDM/Beauf/Sauce/Sel)")]
+            [Description("Key to add the record to")]
             MeterCategories meterCategory,
             [Description("Record to add"), RemainingText]
             string history)
         {
-            try
-            {
                 var record = Enumerat.FindAsync(member, meterCategory).Result;
 
                 if (record.History == null)
@@ -65,11 +58,6 @@ namespace Bishop.Commands.History
                 await record.Commit();
                 await context.RespondAsync(
                     $"Added «*{history}*» to {member.Username}’s {meterCategory} history.");
-            }
-            catch (Exception e)
-            {
-                await context.RespondAsync(e.Message);
-            }
         }
 
         [Command("consult")]
@@ -78,12 +66,10 @@ namespace Bishop.Commands.History
         private async Task Consult(CommandContext context,
             [Description("@User to know the history of")]
             DiscordMember member,
-            [Description("Key to know the history of (BDM/Beauf/Sauce/Sel)")]
+            [Description("Key to know the history of")]
             MeterCategories meterCategory
         )
         {
-            try
-            {
                 var history = Enumerat.FindAsync(member, meterCategory)
                     .Result.History
                     .Select(record => record.ToString())
@@ -95,11 +81,6 @@ namespace Bishop.Commands.History
                 else
                     await context.RespondAsync(history
                         .Aggregate((acc, h) => string.Join("\n", acc, h)));
-            }
-            catch (Exception e)
-            {
-                await context.RespondAsync(e.Message);
-            }
         }
 
         [Command("consult")]
@@ -117,7 +98,7 @@ namespace Bishop.Commands.History
                 await context.RespondAsync(
                     $"No history recorded for user {member.Username}");
             else
-                await context.RespondAsync(history.ElementAt(new Random().Next(0, history.Count)));
+                await context.RespondAsync(history.ElementAt(Random.Next(0, history.Count)));
         }
     }
 }
