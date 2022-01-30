@@ -70,6 +70,16 @@ namespace Bishop.Commands.Meter
             await Score(context, member, MeterCategories.Beauf, nb);
         }
 
+        [Command("rass")]
+        //[Description("Adds a provided value to @someone’s Rass score")]
+        public async Task ScoreRass(CommandContext context,
+            [Description("User to increment the beauf score of")]
+            DiscordMember member,
+            [Description("To increment by")] long nb)
+        {
+            await Score(context, member, MeterCategories.Rass, nb);
+        }
+
         [Command("sel")]
         //[Description("Returns the value of @someone’s sel score")]
         public async Task ScoreSel(CommandContext context,
@@ -106,6 +116,15 @@ namespace Bishop.Commands.Meter
             await Score(context, member, MeterCategories.Beauf);
         }
 
+        [Command("rass")]
+        //[Description("Returns the value of @someone’s Rass score")]
+        public async Task ScoreRass(CommandContext context,
+            [Description("User to know the rass score of")]
+            DiscordMember member)
+        {
+            await Score(context, member, MeterCategories.Rass);
+        }
+
         [Command("sel")]
         //[Description("Returns all sel scores")] todo
         public async Task ScoreSel(CommandContext context)
@@ -132,6 +151,13 @@ namespace Bishop.Commands.Meter
         public async Task ScoreBeauf(CommandContext context)
         {
             await Score(context, MeterCategories.Beauf);
+        }
+
+        [Command("rass")]
+        //[Description("Returns all Rass scores")]
+        public async Task ScoreRass(CommandContext context)
+        {
+            await Score(context, MeterCategories.Rass);
         }
 
         [Command("sel")]
@@ -175,6 +201,17 @@ namespace Bishop.Commands.Meter
             string reason)
         {
             await Score(context, member, MeterCategories.Beauf, reason);
+        }
+
+        [Command("rass")]
+        //[Description("Adds a provided value to @someone’s Rass score")]
+        public async Task ScoreRass(CommandContext context,
+            [Description("User to increment the beauf score of by 1")]
+            DiscordMember member,
+            [RemainingText, Description("Reason for the increment")]
+            string reason)
+        {
+            await Score(context, member, MeterCategories.Rass, reason);
         }
     }
 }

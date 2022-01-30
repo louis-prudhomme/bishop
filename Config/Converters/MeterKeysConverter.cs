@@ -23,6 +23,7 @@ namespace Bishop.Config.Converters
                 "beauf" => Task.FromResult(Optional.FromValue(MeterCategories.Beauf)),
                 "sauce" => Task.FromResult(Optional.FromValue(MeterCategories.Sauce)),
                 "sel" => Task.FromResult(Optional.FromValue(MeterCategories.Sel)),
+                "rass" => Task.FromResult(Optional.FromValue(MeterCategories.Rass)),
                 _ => Task.FromResult(Optional.FromNoValue<MeterCategories>())
             };
         }

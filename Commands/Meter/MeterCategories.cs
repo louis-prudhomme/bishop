@@ -5,6 +5,7 @@
         Bdm,
         Sauce,
         Sel,
-        Beauf
+        Beauf,
+        Rass,
     }
 }
