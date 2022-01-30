@@ -6,6 +6,7 @@ using DSharpPlus.Entities;
 namespace Bishop.Commands.Meter.Aliases
 {
     [Group("rass")]
+    [Aliases("n")]
     [Description("Rass-related commands")]
     public class RassCounter : BaseCommandModule
     {
