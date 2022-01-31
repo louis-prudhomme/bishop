@@ -18,24 +18,25 @@ namespace Bishop.Commands.History;
 internal class History : BaseCommandModule
 {
     public Random Random { private get; set; }
+    public RecordRepository RecordRepository { private get; set; } = null!;
 
     [GroupCommand]
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
     {
-        var enumerats = Enumerat.FindAllWithHistoryAsync().Result
-            .Where(enumerat => enumerat.History != null)
-            .SelectMany(enumerat => enumerat.History.Select(record => new {enumerat.User, record}))
-            .ToList();
-        if (enumerats.Count == 0)
+        var records = (await RecordRepository.FindAllAsync()).ToList();
+        
+        if (!records.Any()) 
         {
             await context.RespondAsync("No history recorded.");
             return;
         }
 
-        var picked = enumerats.ElementAt(Random.Next(0, enumerats.Count));
-
-        await context.RespondAsync($"{picked.record} — {picked.User}");
+        var picked = records.ElementAt(Random.Next(0, records.Count));
+        // TODO default value as l'étranger
+        var originalUser = context.Guild.Members[picked.UserId];
+        
+        await context.RespondAsync($"{picked.Motive} — {originalUser.Mention}");
     }
 
     [Command("add")]
@@ -49,15 +50,11 @@ internal class History : BaseCommandModule
         [Description("Record to add")] [RemainingText]
         string history)
     {
-        var record = Enumerat.FindAsync(member, countCategory).Result;
+        var record = new RecordEntity(member.Id, countCategory, history);
 
-        if (record.History == null)
-            record.History = new List<Record> {new(history)};
-        else record.History.Add(new Record(history));
-
-        await record.Commit();
+        await RecordRepository.SaveAsync(record);
         await context.RespondAsync(
-            $"Added «*{history}*» to {member.Username}’s {countCategory} history.");
+            $"Added «*{record.Motive}*» to {member.Mention}’s {countCategory} history.");
     }
 
     [Command("consult")]
