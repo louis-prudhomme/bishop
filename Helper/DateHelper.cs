@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Bishop.Commands.Helper
+namespace Bishop.Helper
 {
     public class DateHelper
     {

@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using Bishop.Config;
 using MongoDB.Driver;
 
-namespace Bishop.Commands.Helper
+namespace Bishop.Helper
 {
     public abstract class Repository<T> where T : DbObject
     {
         /// <summary>
-        ///     Default name of the Mongo collection. Can be overriden by environment variables. <see cref="Program" />.
+        /// Default name of the Mongo collection. Should be a constant in children classes.
+        /// This will be the name of the set in database containing data. Think of it as a table.
         /// </summary>
         private readonly string _collectionName;
 

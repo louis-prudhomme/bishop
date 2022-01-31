@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 
-namespace Bishop.Commands.Helper
+namespace Bishop.Helper
 {
     public abstract class DbObject
     {
