@@ -48,9 +48,9 @@ internal class History : BaseCommandModule
         [Description("Key to add the record to")]
         CountCategory countCategory,
         [Description("Record to add")] [RemainingText]
-        string history)
+        string motive)
     {
-        var record = new RecordEntity(member.Id, countCategory, history);
+        var record = new RecordEntity(member.Id, countCategory, motive);
 
         await RecordRepository.SaveAsync(record);
         await context.RespondAsync(
@@ -63,19 +63,54 @@ internal class History : BaseCommandModule
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordMember member,
-        [Description("Key to know the history of")]
-        CountCategory countCategory
+        [Description("Category to know the history of")]
+        CountCategory countCategory,
+        [Description("Number of records to pull")] int limit
     )
     {
         var records = await RecordRepository.FindByUserAndCategory(member.Id, countCategory);
-
+        var trueLimit = limit > -1 ? records.Count : limit;
+        
         if (records.Any())
             await context.RespondAsync(records
                 .Select(entity => entity.ToString())
+                .Take(trueLimit)
                 .Aggregate((acc, h) => string.Join("\n", acc, h)));
         else
             await context.RespondAsync(
                 $"No history recorded for category user {member.Username} and {countCategory}");
+    }
+    
+    [Command("consult")]
+    [Description("To see the history of a @member")]
+    private async Task Consult(CommandContext context,
+        [Description("@User to know the history of")]
+        DiscordMember member,
+        [Description("Category to know the history of")]
+        CountCategory countCategory
+    )
+    {
+        await Consult(context, member, countCategory, -1);
+    }
+
+    [Command("consult")]
+    private async Task Consult(CommandContext context,
+        [Description("@User to know the history of")]
+        DiscordMember member,
+        [Description("Number of records to pull")] int limit
+    )
+    {
+        var records = await RecordRepository.FindByUser(member.Id);
+        var trueLimit = limit > -1 ? records.Count : limit;
+
+        if (records.Any())
+            await context.RespondAsync(records
+                .Select(entity => entity.ToString())
+                .Take(trueLimit)
+                .Aggregate((acc, h) => string.Join("\n", acc, h)));
+        else
+            await context.RespondAsync(
+                $"No history recorded for user {member.Username}");
     }
 
     [Command("consult")]
@@ -84,15 +119,6 @@ internal class History : BaseCommandModule
         DiscordMember member
     )
     {
-        var history = Enumerat.FindAllWithHistoryAsync(member)
-            .Result.SelectMany(enumerat => enumerat.History)
-            .Select(record => record.ToString())
-            .ToList();
-
-        if (history.Count == 0)
-            await context.RespondAsync(
-                $"No history recorded for user {member.Username}");
-        else
-            await context.RespondAsync(history.ElementAt(Random.Next(0, history.Count)));
+        await Consult(context, member, -1);
     }
 }

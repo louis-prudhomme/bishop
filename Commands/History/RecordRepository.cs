@@ -24,19 +24,38 @@ public class RecordRepository : Repository<RecordEntity>
         return await cursor.ToListAsync();
     }
 
+    public async Task<List<RecordEntity>> FindByUser(ulong userId)
+    {
+        var cursor = await Collection.FindAsync(
+            GetFilterByUser(userId), 
+            GetOrderByTimestamp());
+
+        return await cursor.ToListAsync();
+    }
+
     /// <summary>
-    ///     Creates and returns a Mongo filter targeting the combination of the provided username and category.
+    ///     Creates and returns a Mongo filter targeting the combination of the provided user IDza and category.
     /// </summary>
-    /// <param name="user">Username to look for.</param>
+    /// <param name="userId">Username to look for.</param>
     /// <param name="countCategory">Category to look for.</param>
     /// <returns>A Mongo filter.</returns>
     private FilterDefinition<RecordEntity> GetFilterByUserAndCategory(ulong userId, CountCategory countCategory)
     {
         return Builders<RecordEntity>
-            .Filter.And(
-                Builders<RecordEntity>.Filter.Eq("UserId", userId),
-                Builders<RecordEntity>.Filter.Eq("Key", countCategory))
+                .Filter.And(
+                    Builders<RecordEntity>.Filter.Eq("UserId", userId),
+                    Builders<RecordEntity>.Filter.Eq("Key", countCategory))
             ;
+    }
+
+    /// <summary>
+    ///     Creates and returns a Mongo filter targeting the provided user id.
+    /// </summary>
+    /// <param name="userId">Username to look for.</param>
+    /// <returns>A Mongo filter.</returns>
+    private FilterDefinition<RecordEntity> GetFilterByUser(ulong userId)
+    {
+        return Builders<RecordEntity>.Filter.Eq("UserId", userId);
     }
 
     private FindOptions<RecordEntity, RecordEntity> GetOrderByTimestamp()
