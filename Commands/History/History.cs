@@ -67,17 +67,15 @@ internal class History : BaseCommandModule
         CountCategory countCategory
     )
     {
-        var history = Enumerat.FindAsync(member, countCategory)
-            .Result.History
-            .Select(record => record.ToString())
-            .ToList();
+        var records = await RecordRepository.FindByUserAndCategory(member.Id, countCategory);
 
-        if (history.Count == 0)
+        if (records.Any())
+            await context.RespondAsync(records
+                .Select(entity => entity.ToString())
+                .Aggregate((acc, h) => string.Join("\n", acc, h)));
+        else
             await context.RespondAsync(
                 $"No history recorded for category user {member.Username} and {countCategory}");
-        else
-            await context.RespondAsync(history
-                .Aggregate((acc, h) => string.Join("\n", acc, h)));
     }
 
     [Command("consult")]
