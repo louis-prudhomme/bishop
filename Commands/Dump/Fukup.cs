@@ -13,10 +13,11 @@ namespace Bishop.Commands.Dump;
 /// </summary>
 [Group("fukup")]
 [Aliases("fu")]
+[RequireOwner]
 public class Fukup : BaseCommandModule
 {
-    public RecordRepository RecordRepository { private get; set; }
-    public CounterRepository CounterRepository { private get; set; }
+    public RecordRepository RecordRepository { private get; set; } = null!;
+    public CounterRepository CounterRepository { private get; set; } = null!;
 
     [Command("records")]
     [Aliases("r")]
