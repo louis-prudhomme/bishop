@@ -6,6 +6,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 
 namespace Bishop.Config
 {
@@ -30,7 +31,7 @@ namespace Bishop.Config
             _sigil = new[] {sigil};
             Client = new DiscordClient(AssembleConfig());
 
-            _commands = Client.UseCommandsNext(AssembleCommands());
+            _commands = Client.UseCommandsNext(AssembleCommands(AssembleServiceCollection()));
             _commands.SetHelpFormatter<DefaultHelpFormatter>();
             
             _commands.RegisterConverter(new MeterKeysConverter());
@@ -40,16 +41,20 @@ namespace Bishop.Config
         public DiscordClient Client { get; }
         public string Sigil => string.Join(" ", _sigil);
 
-
-        private CommandsNextConfiguration AssembleCommands()
+        private IServiceCollection AssembleServiceCollection()
+        {
+            return new ServiceCollection()
+                .AddSingleton<Counter>()
+                .AddSingleton<Random>()
+                .AddSingleton<CounterRepository>()
+                .AddSingleton<RecordRepository>();
+        }
+        
+        private CommandsNextConfiguration AssembleCommands(IServiceCollection services)
         {
             return new CommandsNextConfiguration
             {
-                Services = new ServiceCollection()
-                    .AddSingleton<Counter>()
-                    .AddSingleton<Random>()
-                    .AddSingleton<RecordRepository>()
-                .BuildServiceProvider(),
+                Services = services.BuildServiceProvider(),
                 StringPrefixes = _sigil ?? Prefix,
             };
         }

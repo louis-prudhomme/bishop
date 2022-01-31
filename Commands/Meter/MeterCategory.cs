@@ -1,5 +1,6 @@
 ﻿namespace Bishop.Commands.Meter
 {
+    // THOSE MUST NOT CHANGE ORDER
     public enum MeterCategory
     {
         Bdm,

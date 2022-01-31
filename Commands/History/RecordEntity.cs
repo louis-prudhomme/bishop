@@ -17,7 +17,7 @@ namespace Bishop.Commands.History
             RecordedAt = DateTime.Now;
             Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
             
-            DiscordMemberId = discordMemberId;
+            UserId = discordMemberId;
             Category = category;
             Motive = motive;
         }
@@ -30,10 +30,10 @@ namespace Bishop.Commands.History
             
             Motive = record.Motive;
             Category = category;
-            DiscordMemberId = discordMemberId;
+            UserId = discordMemberId;
         }
         
-        public ulong DiscordMemberId { get; set; }
+        public ulong UserId { get; set; }
         public MeterCategory Category { get; set; }
         public DateTime RecordedAt { get; set; }
         public long Timestamp;

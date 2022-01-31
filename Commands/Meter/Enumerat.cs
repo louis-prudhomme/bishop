@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using DSharpPlus.Entities;
@@ -12,7 +14,7 @@ namespace Bishop.Commands.Meter
     /// <summary>
     ///     This class represents a @user's score in a certain category.
     /// </summary>
-    internal class Enumerat
+    public class Enumerat
     {
         /// <summary>
         ///     Default name of the Mongo collection. Can be overriden by environment variables. <see cref="Program" />.
@@ -106,6 +108,24 @@ namespace Bishop.Commands.Meter
                     Builders<Enumerat>.Filter.Eq("User", member.Username)))
                 .SortByDescending(enumerat => enumerat.Score)
                 .ToListAsync();
+        }
+
+        /// <summary>
+        ///     Fetches the record corresponding to a user and a category
+        ///     or creates a new one if the combination does not exist.
+        /// </summary>
+        /// <param name="user">Pseudo of the user</param>
+        /// <param name="meterCategory">Key of the category</param>
+        /// <returns>The corresponding record or a new one.</returns>
+        public static async Task<List<Enumerat>> FindAllAsync(DiscordUser user)
+        {
+            return Enum.GetValues(typeof(MeterCategory))
+                .OfType<MeterCategory>()
+                .Select(category => (category, Collection.FindAsync(GetFilter(user, category))))
+                .Select(tuple => tuple.Item2.Result
+                    .FirstOrDefaultAsync()
+                    .Result ?? new Enumerat(user.Username, tuple.category))
+                .ToList();
         }
 
         /// <summary>

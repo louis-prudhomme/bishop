@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
+using Bishop.Config;
 using MongoDB.Driver;
 
 namespace Bishop.Commands.Helper
@@ -11,9 +13,7 @@ namespace Bishop.Commands.Helper
         /// </summary>
         private readonly string _collectionName;
 
-        public static MongoClient Mongo { get; set; }
-        public static string Database { get; set; }
-
+        public static MongoContext MongoContext { private get; set; }
 
         protected Repository(string collectionName)
         {
@@ -25,7 +25,7 @@ namespace Bishop.Commands.Helper
         ///     Returns the Mongo Collection for the meter.
         /// </summary>
         protected IMongoCollection<T> Collection =>
-            Mongo.GetDatabase(Database).GetCollection<T>(_collectionName);
+            MongoContext.Mongo.GetDatabase(MongoContext.Database).GetCollection<T>(_collectionName);
 
         public async Task InsertManyAsync(IEnumerable<T> instances)
         {

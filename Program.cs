@@ -53,16 +53,17 @@ namespace Bishop
                 .Result;
 
             var mongoClient = new MongoClient(MongoToken);
-            
+
             Enumerat.Database = MongoDatabase;
             Enumerat.Mongo = mongoClient;
-            
-            Repository<RecordEntity>.Database = MongoDatabase;
-            Repository<RecordEntity>.Mongo = mongoClient;
+
+            var dbContext = new MongoContext(mongoClient, MongoDatabase);
+            Repository<CounterEntity>.MongoContext = dbContext;
+            Repository<RecordEntity>.MongoContext = dbContext;
 
             CardCollection.Database = MongoDatabase;
             CardCollection.Mongo = mongoClient;
-            
+
             _generator = new DiscordClientGenerator(DiscordToken, CommandSigil);
 
             _generator.Register<Randomizer>();
@@ -70,17 +71,17 @@ namespace Bishop
             _generator.Register<Tomato>();
             _generator.Register<Vote>();
             _generator.Register<Deleter>();
-            
+
             _generator.Register<Counter>();
             _generator.Register<BdmCounter>();
             _generator.Register<BeaufCounter>();
             _generator.Register<SauceCounter>();
             _generator.Register<SelCounter>();
             _generator.Register<RassCounter>();
-            
+
             _generator.Register<History>();
             _generator.Register<CardGameTracker>();
-            
+
             _generator.Register<Fukup>();
 
             _discord = _generator.Client;
