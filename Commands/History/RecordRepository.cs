@@ -17,7 +17,10 @@ public class RecordRepository : Repository<RecordEntity>
 
     public async Task<List<RecordEntity>> FindByUserAndCategory(ulong userId, CountCategory category)
     {
-        var cursor = await Collection.FindAsync(GetFilterByUserAndCategory(userId, category));
+        var cursor = await Collection.FindAsync(
+            GetFilterByUserAndCategory(userId, category), 
+            GetOrderByTimestamp());
+
         return await cursor.ToListAsync();
     }
 
@@ -27,11 +30,20 @@ public class RecordRepository : Repository<RecordEntity>
     /// <param name="user">Username to look for.</param>
     /// <param name="countCategory">Category to look for.</param>
     /// <returns>A Mongo filter.</returns>
-    private static FilterDefinition<RecordEntity> GetFilterByUserAndCategory(ulong userId, CountCategory countCategory)
+    private FilterDefinition<RecordEntity> GetFilterByUserAndCategory(ulong userId, CountCategory countCategory)
     {
         return Builders<RecordEntity>
             .Filter.And(
                 Builders<RecordEntity>.Filter.Eq("UserId", userId),
-                Builders<RecordEntity>.Filter.Eq("Key", countCategory));
+                Builders<RecordEntity>.Filter.Eq("Key", countCategory))
+            ;
     }
+
+    private FindOptions<RecordEntity, RecordEntity> GetOrderByTimestamp()
+    {
+        return new FindOptions<RecordEntity, RecordEntity>()
+        {
+            Sort = Builders<RecordEntity>.Sort.Ascending("Timestamp")
+        };
+    } 
 }
