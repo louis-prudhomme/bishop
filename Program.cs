@@ -13,91 +13,90 @@ using log4net;
 using log4net.Config;
 using MongoDB.Driver;
 
-namespace Bishop
+namespace Bishop;
+
+internal class Program
 {
-    internal class Program
+    private const string TomatoFilePath = "./Resources/tomatoes.json";
+    private const string StalkFilePath = "./Resources/slenders.json";
+
+    private static readonly string DiscordToken = Environment
+        .GetEnvironmentVariable("DISCORD_TOKEN")!;
+
+    private static readonly string MongoToken = Environment
+        .GetEnvironmentVariable("MONGO_TOKEN")!;
+
+    private static readonly string MongoDatabase = Environment
+        .GetEnvironmentVariable("MONGO_DB")!;
+
+    private static readonly string CommandSigil = Environment
+        .GetEnvironmentVariable("COMMAND_SIGIL")!;
+
+    private static readonly ILog Log = LogManager
+        .GetLogger(MethodBase.GetCurrentMethod()?
+            .DeclaringType);
+
+    private static DiscordClient _discord = null!;
+    private static DiscordClientGenerator _generator = null!;
+
+    [STAThread]
+    private static void Main(string[] args)
     {
-        private const string TomatoFilePath = "./Resources/tomatoes.json";
-        private const string StalkFilePath = "./Resources/slenders.json";
+        XmlConfigurator.Configure();
 
-        private static readonly string DiscordToken = Environment
-            .GetEnvironmentVariable("DISCORD_TOKEN")!;
+        Tomato.Tomatoes = new TomatoConfigurator(TomatoFilePath)
+            .ReadTomatoesAsync()
+            .Result;
 
-        private static readonly string MongoToken = Environment
-            .GetEnvironmentVariable("MONGO_TOKEN")!;
+        Stalk.Lines = new StalkConfigurator(StalkFilePath)
+            .ReadStalkAsync()
+            .Result;
 
-        private static readonly string MongoDatabase = Environment
-            .GetEnvironmentVariable("MONGO_DB")!;
+        var mongoClient = new MongoClient(MongoToken);
 
-        private static readonly string CommandSigil = Environment
-            .GetEnvironmentVariable("COMMAND_SIGIL")!;
+        Enumerat.Database = MongoDatabase;
+        Enumerat.Mongo = mongoClient;
 
-        private static readonly ILog Log = LogManager
-            .GetLogger(MethodBase.GetCurrentMethod()?
-                .DeclaringType);
+        var dbContext = new MongoContext(mongoClient, MongoDatabase);
+        Repository<CounterEntity>.MongoContext = dbContext;
+        Repository<RecordEntity>.MongoContext = dbContext;
 
-        private static DiscordClient _discord = null!;
-        private static DiscordClientGenerator _generator = null!;
+        CardCollection.Database = MongoDatabase;
+        CardCollection.Mongo = mongoClient;
 
-        [STAThread]
-        private static void Main(string[] args)
-        {
-            XmlConfigurator.Configure();
+        _generator = new DiscordClientGenerator(DiscordToken, CommandSigil);
 
-            Tomato.Tomatoes = new TomatoConfigurator(TomatoFilePath)
-                .ReadTomatoesAsync()
-                .Result;
+        _generator.Register<Randomizer>();
+        _generator.Register<Stalk>();
+        _generator.Register<Tomato>();
+        _generator.Register<Vote>();
+        _generator.Register<Deleter>();
 
-            Stalk.Lines = new StalkConfigurator(StalkFilePath)
-                .ReadStalkAsync()
-                .Result;
+        _generator.Register<Counter>();
+        _generator.Register<BdmCounter>();
+        _generator.Register<BeaufCounter>();
+        _generator.Register<SauceCounter>();
+        _generator.Register<SelCounter>();
+        _generator.Register<RassCounter>();
 
-            var mongoClient = new MongoClient(MongoToken);
+        _generator.Register<History>();
+        _generator.Register<CardGameTracker>();
 
-            Enumerat.Database = MongoDatabase;
-            Enumerat.Mongo = mongoClient;
+        _generator.Register<Fukup>();
 
-            var dbContext = new MongoContext(mongoClient, MongoDatabase);
-            Repository<CounterEntity>.MongoContext = dbContext;
-            Repository<RecordEntity>.MongoContext = dbContext;
+        _discord = _generator.Client;
 
-            CardCollection.Database = MongoDatabase;
-            CardCollection.Mongo = mongoClient;
+        Log.Info($"Sigil is {_generator.Sigil}");
+        Log.Info("Awaiting commands");
 
-            _generator = new DiscordClientGenerator(DiscordToken, CommandSigil);
+        MainAsync()
+            .GetAwaiter()
+            .GetResult();
+    }
 
-            _generator.Register<Randomizer>();
-            _generator.Register<Stalk>();
-            _generator.Register<Tomato>();
-            _generator.Register<Vote>();
-            _generator.Register<Deleter>();
-
-            _generator.Register<Counter>();
-            _generator.Register<BdmCounter>();
-            _generator.Register<BeaufCounter>();
-            _generator.Register<SauceCounter>();
-            _generator.Register<SelCounter>();
-            _generator.Register<RassCounter>();
-
-            _generator.Register<History>();
-            _generator.Register<CardGameTracker>();
-
-            _generator.Register<Fukup>();
-
-            _discord = _generator.Client;
-
-            Log.Info($"Sigil is {_generator.Sigil}");
-            Log.Info("Awaiting commands");
-
-            MainAsync()
-                .GetAwaiter()
-                .GetResult();
-        }
-
-        private static async Task MainAsync()
-        {
-            await _discord.ConnectAsync();
-            await Task.Delay(-1);
-        }
+    private static async Task MainAsync()
+    {
+        await _discord.ConnectAsync();
+        await Task.Delay(-1);
     }
 }

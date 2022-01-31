@@ -3,25 +3,24 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Bishop.Config
+namespace Bishop.Config;
+
+/// <summary>
+///     Configures the Stalker variables by fetching the relevant information.
+///     See <see cref="Stalk" />.
+/// </summary>
+public class StalkConfigurator
 {
-    /// <summary>
-    ///     Configures the Stalker variables by fetching the relevant information.
-    ///     See <see cref="Stalk" />.
-    /// </summary>
-    public class StalkConfigurator
+    private readonly string _path;
+
+    public StalkConfigurator(string path)
     {
-        private readonly string _path;
+        _path = path;
+    }
 
-        public StalkConfigurator(string path)
-        {
-            _path = path;
-        }
-
-        public async Task<Dictionary<string, string>> ReadStalkAsync()
-        {
-            using var sr = File.OpenText(_path);
-            return await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(sr.BaseStream);
-        }
+    public async Task<Dictionary<string, string>> ReadStalkAsync()
+    {
+        using var sr = File.OpenText(_path);
+        return await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(sr.BaseStream);
     }
 }

@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Bishop.Commands.History
+namespace Bishop.Commands.History;
+
+public class Record
 {
-    public class Record
+    public Record(string motive)
     {
-        public Record(string motive)
-        {
-            Date = DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("fr-FR"));
+        Date = DateTime.Now.ToString(CultureInfo.CreateSpecificCulture("fr-FR"));
 
-            Motive = motive;
-        }
+        Motive = motive;
+    }
 
-        public string Date { get; set; }
-        public string Motive { get; set; }
+    public string Date { get; set; }
+    public string Motive { get; set; }
 
-        public override string ToString()
-        {
-            return $"*« {Motive} »* – {Date}";
-        }
+    public override string ToString()
+    {
+        return $"*« {Motive} »* – {Date}";
     }
 }
