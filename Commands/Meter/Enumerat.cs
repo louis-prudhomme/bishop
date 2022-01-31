@@ -14,6 +14,7 @@ namespace Bishop.Commands.Meter
     /// <summary>
     ///     This class represents a @user's score in a certain category.
     /// </summary>
+    [Obsolete("This class was badly designed (no layering + no slicing) and will be removed ; hopefully, sooner than later.")]
     public class Enumerat
     {
         /// <summary>

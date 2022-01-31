@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Globalization;
-using Bishop.Commands.Helper;
 using Bishop.Commands.Meter;
+using Bishop.Helper;
 using DSharpPlus.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Bishop.Commands.History
 {
+    /// <summary>
+    /// Specifies and implements interactions of <see cref="RecordEntity"/> with DB.
+    /// </summary>
     public class RecordEntity : DbObject
     {
-        public RecordEntity() : base(false) {}
+        public RecordEntity() : base(false)
+        {
+            Motive = null!;
+        }
 
         public RecordEntity(ulong discordMemberId, CountCategory category, string motive) : base(true)
         {

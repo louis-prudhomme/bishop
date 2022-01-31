@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Bishop.Commands.Helper;
-using Bishop.Commands.Meter;
+using Bishop.Helper;
 using MongoDB.Driver;
 
 namespace Bishop.Commands.History

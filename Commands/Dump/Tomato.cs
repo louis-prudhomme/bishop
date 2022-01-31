@@ -5,7 +5,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Dump.Commands
+namespace Bishop.Commands.Dump
 {
     /// <summary>
     ///     Provide a command to send tomatoes to @users.

@@ -1,6 +1,9 @@
 ﻿namespace Bishop.Commands.Meter
 {
-    // THOSE MUST NOT CHANGE ORDER
+    /// <summary>
+    /// Represent every possible category for <see cref="CounterEntity"/>.
+    /// <remarks>ORDERS OF THE KEYS MUST NOT CHANGE AS ENUMS ARE CONVERTED TO INT WITH KEY POSITION</remarks>
+    /// </summary>
     public enum CountCategory
     {
         Bdm,

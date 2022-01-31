@@ -1,8 +1,12 @@
-﻿using Bishop.Commands.Helper;
+﻿using System;
+using Bishop.Helper;
 using Google.Apis.Drive.v3.Data;
 
 namespace Bishop.Commands.Meter
 {
+    /// <summary>
+    /// Represents users' counters of points in a specific category.
+    /// </summary>
     public class CounterEntity : DbObject
     {
         public CounterEntity() : base(false)
@@ -16,7 +20,12 @@ namespace Bishop.Commands.Meter
             Score = 0;
         }
         
-        //TODO remove me
+        /// <summary>
+        /// To convert oldish and deprecated <see cref="Enumerat"/> to <see cref="CounterEntity"/>.
+        /// </summary>
+        /// <param name="userId">Discord user ID</param>
+        /// <param name="old">Previous <see cref="Enumerat"/></param>
+        [Obsolete("Will eventually be removed along with Enumerats.")]
         public CounterEntity(ulong userId, Enumerat old) : base(true)
         {
             UserId = userId;
@@ -32,6 +41,7 @@ namespace Bishop.Commands.Meter
         public CountCategory Key { get; set; }
         public long Score { get; set; }
 
+        //TODO create a formatter.
         public override string ToString()
         {
             return $"{UserId}’s {Key} ⇒ {Score}";

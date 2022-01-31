@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 
-namespace Bishop.Dump.Commands
+namespace Bishop.Commands.Dump
 {
     /// <summary>
     ///     Provides a set of random-based commands.

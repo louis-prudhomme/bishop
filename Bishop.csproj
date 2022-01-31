@@ -4,6 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <FileUpgradeFlags>40</FileUpgradeFlags>
         <OldToolsVersion>Current</OldToolsVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
         <None Remove="Resources\slenders.json" />

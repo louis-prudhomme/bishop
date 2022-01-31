@@ -3,11 +3,12 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands;
 using Bishop.Commands.CardGame;
-using Bishop.Commands.Helper;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Commands.Meter.Aliases;
 using Bishop.Config;
+using Bishop.Commands.Dump;
+using Bishop.Helper;
 using DSharpPlus;
 using log4net;
 using log4net.Config;
@@ -21,23 +22,23 @@ namespace Bishop
         private const string StalkFilePath = "./Resources/slenders.json";
 
         private static readonly string DiscordToken = Environment
-            .GetEnvironmentVariable("DISCORD_TOKEN");
+            .GetEnvironmentVariable("DISCORD_TOKEN")!;
 
         private static readonly string MongoToken = Environment
-            .GetEnvironmentVariable("MONGO_TOKEN");
+            .GetEnvironmentVariable("MONGO_TOKEN")!;
 
         private static readonly string MongoDatabase = Environment
-            .GetEnvironmentVariable("MONGO_DB");
+            .GetEnvironmentVariable("MONGO_DB")!;
 
         private static readonly string CommandSigil = Environment
-            .GetEnvironmentVariable("COMMAND_SIGIL");
+            .GetEnvironmentVariable("COMMAND_SIGIL")!;
 
         private static readonly ILog Log = LogManager
             .GetLogger(MethodBase.GetCurrentMethod()?
                 .DeclaringType);
 
-        private static DiscordClient _discord;
-        private static DiscordClientGenerator _generator;
+        private static DiscordClient _discord = null!;
+        private static DiscordClientGenerator _generator = null!;
 
         [STAThread]
         private static void Main(string[] args)

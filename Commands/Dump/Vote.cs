@@ -5,7 +5,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Dump.Commands
+namespace Bishop.Commands.Dump
 {
     /// <summary>
     ///     Provides a command to ease voting between options.
