@@ -12,7 +12,7 @@ namespace Bishop.Commands.History
     {
         public RecordEntity() : base(false) {}
 
-        public RecordEntity(ulong discordMemberId, MeterCategory category, string motive) : base(true)
+        public RecordEntity(ulong discordMemberId, CountCategory category, string motive) : base(true)
         {
             RecordedAt = DateTime.Now;
             Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
@@ -23,7 +23,7 @@ namespace Bishop.Commands.History
         }
         
         //TODO remove me
-        public RecordEntity(ulong discordMemberId, MeterCategory category, Record record) : base(true)
+        public RecordEntity(ulong discordMemberId, CountCategory category, Record record) : base(true)
         {
             RecordedAt = DateHelper.FromOldStringToDateTime(record.Date);
             Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
@@ -34,7 +34,7 @@ namespace Bishop.Commands.History
         }
         
         public ulong UserId { get; set; }
-        public MeterCategory Category { get; set; }
+        public CountCategory Category { get; set; }
         public DateTime RecordedAt { get; set; }
         public long Timestamp;
         public string Motive { get; set; }

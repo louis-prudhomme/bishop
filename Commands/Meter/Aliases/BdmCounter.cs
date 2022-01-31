@@ -18,7 +18,7 @@ namespace Bishop.Commands.Meter.Aliases
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
-            await Counter.Score(context, member, MeterCategory.Bdm, nb);
+            await Counter.Score(context, member, CountCategory.Bdm, nb);
         }
 
         [GroupCommand]
@@ -27,14 +27,14 @@ namespace Bishop.Commands.Meter.Aliases
             [Description("User to know the bdm score of")]
             DiscordMember member)
         {
-            await Counter.Score(context, member, MeterCategory.Bdm);
+            await Counter.Score(context, member, CountCategory.Bdm);
         }
 
         [GroupCommand]
         [Description("Returns all bdm scores")]
         public async Task ScoreBdm(CommandContext context)
         {
-            await Counter.Score(context, MeterCategory.Bdm);
+            await Counter.Score(context, CountCategory.Bdm);
         }
 
         [GroupCommand]
@@ -45,7 +45,7 @@ namespace Bishop.Commands.Meter.Aliases
             [RemainingText, Description("Reason for the increment")]
             string reason)
         {
-            await Counter.Score(context, member, MeterCategory.Bdm , reason);
+            await Counter.Score(context, member, CountCategory.Bdm , reason);
         }
     }
 }

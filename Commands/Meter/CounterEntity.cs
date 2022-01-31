@@ -9,7 +9,7 @@ namespace Bishop.Commands.Meter
         {
         }
 
-        public CounterEntity(ulong user, MeterCategory key) : base(true)
+        public CounterEntity(ulong user, CountCategory key) : base(true)
         {
             UserId = user;
             Key = key;
@@ -29,7 +29,7 @@ namespace Bishop.Commands.Meter
         /// </summary>
         public ulong UserId { get; set; }
 
-        public MeterCategory Key { get; set; }
+        public CountCategory Key { get; set; }
         public long Score { get; set; }
 
         public override string ToString()

@@ -26,7 +26,7 @@ namespace Bishop.Commands.Meter
         /// </summary>
         private readonly bool _nue;
 
-        private Enumerat(string user, MeterCategory key)
+        private Enumerat(string user, CountCategory key)
         {
             User = user;
             Key = key;
@@ -48,7 +48,7 @@ namespace Bishop.Commands.Meter
         /// </summary>
         public string User { get; set; }
 
-        public MeterCategory Key { get; set; }
+        public CountCategory Key { get; set; }
         public long Score { get; set; }
         public List<Record> History { get; set; }
 
@@ -75,12 +75,12 @@ namespace Bishop.Commands.Meter
         /// <summary>
         ///     Returns all the user records for the provided category.
         /// </summary>
-        /// <param name="meterCategory">Category to look for.</param>
+        /// <param name="countCategory">Category to look for.</param>
         /// <returns>List of all matching records.</returns>
-        public static async Task<List<Enumerat>> FindAllAsync(MeterCategory meterCategory)
+        public static async Task<List<Enumerat>> FindAllAsync(CountCategory countCategory)
         {
             return await Collection
-                .Find(Builders<Enumerat>.Filter.Eq("Key", meterCategory))
+                .Find(Builders<Enumerat>.Filter.Eq("Key", countCategory))
                 .SortByDescending(enumerat => enumerat.Score)
                 .ToListAsync();
         }
@@ -119,8 +119,8 @@ namespace Bishop.Commands.Meter
         /// <returns>The corresponding record or a new one.</returns>
         public static async Task<List<Enumerat>> FindAllAsync(DiscordUser user)
         {
-            return Enum.GetValues(typeof(MeterCategory))
-                .OfType<MeterCategory>()
+            return Enum.GetValues(typeof(CountCategory))
+                .OfType<CountCategory>()
                 .Select(category => (category, Collection.FindAsync(GetFilter(user, category))))
                 .Select(tuple => tuple.Item2.Result
                     .FirstOrDefaultAsync()
@@ -133,33 +133,33 @@ namespace Bishop.Commands.Meter
         ///     or creates a new one if the combination does not exist.
         /// </summary>
         /// <param name="user">Pseudo of the user</param>
-        /// <param name="meterCategory">Key of the category</param>
+        /// <param name="countCategory">Key of the category</param>
         /// <returns>The corresponding record or a new one.</returns>
-        public static async Task<Enumerat> FindAsync(DiscordUser user, MeterCategory meterCategory)
+        public static async Task<Enumerat> FindAsync(DiscordUser user, CountCategory countCategory)
         {
-            return await Collection.Find(GetFilter(user, meterCategory))
+            return await Collection.Find(GetFilter(user, countCategory))
                        .FirstOrDefaultAsync()
-                   ?? new Enumerat(user.Username, meterCategory);
+                   ?? new Enumerat(user.Username, countCategory);
         }
 
         /// <summary>
         ///     Creates and returns a Mongo filter targeting the combination of the provided username and category.
         /// </summary>
         /// <param name="user">Username to look for.</param>
-        /// <param name="meterCategory">Category to look for.</param>
+        /// <param name="countCategory">Category to look for.</param>
         /// <returns>A Mongo filter.</returns>
-        private static FilterDefinition<Enumerat> GetFilter(string user, MeterCategory meterCategory)
+        private static FilterDefinition<Enumerat> GetFilter(string user, CountCategory countCategory)
         {
             return Builders<Enumerat>
                 .Filter.And(
                     Builders<Enumerat>.Filter.Eq("User", user),
-                    Builders<Enumerat>.Filter.Eq("Key", meterCategory));
+                    Builders<Enumerat>.Filter.Eq("Key", countCategory));
         }
 
-        /// <inheritdoc cref="GetFilter(string,MeterCategory)" />
-        private static FilterDefinition<Enumerat> GetFilter(DiscordUser user, MeterCategory meterCategory)
+        /// <inheritdoc cref="GetFilter(string,CountCategory)" />
+        private static FilterDefinition<Enumerat> GetFilter(DiscordUser user, CountCategory countCategory)
         {
-            return GetFilter(user.Username, meterCategory);
+            return GetFilter(user.Username, countCategory);
         }
 
         public override string ToString()

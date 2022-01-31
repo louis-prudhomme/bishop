@@ -18,7 +18,7 @@ namespace Bishop.Commands.Meter.Aliases
             DiscordMember member,
             [Description("To increment by")] long nb)
         {
-            await Counter.Score(context, member, MeterCategory.Beauf, nb);
+            await Counter.Score(context, member, CountCategory.Beauf, nb);
         }
 
         [GroupCommand]
@@ -27,14 +27,14 @@ namespace Bishop.Commands.Meter.Aliases
             [Description("User to know the beauf score of")]
             DiscordMember member)
         {
-            await Counter.Score(context, member, MeterCategory.Beauf);
+            await Counter.Score(context, member, CountCategory.Beauf);
         }
 
         [GroupCommand]
         [Description("Returns all beauf scores")]
         public async Task ScoreBeauf(CommandContext context)
         {
-            await Counter.Score(context, MeterCategory.Beauf);
+            await Counter.Score(context, CountCategory.Beauf);
         }
 
         [GroupCommand]
@@ -45,7 +45,7 @@ namespace Bishop.Commands.Meter.Aliases
             [RemainingText, Description("Reason for the increment")]
             string reason)
         {
-            await Counter.Score(context, member, MeterCategory.Beauf , reason);
+            await Counter.Score(context, member, CountCategory.Beauf , reason);
         }
     }
 }

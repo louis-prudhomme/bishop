@@ -45,11 +45,11 @@ namespace Bishop.Commands.History
             [Description("@User to add the record to")]
             DiscordMember member,
             [Description("Key to add the record to")]
-            MeterCategory meterCategory,
+            CountCategory countCategory,
             [Description("Record to add"), RemainingText]
             string history)
         {
-                var record = Enumerat.FindAsync(member, meterCategory).Result;
+                var record = Enumerat.FindAsync(member, countCategory).Result;
 
                 if (record.History == null)
                     record.History = new List<Record> {new(history)};
@@ -57,7 +57,7 @@ namespace Bishop.Commands.History
 
                 await record.Commit();
                 await context.RespondAsync(
-                    $"Added «*{history}*» to {member.Username}’s {meterCategory} history.");
+                    $"Added «*{history}*» to {member.Username}’s {countCategory} history.");
         }
 
         [Command("consult")]
@@ -67,17 +67,17 @@ namespace Bishop.Commands.History
             [Description("@User to know the history of")]
             DiscordMember member,
             [Description("Key to know the history of")]
-            MeterCategory meterCategory
+            CountCategory countCategory
         )
         {
-                var history = Enumerat.FindAsync(member, meterCategory)
+                var history = Enumerat.FindAsync(member, countCategory)
                     .Result.History
                     .Select(record => record.ToString())
                     .ToList();
 
                 if (history.Count == 0)
                     await context.RespondAsync(
-                        $"No history recorded for category user {member.Username} and {meterCategory}");
+                        $"No history recorded for category user {member.Username} and {countCategory}");
                 else
                     await context.RespondAsync(history
                         .Aggregate((acc, h) => string.Join("\n", acc, h)));

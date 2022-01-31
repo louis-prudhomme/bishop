@@ -25,8 +25,8 @@ namespace Bishop.Commands.Meter
         public async Task Score(CommandContext context,
             [Description("Target @user")] DiscordMember member)
         {
-            var scores = Enum.GetValues(typeof(MeterCategory))
-                .OfType<MeterCategory>()
+            var scores = Enum.GetValues(typeof(CountCategory))
+                .OfType<CountCategory>()
                 .Select(key => Enumerat.FindAsync(member, key)
                     .Result)
                 .Where(key => key != null)
@@ -43,15 +43,15 @@ namespace Bishop.Commands.Meter
         [Command("score")]
         public async Task Score(CommandContext context,
             [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-            MeterCategory meterCategory)
+            CountCategory countCategory)
         {
-            var scores = Enumerat.FindAllAsync(meterCategory).Result
+            var scores = Enumerat.FindAllAsync(countCategory).Result
                 .Where(score => score != null)
                 .Select(score => score.ToString())
                 .ToList();
 
             if (!scores.Any())
-                await context.RespondAsync($"No scores recorded for category {meterCategory}");
+                await context.RespondAsync($"No scores recorded for category {countCategory}");
             else
                 await context.RespondAsync(scores
                     .Aggregate((acc, score) => string.Join("\n", acc, score)));
@@ -61,9 +61,9 @@ namespace Bishop.Commands.Meter
         public async Task Score(CommandContext context,
             [Description("Target @user")] DiscordMember member,
             [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-            MeterCategory meterCategory)
+            CountCategory countCategory)
         {
-            var score = Enumerat.FindAsync(member, meterCategory)
+            var score = Enumerat.FindAsync(member, countCategory)
                 .Result.ToString();
             await context.RespondAsync(score);
         }
@@ -73,10 +73,10 @@ namespace Bishop.Commands.Meter
             [Description("User to add some score to")]
             DiscordMember member,
             [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-            MeterCategory meterCategory,
+            CountCategory countCategory,
             [Description("To increment by")] long nb)
         {
-            var record = Enumerat.FindAsync(member, meterCategory).Result;
+            var record = Enumerat.FindAsync(member, countCategory).Result;
 
             var previous = record.Score;
             record.Score += nb;
@@ -90,12 +90,12 @@ namespace Bishop.Commands.Meter
             [Description("User to increment score of")]
             DiscordMember member,
             [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-            MeterCategory meterCategory,
+            CountCategory countCategory,
             [RemainingText] [Description("Context for the point(s) addition")]
             string history)
         {
-            await Task.WhenAll(Score(context, member, meterCategory, 1),
-                new History.History().Add(context, member, meterCategory, history));
+            await Task.WhenAll(Score(context, member, countCategory, 1),
+                new History.History().Add(context, member, countCategory, history));
         }
     }
 }
