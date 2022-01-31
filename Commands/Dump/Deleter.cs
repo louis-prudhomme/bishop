@@ -4,7 +4,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 
-namespace Bishop.Commands
+namespace Bishop.Dump.Commands
 {
     /// <summary>
     ///     This class provides a set of commands to delete messages.

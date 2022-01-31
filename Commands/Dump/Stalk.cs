@@ -5,7 +5,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands
+namespace Bishop.Dump.Commands
 {
     public class Stalk : BaseCommandModule
     {
