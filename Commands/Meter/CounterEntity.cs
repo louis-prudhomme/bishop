@@ -8,11 +8,11 @@ namespace Bishop.Commands.Meter
     /// </summary>
     public class CounterEntity : DbObject
     {
-        public CounterEntity() : base(false)
+        public CounterEntity() 
         {
         }
 
-        public CounterEntity(ulong user, CountCategory key) : base(true)
+        public CounterEntity(ulong user, CountCategory key) 
         {
             UserId = user;
             Key = key;
@@ -25,7 +25,7 @@ namespace Bishop.Commands.Meter
         /// <param name="userId">Discord user ID</param>
         /// <param name="old">Previous <see cref="Enumerat" /></param>
         [Obsolete("Will eventually be removed along with Enumerats.")]
-        public CounterEntity(ulong userId, Enumerat old) : base(true)
+        public CounterEntity(ulong userId, Enumerat old) 
         {
             UserId = userId;
             Key = old.Key;

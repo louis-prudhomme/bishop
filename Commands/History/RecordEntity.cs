@@ -11,12 +11,12 @@ namespace Bishop.Commands.History
     {
         public long Timestamp;
 
-        public RecordEntity() : base(false)
+        public RecordEntity() 
         {
             Motive = null!;
         }
 
-        public RecordEntity(ulong discordMemberId, CountCategory category, string motive) : base(true)
+        public RecordEntity(ulong discordMemberId, CountCategory category, string motive) 
         {
             RecordedAt = DateTime.Now;
             Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
@@ -27,7 +27,7 @@ namespace Bishop.Commands.History
         }
 
         //TODO remove me
-        public RecordEntity(ulong discordMemberId, CountCategory category, Record record) : base(true)
+        public RecordEntity(ulong discordMemberId, CountCategory category, Record record) 
         {
             RecordedAt = DateHelper.FromOldStringToDateTime(record.Date);
             Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
