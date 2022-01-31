@@ -17,7 +17,7 @@ namespace Bishop.Commands.History;
 [Description("History-related commands")]
 internal class History : BaseCommandModule
 {
-    public Random Random { private get; set; }
+    public Random Random { private get; set; } = null!;
     public RecordRepository RecordRepository { private get; set; } = null!;
 
     [GroupCommand]
@@ -45,7 +45,7 @@ internal class History : BaseCommandModule
     public async Task Add(CommandContext context,
         [Description("@User to add the record to")]
         DiscordMember member,
-        [Description("Key to add the record to")]
+        [Description("Category to add the record to")]
         CountCategory countCategory,
         [Description("Record to add")] [RemainingText]
         string motive)
@@ -62,7 +62,7 @@ internal class History : BaseCommandModule
     [Description("To see the history of a @member")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
-        DiscordMember member,
+        DiscordUser member,
         [Description("Category to know the history of")]
         CountCategory countCategory,
         [Description("Number of records to pull")] int limit
@@ -85,7 +85,7 @@ internal class History : BaseCommandModule
     [Description("To see the history of a @member")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
-        DiscordMember member,
+        DiscordUser member,
         [Description("Category to know the history of")]
         CountCategory countCategory
     )
@@ -96,7 +96,7 @@ internal class History : BaseCommandModule
     [Command("consult")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
-        DiscordMember member,
+        DiscordUser member,
         [Description("Number of records to pull")] int limit
     )
     {
@@ -116,7 +116,7 @@ internal class History : BaseCommandModule
     [Command("consult")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
-        DiscordMember member
+        DiscordUser member
     )
     {
         await Consult(context, member, -1);

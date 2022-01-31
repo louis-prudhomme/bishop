@@ -44,7 +44,7 @@ public class RecordRepository : Repository<RecordEntity>
         return Builders<RecordEntity>
                 .Filter.And(
                     Builders<RecordEntity>.Filter.Eq("UserId", userId),
-                    Builders<RecordEntity>.Filter.Eq("Key", countCategory))
+                    Builders<RecordEntity>.Filter.Eq("Category", countCategory))
             ;
     }
 
