@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -29,7 +28,7 @@ namespace Bishop.Commands.CardGame
                 .Select(game => game.ToString())
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
         }
-        
+
         [GroupCommand]
         [Description("Adds a card game to the collection in your name.")]
         public async Task AddAlias(CommandContext context,
@@ -42,7 +41,6 @@ namespace Bishop.Commands.CardGame
         [Command("from")]
         [Aliases("f", ">")]
         [Description("Adds a card game to the collection in the name of provided user.")]
-
         public async Task AddFrom(CommandContext context,
             [Description("User offering the card game")]
             DiscordMember gifter,
@@ -55,7 +53,7 @@ namespace Bishop.Commands.CardGame
 
             await context.RespondAsync($"*{cardGameName}* was added to the collection by **{gifter.Username}** !");
         }
-        
+
         [Command("add")]
         [Aliases("a", "+")]
         [Description("Adds a card game to the collection in your name.")]

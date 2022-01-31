@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bishop.Commands.Meter;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;

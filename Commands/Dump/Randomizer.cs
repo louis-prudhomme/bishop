@@ -26,7 +26,8 @@ namespace Bishop.Commands.Dump
         [Aliases("rand", "r")]
         [Description("Make a random choice")]
         public async Task RandomChoice(CommandContext context,
-            [Description("Options to choose from")] params string[] args)
+            [Description("Options to choose from")]
+            params string[] args)
         {
             await context.RespondAsync($"🎲 ⇒ {args[Rand.Next(args.Length)]}");
         }

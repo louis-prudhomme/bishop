@@ -10,7 +10,7 @@ namespace Bishop.Commands.Meter.Aliases
     public class SelCounter : BaseCommandModule
     {
         public Counter Counter { private get; set; }
-        
+
         [GroupCommand]
         [Description("Adds a provided value to @someone’s sel score")]
         public async Task ScoreSel(CommandContext context,
@@ -42,7 +42,7 @@ namespace Bishop.Commands.Meter.Aliases
         public async Task ScoreSel(CommandContext context,
             [Description("User to increment the sel score of by 1")]
             DiscordMember member,
-            [RemainingText, Description("Reason for the increment")]
+            [RemainingText] [Description("Reason for the increment")]
             string reason)
         {
             await Counter.Score(context, member, CountCategory.Sel, reason);

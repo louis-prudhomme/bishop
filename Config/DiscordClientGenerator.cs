@@ -6,7 +6,6 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Driver;
 
 namespace Bishop.Config
 {
@@ -33,7 +32,7 @@ namespace Bishop.Config
 
             _commands = Client.UseCommandsNext(AssembleCommands(AssembleServiceCollection()));
             _commands.SetHelpFormatter<DefaultHelpFormatter>();
-            
+
             _commands.RegisterConverter(new MeterKeysConverter());
         }
 
@@ -49,13 +48,13 @@ namespace Bishop.Config
                 .AddSingleton<CounterRepository>()
                 .AddSingleton<RecordRepository>();
         }
-        
+
         private CommandsNextConfiguration AssembleCommands(IServiceCollection services)
         {
             return new CommandsNextConfiguration
             {
                 Services = services.BuildServiceProvider(),
-                StringPrefixes = _sigil ?? Prefix,
+                StringPrefixes = _sigil ?? Prefix
             };
         }
 

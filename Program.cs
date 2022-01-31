@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using Bishop.Commands;
 using Bishop.Commands.CardGame;
+using Bishop.Commands.Dump;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Commands.Meter.Aliases;
 using Bishop.Config;
-using Bishop.Commands.Dump;
 using Bishop.Helper;
 using DSharpPlus;
 using log4net;

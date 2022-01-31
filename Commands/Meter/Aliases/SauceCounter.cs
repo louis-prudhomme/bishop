@@ -10,7 +10,7 @@ namespace Bishop.Commands.Meter.Aliases
     public class SauceCounter : BaseCommandModule
     {
         public Counter Counter { private get; set; }
-        
+
         [GroupCommand]
         [Description("Adds a provided value to @someone’s sauce score")]
         public async Task ScoreSauce(CommandContext context,
@@ -42,10 +42,10 @@ namespace Bishop.Commands.Meter.Aliases
         public async Task ScoreSauce(CommandContext context,
             [Description("User to increment the sauce score of by 1")]
             DiscordMember member,
-            [RemainingText, Description("Reason for the increment")]
+            [RemainingText] [Description("Reason for the increment")]
             string reason)
         {
-            await Counter.Score(context, member, CountCategory.Sauce , reason);
+            await Counter.Score(context, member, CountCategory.Sauce, reason);
         }
     }
 }

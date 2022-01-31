@@ -1,11 +1,10 @@
 ﻿using System;
 using Bishop.Helper;
-using Google.Apis.Drive.v3.Data;
 
 namespace Bishop.Commands.Meter
 {
     /// <summary>
-    /// Represents users' counters of points in a specific category.
+    ///     Represents users' counters of points in a specific category.
     /// </summary>
     public class CounterEntity : DbObject
     {
@@ -19,12 +18,12 @@ namespace Bishop.Commands.Meter
             Key = key;
             Score = 0;
         }
-        
+
         /// <summary>
-        /// To convert oldish and deprecated <see cref="Enumerat"/> to <see cref="CounterEntity"/>.
+        ///     To convert oldish and deprecated <see cref="Enumerat" /> to <see cref="CounterEntity" />.
         /// </summary>
         /// <param name="userId">Discord user ID</param>
-        /// <param name="old">Previous <see cref="Enumerat"/></param>
+        /// <param name="old">Previous <see cref="Enumerat" /></param>
         [Obsolete("Will eventually be removed along with Enumerats.")]
         public CounterEntity(ulong userId, Enumerat old) : base(true)
         {

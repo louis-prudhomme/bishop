@@ -26,7 +26,8 @@ namespace Bishop.Commands.Dump
         [Aliases("vote", "v")]
         [Description("Create a poll with the specified options. There must not be more than 20 options.")]
         public async Task Referendum(CommandContext context,
-            [Description("Options to choose from")] params string[] args)
+            [Description("Options to choose from")]
+            params string[] args)
         {
             switch (args.Length)
             {

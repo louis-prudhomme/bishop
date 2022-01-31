@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using DSharpPlus.Entities;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
@@ -14,7 +13,8 @@ namespace Bishop.Commands.Meter
     /// <summary>
     ///     This class represents a @user's score in a certain category.
     /// </summary>
-    [Obsolete("This class was badly designed (no layering + no slicing) and will be removed ; hopefully, sooner than later.")]
+    [Obsolete(
+        "This class was badly designed (no layering + no slicing) and will be removed ; hopefully, sooner than later.")]
     public class Enumerat
     {
         /// <summary>
@@ -88,7 +88,7 @@ namespace Bishop.Commands.Meter
 
         /// <summary>
         ///     Returns all the user records with a history.
-        /// </summary>  
+        /// </summary>
         /// <returns>List of all matching records.</returns>
         public static async Task<List<Enumerat>> FindAllWithHistoryAsync()
         {

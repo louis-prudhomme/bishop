@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -12,9 +11,8 @@ namespace Bishop.Commands.Meter
     /// <summary>
     ///     The <c>Counter</c> class provides a set of commands to keep trace of user's deeds.
     ///     This file contains all the general and generic commands.
-    /// Classes specific to each category exist (ex: <see cref="SelCounter"/>).
+    ///     Classes specific to each category exist (ex: <see cref="SelCounter" />).
     /// </summary>
-
     public class Counter : BaseCommandModule
     {
         [Command("score")]

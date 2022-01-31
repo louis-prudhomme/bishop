@@ -15,10 +15,10 @@ namespace Bishop.Commands.History
     [Group("history")]
     [Aliases("hy")]
     [Description("History-related commands")]
-    class History : BaseCommandModule
+    internal class History : BaseCommandModule
     {
         public Random Random { private get; set; }
-        
+
         [GroupCommand]
         [Description("Picks a random record to expose")]
         public async Task PickRandom(CommandContext context)
@@ -46,18 +46,18 @@ namespace Bishop.Commands.History
             DiscordMember member,
             [Description("Key to add the record to")]
             CountCategory countCategory,
-            [Description("Record to add"), RemainingText]
+            [Description("Record to add")] [RemainingText]
             string history)
         {
-                var record = Enumerat.FindAsync(member, countCategory).Result;
+            var record = Enumerat.FindAsync(member, countCategory).Result;
 
-                if (record.History == null)
-                    record.History = new List<Record> {new(history)};
-                else record.History.Add(new Record(history));
+            if (record.History == null)
+                record.History = new List<Record> {new(history)};
+            else record.History.Add(new Record(history));
 
-                await record.Commit();
-                await context.RespondAsync(
-                    $"Added «*{history}*» to {member.Username}’s {countCategory} history.");
+            await record.Commit();
+            await context.RespondAsync(
+                $"Added «*{history}*» to {member.Username}’s {countCategory} history.");
         }
 
         [Command("consult")]
@@ -70,17 +70,17 @@ namespace Bishop.Commands.History
             CountCategory countCategory
         )
         {
-                var history = Enumerat.FindAsync(member, countCategory)
-                    .Result.History
-                    .Select(record => record.ToString())
-                    .ToList();
+            var history = Enumerat.FindAsync(member, countCategory)
+                .Result.History
+                .Select(record => record.ToString())
+                .ToList();
 
-                if (history.Count == 0)
-                    await context.RespondAsync(
-                        $"No history recorded for category user {member.Username} and {countCategory}");
-                else
-                    await context.RespondAsync(history
-                        .Aggregate((acc, h) => string.Join("\n", acc, h)));
+            if (history.Count == 0)
+                await context.RespondAsync(
+                    $"No history recorded for category user {member.Username} and {countCategory}");
+            else
+                await context.RespondAsync(history
+                    .Aggregate((acc, h) => string.Join("\n", acc, h)));
         }
 
         [Command("consult")]

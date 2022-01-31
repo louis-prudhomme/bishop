@@ -1,12 +1,9 @@
-﻿using System.Threading.Tasks;
-using Bishop.Commands.Meter;
-using Bishop.Helper;
-using MongoDB.Driver;
+﻿using Bishop.Helper;
 
 namespace Bishop.Commands.Meter
 {
     /// <summary>
-    /// Specifies and implements interactions of <see cref="CounterEntity"/> with DB.
+    ///     Specifies and implements interactions of <see cref="CounterEntity" /> with DB.
     /// </summary>
     public class CounterRepository : Repository<CounterEntity>
     {

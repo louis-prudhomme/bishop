@@ -11,7 +11,7 @@ namespace Bishop.Commands.Meter.Aliases
     public class RassCounter : BaseCommandModule
     {
         public Counter Counter { private get; set; }
-        
+
         [GroupCommand]
         [Description("Adds a provided value to @someone’s rass score")]
         public async Task ScoreRass(CommandContext context,
@@ -43,10 +43,10 @@ namespace Bishop.Commands.Meter.Aliases
         public async Task ScoreRass(CommandContext context,
             [Description("User to increment the rass score of by 1")]
             DiscordMember member,
-            [RemainingText, Description("Reason for the increment")]
+            [RemainingText] [Description("Reason for the increment")]
             string reason)
         {
-            await Counter.Score(context, member, CountCategory.Rass , reason);
+            await Counter.Score(context, member, CountCategory.Rass, reason);
         }
     }
 }

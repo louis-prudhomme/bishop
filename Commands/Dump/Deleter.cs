@@ -32,7 +32,11 @@ namespace Bishop.Commands.Dump
 
                 if (!string.IsNullOrEmpty(silentFlag)) return;
                 await context.RespondAsync($"Removed {futures.Count} 😉");
-            } else await context.RespondAsync("You need to answer a message.");
+            }
+            else
+            {
+                await context.RespondAsync("You need to answer a message.");
+            }
         }
 
         [Command("deleten")]

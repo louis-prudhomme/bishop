@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Bishop.Helper;
-using MongoDB.Driver;
+﻿using Bishop.Helper;
 
 namespace Bishop.Commands.History
 {

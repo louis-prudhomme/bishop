@@ -30,7 +30,8 @@ namespace Bishop.Commands.Dump
         [Command("stalk")]
         [Description("Invoke a discussion between you and one of the five Slenders")]
         public async Task Discuss(CommandContext context,
-            [Description("Slender to talk with")] [RemainingText] string name)
+            [Description("Slender to talk with")] [RemainingText]
+            string name)
         {
             await context.RespondAsync(Lines[name]);
         }

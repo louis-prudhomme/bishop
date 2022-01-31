@@ -10,7 +10,7 @@ namespace Bishop.Commands.Meter.Aliases
     public class BdmCounter : BaseCommandModule
     {
         public Counter Counter { private get; set; }
-        
+
         [GroupCommand]
         [Description("Adds a provided value to @someone’s bdm score")]
         public async Task ScoreBdm(CommandContext context,
@@ -42,10 +42,10 @@ namespace Bishop.Commands.Meter.Aliases
         public async Task ScoreBdm(CommandContext context,
             [Description("User to increment the bdm score of by 1")]
             DiscordMember member,
-            [RemainingText, Description("Reason for the increment")]
+            [RemainingText] [Description("Reason for the increment")]
             string reason)
         {
-            await Counter.Score(context, member, CountCategory.Bdm , reason);
+            await Counter.Score(context, member, CountCategory.Bdm, reason);
         }
     }
 }
