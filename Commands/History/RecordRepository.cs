@@ -4,7 +4,7 @@ namespace Bishop.Commands.History
 {
     public class RecordRepository : Repository<RecordEntity>
     {
-        private const string CollectionName = "history";
+        private const string CollectionName = "records";
 
         public RecordRepository() : base(CollectionName)
         {

@@ -7,7 +7,7 @@ namespace Bishop.Commands.Meter
     /// </summary>
     public class CounterRepository : Repository<CounterEntity>
     {
-        private const string CollectionName = "counter";
+        private const string CollectionName = "counters";
 
         public CounterRepository() : base(CollectionName)
         {
