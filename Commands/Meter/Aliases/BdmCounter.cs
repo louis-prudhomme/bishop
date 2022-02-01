@@ -9,7 +9,7 @@ namespace Bishop.Commands.Meter.Aliases;
 [Description("Bdm-related commands")]
 public class BdmCounter : BaseCommandModule
 {
-    public Counter Counter { private get; set; }
+    public CounterService Service { private get; set; }
 
     [GroupCommand]
     [Description("Adds a provided value to @someone’s bdm score")]
@@ -18,7 +18,7 @@ public class BdmCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Counter.Score(context, member, CountCategory.Bdm, nb);
+        await Service.Score(context, member, CountCategory.Bdm, nb);
     }
 
     [GroupCommand]
@@ -27,14 +27,14 @@ public class BdmCounter : BaseCommandModule
         [Description("User to know the bdm score of")]
         DiscordMember member)
     {
-        await Counter.Score(context, member, CountCategory.Bdm);
+        await Service.Score(context, member, CountCategory.Bdm);
     }
 
     [GroupCommand]
     [Description("Returns all bdm scores")]
     public async Task ScoreBdm(CommandContext context)
     {
-        await Counter.Score(context, CountCategory.Bdm);
+        await Service.Score(context, CountCategory.Bdm);
     }
 
     [GroupCommand]
@@ -45,6 +45,6 @@ public class BdmCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Counter.Score(context, member, CountCategory.Bdm, reason);
+        await Service.Score(context, member, CountCategory.Bdm, reason);
     }
 }

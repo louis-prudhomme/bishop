@@ -12,10 +12,10 @@ public class CounterEntity : DbObject
     {
     }
 
-    public CounterEntity(ulong user, CountCategory key) 
+    public CounterEntity(ulong user, CountCategory category) 
     {
         UserId = user;
-        Key = key;
+        Category = category;
         Score = 0;
     }
 
@@ -28,7 +28,7 @@ public class CounterEntity : DbObject
     public CounterEntity(ulong userId, Enumerat old) 
     {
         UserId = userId;
-        Key = old.Key;
+        Category = old.Key;
         Score = old.Score;
     }
 
@@ -37,12 +37,12 @@ public class CounterEntity : DbObject
     /// </summary>
     public ulong UserId { get; set; }
 
-    public CountCategory Key { get; set; }
+    public CountCategory Category { get; set; }
     public long Score { get; set; }
 
     //TODO create a formatter.
     public override string ToString()
     {
-        return $"{UserId}’s {Key} ⇒ {Score}";
+        return $"{UserId}’s {Category} ⇒ {Score}";
     }
 }

@@ -9,7 +9,7 @@ namespace Bishop.Commands.Meter.Aliases;
 [Description("Sauce-related commands")]
 public class SauceCounter : BaseCommandModule
 {
-    public Counter Counter { private get; set; }
+    public CounterService Service { private get; set; }
 
     [GroupCommand]
     [Description("Adds a provided value to @someone’s sauce score")]
@@ -18,7 +18,7 @@ public class SauceCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Counter.Score(context, member, CountCategory.Sauce, nb);
+        await Service.Score(context, member, CountCategory.Sauce, nb);
     }
 
     [GroupCommand]
@@ -27,14 +27,14 @@ public class SauceCounter : BaseCommandModule
         [Description("User to know the sauce score of")]
         DiscordMember member)
     {
-        await Counter.Score(context, member, CountCategory.Sauce);
+        await Service.Score(context, member, CountCategory.Sauce);
     }
 
     [GroupCommand]
     [Description("Returns all sauce scores")]
     public async Task ScoreSauce(CommandContext context)
     {
-        await Counter.Score(context, CountCategory.Sauce);
+        await Service.Score(context, CountCategory.Sauce);
     }
 
     [GroupCommand]
@@ -45,6 +45,6 @@ public class SauceCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Counter.Score(context, member, CountCategory.Sauce, reason);
+        await Service.Score(context, member, CountCategory.Sauce, reason);
     }
 }

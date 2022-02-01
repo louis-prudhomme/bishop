@@ -15,7 +15,7 @@ namespace Bishop.Commands.History;
 [Group("history")]
 [Aliases("hy")]
 [Description("History-related commands")]
-internal class History : BaseCommandModule
+public class HistoryService : BaseCommandModule
 {
     public Random Random { private get; set; } = null!;
     public RecordRepository Repository { private get; set; } = null!;

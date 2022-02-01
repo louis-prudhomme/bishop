@@ -72,14 +72,14 @@ internal class Program
         _generator.Register<Vote>();
         _generator.Register<Deleter>();
 
-        _generator.Register<Counter>();
+        _generator.Register<CounterService>();
         _generator.Register<BdmCounter>();
         _generator.Register<BeaufCounter>();
         _generator.Register<SauceCounter>();
         _generator.Register<SelCounter>();
         _generator.Register<RassCounter>();
 
-        _generator.Register<History>();
+        _generator.Register<HistoryService>();
         _generator.Register<CardGameTracker>();
 
         _generator.Register<Fukup>();

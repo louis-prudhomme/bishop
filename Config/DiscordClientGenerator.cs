@@ -43,7 +43,7 @@ public class DiscordClientGenerator
     private IServiceCollection AssembleServiceCollection()
     {
         return new ServiceCollection()
-            .AddSingleton<Counter>()
+            .AddSingleton<CounterService>()
             .AddSingleton<Random>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<RecordRepository>();

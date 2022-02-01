@@ -9,7 +9,7 @@ namespace Bishop.Commands.Meter.Aliases;
 [Description("Sel-related commands")]
 public class SelCounter : BaseCommandModule
 {
-    public Counter Counter { private get; set; }
+    public CounterService Service { private get; set; }
 
     [GroupCommand]
     [Description("Adds a provided value to @someone’s sel score")]
@@ -18,7 +18,7 @@ public class SelCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Counter.Score(context, member, CountCategory.Sel, nb);
+        await Service.Score(context, member, CountCategory.Sel, nb);
     }
 
     [GroupCommand]
@@ -27,14 +27,14 @@ public class SelCounter : BaseCommandModule
         [Description("User to know the sel score of")]
         DiscordMember member)
     {
-        await Counter.Score(context, member, CountCategory.Sel);
+        await Service.Score(context, member, CountCategory.Sel);
     }
 
     [GroupCommand]
     [Description("Returns all sel scores")]
     public async Task ScoreSel(CommandContext context)
     {
-        await Counter.Score(context, CountCategory.Sel);
+        await Service.Score(context, CountCategory.Sel);
     }
 
     [GroupCommand]
@@ -45,6 +45,6 @@ public class SelCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Counter.Score(context, member, CountCategory.Sel, reason);
+        await Service.Score(context, member, CountCategory.Sel, reason);
     }
 }

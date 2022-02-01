@@ -10,7 +10,7 @@ namespace Bishop.Commands.Meter.Aliases;
 [Description("Rass-related commands")]
 public class RassCounter : BaseCommandModule
 {
-    public Counter Counter { private get; set; }
+    public CounterService Service { private get; set; }
 
     [GroupCommand]
     [Description("Adds a provided value to @someone’s rass score")]
@@ -19,7 +19,7 @@ public class RassCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Counter.Score(context, member, CountCategory.Rass, nb);
+        await Service.Score(context, member, CountCategory.Rass, nb);
     }
 
     [GroupCommand]
@@ -28,14 +28,14 @@ public class RassCounter : BaseCommandModule
         [Description("User to know the rass score of")]
         DiscordMember member)
     {
-        await Counter.Score(context, member, CountCategory.Rass);
+        await Service.Score(context, member, CountCategory.Rass);
     }
 
     [GroupCommand]
     [Description("Returns all rass scores")]
     public async Task ScoreRass(CommandContext context)
     {
-        await Counter.Score(context, CountCategory.Rass);
+        await Service.Score(context, CountCategory.Rass);
     }
 
     [GroupCommand]
@@ -46,6 +46,6 @@ public class RassCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Counter.Score(context, member, CountCategory.Rass, reason);
+        await Service.Score(context, member, CountCategory.Rass, reason);
     }
 }

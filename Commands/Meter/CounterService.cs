@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -13,8 +14,11 @@ namespace Bishop.Commands.Meter;
 ///     This file contains all the general and generic commands.
 ///     Classes specific to each category exist (ex: <see cref="SelCounter" />).
 /// </summary>
-public class Counter : BaseCommandModule
+public class CounterService : BaseCommandModule
 {
+    public CounterRepository Repository { private get; set; } = null!;
+    public HistoryService Service { private get; set; } = null!;
+
     [Command("score")]
     [Aliases("s")]
     [Description(
@@ -62,9 +66,9 @@ public class Counter : BaseCommandModule
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
         CountCategory countCategory)
     {
-        var score = Enumerat.FindAsync(member, countCategory)
-            .Result.ToString();
-        await context.RespondAsync(score);
+        var score = await Repository.FindByUserAndCategory(member.Id, countCategory)
+                    ?? new CounterEntity(member.Id, countCategory);
+        await context.RespondAsync(score.ToString());
     }
 
     [Command("score")]
@@ -75,12 +79,13 @@ public class Counter : BaseCommandModule
         CountCategory countCategory,
         [Description("To increment by")] long nb)
     {
-        var record = Enumerat.FindAsync(member, countCategory).Result;
+        var record = await Repository.FindByUserAndCategory(member.Id, countCategory)
+                     ?? new CounterEntity(member.Id, countCategory);
 
         var previous = record.Score;
         record.Score += nb;
 
-        await record.Commit();
+        await Repository.SaveAsync(record);
         await context.RespondAsync($"{record} (from {previous})");
     }
 
@@ -91,9 +96,10 @@ public class Counter : BaseCommandModule
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
         CountCategory countCategory,
         [RemainingText] [Description("Context for the point(s) addition")]
-        string history)
+        string motive)
     {
-        await Task.WhenAll(Score(context, member, countCategory, 1),
-            new History.History().Add(context, member, countCategory, history));
+        await Task.WhenAll(
+            Score(context, member, countCategory, 1),
+            Service.Add(context, member, countCategory, motive));
     }
 }
