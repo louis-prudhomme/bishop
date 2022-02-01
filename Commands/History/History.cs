@@ -18,13 +18,13 @@ namespace Bishop.Commands.History;
 internal class History : BaseCommandModule
 {
     public Random Random { private get; set; } = null!;
-    public RecordRepository RecordRepository { private get; set; } = null!;
+    public RecordRepository Repository { private get; set; } = null!;
 
     [GroupCommand]
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
     {
-        var records = (await RecordRepository.FindAllAsync()).ToList();
+        var records = (await Repository.FindAllAsync()).ToList();
         
         if (!records.Any()) 
         {
@@ -36,7 +36,7 @@ internal class History : BaseCommandModule
         // TODO default value as l'étranger
         var originalUser = context.Guild.Members[picked.UserId];
         
-        await context.RespondAsync($"{picked.Motive} — {originalUser.Mention}");
+        await context.RespondAsync($"• {picked.Motive} — {originalUser.Mention}");
     }
 
     [Command("add")]
@@ -52,7 +52,7 @@ internal class History : BaseCommandModule
     {
         var record = new RecordEntity(member.Id, countCategory, motive);
 
-        await RecordRepository.SaveAsync(record);
+        await Repository.SaveAsync(record);
         await context.RespondAsync(
             $"Added «*{record.Motive}*» to {member.Mention}’s {countCategory} history.");
     }
@@ -68,7 +68,7 @@ internal class History : BaseCommandModule
         [Description("Number of records to pull")] int limit
     )
     {
-        var records = await RecordRepository.FindByUserAndCategory(member.Id, countCategory);
+        var records = await Repository.FindByUserAndCategory(member.Id, countCategory);
         var trueLimit = limit > -1 ? records.Count : limit;
         
         if (records.Any())
@@ -100,7 +100,7 @@ internal class History : BaseCommandModule
         [Description("Number of records to pull")] int limit
     )
     {
-        var records = await RecordRepository.FindByUser(member.Id);
+        var records = await Repository.FindByUser(member.Id);
         var trueLimit = limit > -1 ? records.Count : limit;
 
         if (records.Any())

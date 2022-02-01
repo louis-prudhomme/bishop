@@ -58,11 +58,16 @@ public class RecordRepository : Repository<RecordEntity>
         return Builders<RecordEntity>.Filter.Eq("UserId", userId);
     }
 
+
+    /// <summary>
+    ///     Creates and returns a Mongo sorting option (by timestamp, ascending)
+    /// </summary>
+    /// <returns>A Mongo sorting option.</returns>
     private FindOptions<RecordEntity, RecordEntity> GetOrderByTimestamp()
     {
         return new FindOptions<RecordEntity, RecordEntity>()
         {
             Sort = Builders<RecordEntity>.Sort.Ascending("Timestamp")
         };
-    } 
+    }
 }
