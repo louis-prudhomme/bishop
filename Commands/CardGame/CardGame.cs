@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Bishop.Commands.CardGame;
 
+[Obsolete]
 public class CardGame
 {
     public CardGame(string name, string gifter)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 
@@ -7,6 +8,7 @@ namespace Bishop.Commands.CardGame;
 /// <summary>
 ///     This class represents a @user's score in a certain category.
 /// </summary>
+[Obsolete]
 internal class CardCollection
 {
     /// <summary>

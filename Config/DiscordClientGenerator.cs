@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Bishop.Commands.CardGame;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Config.Converters;
@@ -52,8 +53,9 @@ public class DiscordClientGenerator
         return new ServiceCollection()
             .AddSingleton<Random>()
             .AddSingleton<CounterService>()
+            .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
-            .AddSingleton<RecordRepository>();
+            .AddSingleton<CardGameRepository>();
     }
 
     private CommandsNextConfiguration AssembleCommands(IServiceCollection services)

@@ -48,7 +48,7 @@ public abstract class Repository<T> where T : DbObject
         if (instance.IsNew)
             await Collection.InsertOneAsync(instance);
         else
-            await Collection.ReplaceOneAsync(GetIdFilter(instance.Id), instance);
+            await Collection.ReplaceOneAsync(GetIdFilter(instance.Id!), instance);
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public abstract class Repository<T> where T : DbObject
     /// </summary>
     /// <param name="filter">Filter to select instances with.</param>
     /// <returns>Empty collection if none match.</returns>
-    public async Task<IEnumerable<T>> FindAllAsync(FilterDefinition<T> filter)
+    public async Task<List<T>> FindAllAsync(FilterDefinition<T> filter)
     {
         var cursor = await Collection.FindAsync(filter);
         return await cursor.ToListAsync();
@@ -77,7 +77,7 @@ public abstract class Repository<T> where T : DbObject
     ///     Returns a list of every record. Use wisely, as this can be performance-heavy.
     /// </summary>
     /// <returns>Empty collection when there are no records.</returns>
-    public async Task<IEnumerable<T>> FindAllAsync()
+    public async Task<List<T>> FindAllAsync()
     {
         return await FindAllAsync(FilterDefinition<T>.Empty);
     }

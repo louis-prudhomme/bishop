@@ -58,6 +58,7 @@ internal class Program
         Enumerat.Mongo = mongoClient;
 
         var dbContext = new MongoContext(mongoClient, MongoDatabase);
+        Repository<CardGameEntity>.MongoContext = dbContext;
         Repository<CounterEntity>.MongoContext = dbContext;
         Repository<RecordEntity>.MongoContext = dbContext;
 
@@ -80,7 +81,7 @@ internal class Program
 
         _generator.Register<CounterService>();
         _generator.Register<HistoryService>();
-        _generator.Register<CardGameTracker>();
+        _generator.Register<CardGameService>();
 
         _generator.Register<Fukup>();
 
