@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -17,7 +18,7 @@ public class BdmCounter : BaseCommandModule
         [Description("User to increment the bdm score of")]
         DiscordMember member,
         [Description("To increment by")] long nb)
-    {
+    { 
         await Service.Score(context, member, CounterCategory.Bdm, nb);
     }
 

@@ -1,10 +1,13 @@
 using System;
+using System.Reflection;
+using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Config.Converters;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
+using log4net;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bishop.Config;
@@ -20,11 +23,15 @@ public class DiscordClientGenerator
     private static readonly string[] Prefix = {";"};
 
     private readonly CommandsNextExtension _commands;
-    private readonly string[] _sigil;
+    private readonly string?[] _sigil;
 
     private readonly string _token;
 
-    public DiscordClientGenerator(string token, string sigil)
+    private readonly ILog _logger = LogManager
+        .GetLogger(MethodBase.GetCurrentMethod()?
+            .DeclaringType);
+
+    public DiscordClientGenerator(string token, string? sigil)
     {
         _token = token;
         _sigil = new[] {sigil};
@@ -43,8 +50,8 @@ public class DiscordClientGenerator
     private IServiceCollection AssembleServiceCollection()
     {
         return new ServiceCollection()
-            .AddSingleton<CounterService>()
             .AddSingleton<Random>()
+            .AddSingleton<CounterService>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<RecordRepository>();
     }

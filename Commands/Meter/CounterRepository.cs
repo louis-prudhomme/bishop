@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Helper;
 using MongoDB.Driver;
@@ -20,10 +22,9 @@ public class CounterRepository : Repository<CounterEntity>
     {
         var cursor = await Collection.FindAsync(
             GetFilterByUserAndCategory(userId, category));
-
-        if (await cursor.AnyAsync())
-            return await cursor.FirstOrDefaultAsync();
-        return null;
+        var scores = await cursor.ToListAsync();
+            
+        return scores.Any() ? scores.First() : null;
     }
 
     public async Task<List<CounterEntity>> FindByUser(ulong userId)
