@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Dump;
 
@@ -11,6 +12,8 @@ namespace Bishop.Commands.Dump;
 /// </summary>
 internal class Deleter : BaseCommandModule
 {
+    private static readonly int MAX_NUMBER_OF_DELETIONS = 100;
+
     [Command("delete")]
     [Aliases("d")]
     [Description("Deletes all the messages between the command and the one replied to.")]
@@ -21,22 +24,24 @@ internal class Deleter : BaseCommandModule
             var limit = context.Message;
             var origin = limit.ReferencedMessage;
 
-            var futures = context.Channel
-                .GetMessagesAfterAsync(origin.Id).Result
-                .TakeWhile(msg => msg.Timestamp > origin.Timestamp)
-                .Select(msg => msg.DeleteAsync())
-                .ToList();
+            var messagesToDelete = (await context.Channel
+                    .GetMessagesAfterAsync(origin.Id))
+                .TakeWhile(msg => msg.Timestamp >= origin.Timestamp)
+                    .ToList();
 
-            Task.WaitAll(futures.ToArray());
-            await origin.DeleteAsync();
+                if (messagesToDelete.Count == 100)
+                {
+                    //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
+                    await context.RespondAsync($"There are more than a hundred messages, cannot delete.");
+                    return;
+                }
+            
+            await context.Channel.DeleteMessagesAsync(messagesToDelete);
 
             if (!string.IsNullOrEmpty(silentFlag)) return;
-            await context.RespondAsync($"Removed {futures.Count} 😉");
+            await context.RespondAsync($"Removed {messagesToDelete.Count} 😉");
         }
-        else
-        {
-            await context.RespondAsync("You need to answer a message.");
-        }
+        else await context.RespondAsync("You need to answer a message.");
     }
 
     [Command("deleten")]
@@ -49,16 +54,24 @@ internal class Deleter : BaseCommandModule
             await context.RespondAsync($"{n} is not a valid number."); // todo cleanify
             return;
         }
+        
+        if (n >= 100)
+        {
+            //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
+            await context.RespondAsync($"There are more than a hundred messages, cannot delete.");
+            return;
+        }
 
         var limit = context.Message;
-        var futures = context.Channel
-            .GetMessagesBeforeAsync(limit.Id).Result
+        var messagesToDelete = (await context.Channel
+                .GetMessagesBeforeAsync(limit.Id))
             .Take(n)
-            .Select(msg => msg.DeleteAsync())
             .ToList();
 
-        Task.WaitAll(futures.ToArray());
+
+        await context.Channel.DeleteMessagesAsync(messagesToDelete);
         await limit.DeleteAsync();
-        await context.RespondAsync($"Removed {futures.Count} 😉");
+
+        await context.RespondAsync($"Removed {messagesToDelete.Count} 😉");
     }
 }
