@@ -18,7 +18,7 @@ public class BdmCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CountCategory.Bdm, nb);
+        await Service.Score(context, member, CounterCategory.Bdm, nb);
     }
 
     [GroupCommand]
@@ -27,14 +27,14 @@ public class BdmCounter : BaseCommandModule
         [Description("User to know the bdm score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CountCategory.Bdm);
+        await Service.Score(context, member, CounterCategory.Bdm);
     }
 
     [GroupCommand]
     [Description("Returns all bdm scores")]
     public async Task ScoreBdm(CommandContext context)
     {
-        await Service.Score(context, CountCategory.Bdm);
+        await Service.Score(context, CounterCategory.Bdm);
     }
 
     [GroupCommand]
@@ -45,6 +45,6 @@ public class BdmCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CountCategory.Bdm, reason);
+        await Service.Score(context, member, CounterCategory.Bdm, reason);
     }
 }

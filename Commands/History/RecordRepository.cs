@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bishop.Commands.Meter;
 using Bishop.Helper;
@@ -15,10 +14,10 @@ public class RecordRepository : Repository<RecordEntity>
     {
     }
 
-    public async Task<List<RecordEntity>> FindByUserAndCategory(ulong userId, CountCategory category)
+    public async Task<List<RecordEntity>> FindByUserAndCategory(ulong userId, CounterCategory category)
     {
         var cursor = await Collection.FindAsync(
-            GetFilterByUserAndCategory(userId, category), 
+            GetFilterByUserAndCategory(userId, category),
             GetOrderByTimestamp());
 
         return await cursor.ToListAsync();
@@ -27,7 +26,7 @@ public class RecordRepository : Repository<RecordEntity>
     public async Task<List<RecordEntity>> FindByUser(ulong userId)
     {
         var cursor = await Collection.FindAsync(
-            GetFilterByUser(userId), 
+            GetFilterByUser(userId),
             GetOrderByTimestamp());
 
         return await cursor.ToListAsync();
@@ -37,14 +36,14 @@ public class RecordRepository : Repository<RecordEntity>
     ///     Creates and returns a Mongo filter targeting the combination of the provided user IDza and category.
     /// </summary>
     /// <param name="userId">Username to look for.</param>
-    /// <param name="countCategory">Category to look for.</param>
+    /// <param name="counterCategory">Category to look for.</param>
     /// <returns>A Mongo filter.</returns>
-    private FilterDefinition<RecordEntity> GetFilterByUserAndCategory(ulong userId, CountCategory countCategory)
+    private FilterDefinition<RecordEntity> GetFilterByUserAndCategory(ulong userId, CounterCategory counterCategory)
     {
         return Builders<RecordEntity>
                 .Filter.And(
                     Builders<RecordEntity>.Filter.Eq("UserId", userId),
-                    Builders<RecordEntity>.Filter.Eq("Category", countCategory))
+                    Builders<RecordEntity>.Filter.Eq("Category", counterCategory))
             ;
     }
 
@@ -65,7 +64,7 @@ public class RecordRepository : Repository<RecordEntity>
     /// <returns>A Mongo sorting option.</returns>
     private FindOptions<RecordEntity, RecordEntity> GetOrderByTimestamp()
     {
-        return new FindOptions<RecordEntity, RecordEntity>()
+        return new FindOptions<RecordEntity, RecordEntity>
         {
             Sort = Builders<RecordEntity>.Sort.Ascending("Timestamp")
         };

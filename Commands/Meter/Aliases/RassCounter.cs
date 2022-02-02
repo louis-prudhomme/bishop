@@ -19,7 +19,7 @@ public class RassCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CountCategory.Rass, nb);
+        await Service.Score(context, member, CounterCategory.Rass, nb);
     }
 
     [GroupCommand]
@@ -28,14 +28,14 @@ public class RassCounter : BaseCommandModule
         [Description("User to know the rass score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CountCategory.Rass);
+        await Service.Score(context, member, CounterCategory.Rass);
     }
 
     [GroupCommand]
     [Description("Returns all rass scores")]
     public async Task ScoreRass(CommandContext context)
     {
-        await Service.Score(context, CountCategory.Rass);
+        await Service.Score(context, CounterCategory.Rass);
     }
 
     [GroupCommand]
@@ -46,6 +46,6 @@ public class RassCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CountCategory.Rass, reason);
+        await Service.Score(context, member, CounterCategory.Rass, reason);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Meter;
@@ -25,8 +24,8 @@ public class HistoryService : BaseCommandModule
     public async Task PickRandom(CommandContext context)
     {
         var records = (await Repository.FindAllAsync()).ToList();
-        
-        if (!records.Any()) 
+
+        if (!records.Any())
         {
             await context.RespondAsync("No history recorded.");
             return;
@@ -35,7 +34,7 @@ public class HistoryService : BaseCommandModule
         var picked = records.ElementAt(Random.Next(0, records.Count));
         // TODO default value as l'étranger
         var originalUser = context.Guild.Members[picked.UserId];
-        
+
         await context.RespondAsync($"• {picked.Motive} — {originalUser.Mention}");
     }
 
@@ -46,15 +45,15 @@ public class HistoryService : BaseCommandModule
         [Description("@User to add the record to")]
         DiscordMember member,
         [Description("Category to add the record to")]
-        CountCategory countCategory,
+        CounterCategory counterCategory,
         [Description("Record to add")] [RemainingText]
         string motive)
     {
-        var record = new RecordEntity(member.Id, countCategory, motive);
+        var record = new RecordEntity(member.Id, counterCategory, motive);
 
         await Repository.SaveAsync(record);
         await context.RespondAsync(
-            $"Added «*{record.Motive}*» to {member.Mention}’s {countCategory} history.");
+            $"Added «*{record.Motive}*» to {member.Mention}’s {counterCategory} history.");
     }
 
     [Command("consult")]
@@ -64,13 +63,14 @@ public class HistoryService : BaseCommandModule
         [Description("@User to know the history of")]
         DiscordUser member,
         [Description("Category to know the history of")]
-        CountCategory countCategory,
-        [Description("Number of records to pull")] int limit
+        CounterCategory counterCategory,
+        [Description("Number of records to pull")]
+        int limit
     )
     {
-        var records = await Repository.FindByUserAndCategory(member.Id, countCategory);
+        var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
         var trueLimit = limit > -1 ? records.Count : limit;
-        
+
         if (records.Any())
             await context.RespondAsync(records
                 .Select(entity => entity.ToString())
@@ -78,26 +78,27 @@ public class HistoryService : BaseCommandModule
                 .Aggregate((acc, h) => string.Join("\n", acc, h)));
         else
             await context.RespondAsync(
-                $"No history recorded for category user {member.Username} and {countCategory}");
+                $"No history recorded for category user {member.Username} and {counterCategory}");
     }
-    
+
     [Command("consult")]
     [Description("To see the history of a @member")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordUser member,
         [Description("Category to know the history of")]
-        CountCategory countCategory
+        CounterCategory counterCategory
     )
     {
-        await Consult(context, member, countCategory, -1);
+        await Consult(context, member, counterCategory, -1);
     }
 
     [Command("consult")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordUser member,
-        [Description("Number of records to pull")] int limit
+        [Description("Number of records to pull")]
+        int limit
     )
     {
         var records = await Repository.FindByUser(member.Id);

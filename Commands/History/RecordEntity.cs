@@ -9,12 +9,12 @@ namespace Bishop.Commands.History;
 /// </summary>
 public class RecordEntity : DbObject
 {
-    public RecordEntity() 
+    public RecordEntity()
     {
         Motive = null!;
     }
 
-    public RecordEntity(ulong discordMemberId, CountCategory category, string motive) 
+    public RecordEntity(ulong discordMemberId, CounterCategory category, string motive)
     {
         RecordedAt = DateTime.Now;
         Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
@@ -25,7 +25,7 @@ public class RecordEntity : DbObject
     }
 
     //TODO remove me
-    public RecordEntity(ulong discordMemberId, CountCategory category, Record record) 
+    public RecordEntity(ulong discordMemberId, CounterCategory category, Record record)
     {
         RecordedAt = DateHelper.FromOldStringToDateTime(record.Date);
         Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
@@ -36,7 +36,7 @@ public class RecordEntity : DbObject
     }
 
     public ulong UserId { get; set; }
-    public CountCategory Category { get; set; }
+    public CounterCategory Category { get; set; }
     public DateTime RecordedAt { get; set; }
     public string Motive { get; set; }
     public long Timestamp { get; set; }

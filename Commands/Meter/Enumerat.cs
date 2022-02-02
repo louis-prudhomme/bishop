@@ -27,7 +27,7 @@ public class Enumerat
     /// </summary>
     private readonly bool _nue;
 
-    private Enumerat(string user, CountCategory key)
+    private Enumerat(string user, CounterCategory key)
     {
         User = user;
         Key = key;
@@ -49,7 +49,7 @@ public class Enumerat
     /// </summary>
     public string User { get; set; }
 
-    public CountCategory Key { get; set; }
+    public CounterCategory Key { get; set; }
     public long Score { get; set; }
     public List<Record> History { get; set; }
 
@@ -76,12 +76,12 @@ public class Enumerat
     /// <summary>
     ///     Returns all the user records for the provided category.
     /// </summary>
-    /// <param name="countCategory">Category to look for.</param>
+    /// <param name="counterCategory">Category to look for.</param>
     /// <returns>List of all matching records.</returns>
-    public static async Task<List<Enumerat>> FindAllAsync(CountCategory countCategory)
+    public static async Task<List<Enumerat>> FindAllAsync(CounterCategory counterCategory)
     {
         return await Collection
-            .Find(Builders<Enumerat>.Filter.Eq("Key", countCategory))
+            .Find(Builders<Enumerat>.Filter.Eq("Key", counterCategory))
             .SortByDescending(enumerat => enumerat.Score)
             .ToListAsync();
     }
@@ -120,8 +120,8 @@ public class Enumerat
     /// <returns>The corresponding record or a new one.</returns>
     public static async Task<List<Enumerat>> FindAllAsync(DiscordUser user)
     {
-        return Enum.GetValues(typeof(CountCategory))
-            .OfType<CountCategory>()
+        return Enum.GetValues(typeof(CounterCategory))
+            .OfType<CounterCategory>()
             .Select(category => (category, Collection.FindAsync(GetFilter(user, category))))
             .Select(tuple => tuple.Item2.Result
                 .FirstOrDefaultAsync()
@@ -134,33 +134,33 @@ public class Enumerat
     ///     or creates a new one if the combination does not exist.
     /// </summary>
     /// <param name="user">Pseudo of the user</param>
-    /// <param name="countCategory">Key of the category</param>
+    /// <param name="counterCategory">Key of the category</param>
     /// <returns>The corresponding record or a new one.</returns>
-    public static async Task<Enumerat> FindAsync(DiscordUser user, CountCategory countCategory)
+    public static async Task<Enumerat> FindAsync(DiscordUser user, CounterCategory counterCategory)
     {
-        return await Collection.Find(GetFilter(user, countCategory))
+        return await Collection.Find(GetFilter(user, counterCategory))
                    .FirstOrDefaultAsync()
-               ?? new Enumerat(user.Username, countCategory);
+               ?? new Enumerat(user.Username, counterCategory);
     }
 
     /// <summary>
     ///     Creates and returns a Mongo filter targeting the combination of the provided username and category.
     /// </summary>
     /// <param name="user">Username to look for.</param>
-    /// <param name="countCategory">Category to look for.</param>
+    /// <param name="counterCategory">Category to look for.</param>
     /// <returns>A Mongo filter.</returns>
-    private static FilterDefinition<Enumerat> GetFilter(string user, CountCategory countCategory)
+    private static FilterDefinition<Enumerat> GetFilter(string user, CounterCategory counterCategory)
     {
         return Builders<Enumerat>
             .Filter.And(
                 Builders<Enumerat>.Filter.Eq("User", user),
-                Builders<Enumerat>.Filter.Eq("Key", countCategory));
+                Builders<Enumerat>.Filter.Eq("Key", counterCategory));
     }
 
-    /// <inheritdoc cref="GetFilter(string,CountCategory)" />
-    private static FilterDefinition<Enumerat> GetFilter(DiscordUser user, CountCategory countCategory)
+    /// <inheritdoc cref="GetFilter(string,CounterCategory)" />
+    private static FilterDefinition<Enumerat> GetFilter(DiscordUser user, CounterCategory counterCategory)
     {
-        return GetFilter(user.Username, countCategory);
+        return GetFilter(user.Username, counterCategory);
     }
 
     public override string ToString()

@@ -18,7 +18,7 @@ public class SauceCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CountCategory.Sauce, nb);
+        await Service.Score(context, member, CounterCategory.Sauce, nb);
     }
 
     [GroupCommand]
@@ -27,14 +27,14 @@ public class SauceCounter : BaseCommandModule
         [Description("User to know the sauce score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CountCategory.Sauce);
+        await Service.Score(context, member, CounterCategory.Sauce);
     }
 
     [GroupCommand]
     [Description("Returns all sauce scores")]
     public async Task ScoreSauce(CommandContext context)
     {
-        await Service.Score(context, CountCategory.Sauce);
+        await Service.Score(context, CounterCategory.Sauce);
     }
 
     [GroupCommand]
@@ -45,6 +45,6 @@ public class SauceCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CountCategory.Sauce, reason);
+        await Service.Score(context, member, CounterCategory.Sauce, reason);
     }
 }

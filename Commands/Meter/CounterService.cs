@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
@@ -28,46 +27,37 @@ public class CounterService : BaseCommandModule
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member)
     {
-        var scores = Enum.GetValues(typeof(CountCategory))
-            .OfType<CountCategory>()
-            .Select(key => Enumerat.FindAsync(member, key)
-                .Result)
-            .Where(key => key != null)
-            .Select(key => key.ToString())
-            .ToList();
+        var scores = await Repository.FindByUser(member.Id);
 
         if (!scores.Any())
             await context.RespondAsync($"No scores for user {member.Username}");
         else
             await context.RespondAsync(scores
+                .Select(entity => entity.ToString())
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
     }
 
     [Command("score")]
     public async Task Score(CommandContext context,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-        CountCategory countCategory)
+        CounterCategory counterCategory)
     {
-        var scores = Enumerat.FindAllAsync(countCategory).Result
-            .Where(score => score != null)
-            .Select(score => score.ToString())
-            .ToList();
+        var score = await Repository.FindByCategory(counterCategory);
 
-        if (!scores.Any())
-            await context.RespondAsync($"No scores recorded for category {countCategory}");
+        if (score.Any())
+            await context.RespondAsync($"No scores for category {counterCategory}");
         else
-            await context.RespondAsync(scores
-                .Aggregate((acc, score) => string.Join("\n", acc, score)));
+            await context.RespondAsync(score.ToString());
     }
 
     [Command("score")]
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-        CountCategory countCategory)
+        CounterCategory counterCategory)
     {
-        var score = await Repository.FindByUserAndCategory(member.Id, countCategory)
-                    ?? new CounterEntity(member.Id, countCategory);
+        var score = await Repository.FindOneByUserAndCategory(member.Id, counterCategory)
+                    ?? new CounterEntity(member.Id, counterCategory);
         await context.RespondAsync(score.ToString());
     }
 
@@ -76,11 +66,11 @@ public class CounterService : BaseCommandModule
         [Description("User to add some score to")]
         DiscordMember member,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-        CountCategory countCategory,
+        CounterCategory counterCategory,
         [Description("To increment by")] long nb)
     {
-        var record = await Repository.FindByUserAndCategory(member.Id, countCategory)
-                     ?? new CounterEntity(member.Id, countCategory);
+        var record = await Repository.FindOneByUserAndCategory(member.Id, counterCategory)
+                     ?? new CounterEntity(member.Id, counterCategory);
 
         var previous = record.Score;
         record.Score += nb;
@@ -94,12 +84,12 @@ public class CounterService : BaseCommandModule
         [Description("User to increment score of")]
         DiscordMember member,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-        CountCategory countCategory,
+        CounterCategory counterCategory,
         [RemainingText] [Description("Context for the point(s) addition")]
         string motive)
     {
         await Task.WhenAll(
-            Score(context, member, countCategory, 1),
-            Service.Add(context, member, countCategory, motive));
+            Score(context, member, counterCategory, 1),
+            Service.Add(context, member, counterCategory, motive));
     }
 }

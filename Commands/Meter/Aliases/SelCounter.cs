@@ -18,7 +18,7 @@ public class SelCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CountCategory.Sel, nb);
+        await Service.Score(context, member, CounterCategory.Sel, nb);
     }
 
     [GroupCommand]
@@ -27,14 +27,14 @@ public class SelCounter : BaseCommandModule
         [Description("User to know the sel score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CountCategory.Sel);
+        await Service.Score(context, member, CounterCategory.Sel);
     }
 
     [GroupCommand]
     [Description("Returns all sel scores")]
     public async Task ScoreSel(CommandContext context)
     {
-        await Service.Score(context, CountCategory.Sel);
+        await Service.Score(context, CounterCategory.Sel);
     }
 
     [GroupCommand]
@@ -45,6 +45,6 @@ public class SelCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CountCategory.Sel, reason);
+        await Service.Score(context, member, CounterCategory.Sel, reason);
     }
 }

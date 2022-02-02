@@ -16,7 +16,7 @@ public class CounterRepository : Repository<CounterEntity>
     {
     }
 
-    public async Task<CounterEntity?> FindByUserAndCategory(ulong userId, CountCategory category)
+    public async Task<CounterEntity?> FindOneByUserAndCategory(ulong userId, CounterCategory category)
     {
         var cursor = await Collection.FindAsync(
             GetFilterByUserAndCategory(userId, category));
@@ -26,18 +26,44 @@ public class CounterRepository : Repository<CounterEntity>
         return null;
     }
 
+    public async Task<List<CounterEntity>> FindByUser(ulong userId)
+    {
+        var cursor = await Collection.FindAsync(
+            GetFilterByUser(userId));
+
+        return await cursor.ToListAsync();
+    }
+
+    public async Task<List<CounterEntity>> FindByCategory(CounterCategory category)
+    {
+        var cursor = await Collection.FindAsync(
+            GetFilterByCategory(category));
+
+        return await cursor.ToListAsync();
+    }
+
     /// <summary>
     ///     Creates and returns a Mongo filter targeting the combination of the provided user IDza and category.
     /// </summary>
     /// <param name="userId">Username to look for.</param>
-    /// <param name="countCategory">Category to look for.</param>
+    /// <param name="counterCategory">Category to look for.</param>
     /// <returns>A Mongo filter.</returns>
-    private FilterDefinition<CounterEntity> GetFilterByUserAndCategory(ulong userId, CountCategory countCategory)
+    private FilterDefinition<CounterEntity> GetFilterByUserAndCategory(ulong userId, CounterCategory counterCategory)
     {
         return Builders<CounterEntity>
-                .Filter.And(
-                    Builders<CounterEntity>.Filter.Eq("UserId", userId),
-                    Builders<CounterEntity>.Filter.Eq("Category", countCategory));
+            .Filter.And(
+                Builders<CounterEntity>.Filter.Eq("UserId", userId),
+                Builders<CounterEntity>.Filter.Eq("Category", counterCategory));
+    }
+
+    /// <summary>
+    ///     Creates and returns a Mongo filter targeting the provided category.
+    /// </summary>
+    /// <param name="counterCategory">Category to look for.</param>
+    /// <returns>A Mongo filter.</returns>
+    private FilterDefinition<CounterEntity> GetFilterByCategory(CounterCategory counterCategory)
+    {
+        return Builders<CounterEntity>.Filter.Eq("Category", counterCategory);
     }
 
     /// <summary>
@@ -52,7 +78,7 @@ public class CounterRepository : Repository<CounterEntity>
 
     private FindOptions<CounterEntity, CounterEntity> GetOrderByScore()
     {
-        return new FindOptions<CounterEntity, CounterEntity>()
+        return new FindOptions<CounterEntity, CounterEntity>
         {
             Sort = Builders<CounterEntity>.Sort.Descending("Score")
         };

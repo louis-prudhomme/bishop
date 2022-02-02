@@ -18,7 +18,7 @@ public class BeaufCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CountCategory.Beauf, nb);
+        await Service.Score(context, member, CounterCategory.Beauf, nb);
     }
 
     [GroupCommand]
@@ -27,14 +27,14 @@ public class BeaufCounter : BaseCommandModule
         [Description("User to know the beauf score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CountCategory.Beauf);
+        await Service.Score(context, member, CounterCategory.Beauf);
     }
 
     [GroupCommand]
     [Description("Returns all beauf scores")]
     public async Task ScoreBeauf(CommandContext context)
     {
-        await Service.Score(context, CountCategory.Beauf);
+        await Service.Score(context, CounterCategory.Beauf);
     }
 
     [GroupCommand]
@@ -45,6 +45,6 @@ public class BeaufCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CountCategory.Beauf, reason);
+        await Service.Score(context, member, CounterCategory.Beauf, reason);
     }
 }
