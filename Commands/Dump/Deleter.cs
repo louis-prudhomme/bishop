@@ -29,7 +29,7 @@ internal class Deleter : BaseCommandModule
                 .TakeWhile(msg => msg.Timestamp >= origin.Timestamp)
                     .ToList();
 
-                if (messagesToDelete.Count == 100)
+                if (messagesToDelete.Count == MAX_NUMBER_OF_DELETIONS)
                 {
                     //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
                     await context.RespondAsync($"There are more than a hundred messages, cannot delete.");
@@ -55,7 +55,7 @@ internal class Deleter : BaseCommandModule
             return;
         }
         
-        if (n >= 100)
+        if (n >= MAX_NUMBER_OF_DELETIONS)
         {
             //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
             await context.RespondAsync($"There are more than a hundred messages, cannot delete.");

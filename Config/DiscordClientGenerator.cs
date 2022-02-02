@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Bishop.Config;
 
 /// <summary>
-///     Generates the configuration of the Discord Client.
+///     Generates the configuration of the Discord Client. Coucou
 /// </summary>
 public class DiscordClientGenerator
 {
