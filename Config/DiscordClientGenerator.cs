@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Config.Converters;
@@ -23,13 +22,14 @@ public class DiscordClientGenerator
     private static readonly string[] Prefix = {";"};
 
     private readonly CommandsNextExtension _commands;
-    private readonly string?[] _sigil;
-
-    private readonly string _token;
 
     private readonly ILog _logger = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
             .DeclaringType);
+
+    private readonly string?[] _sigil;
+
+    private readonly string _token;
 
     public DiscordClientGenerator(string token, string? sigil)
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Helper;
@@ -23,7 +22,7 @@ public class CounterRepository : Repository<CounterEntity>
         var cursor = await Collection.FindAsync(
             GetFilterByUserAndCategory(userId, category));
         var scores = await cursor.ToListAsync();
-            
+
         return scores.Any() ? scores.First() : null;
     }
 

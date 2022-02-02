@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
@@ -23,14 +22,14 @@ namespace Bishop.Commands.Meter;
 public class CounterService : BaseCommandModule
 {
     /// <summary>
-    /// Should be injected; however, <c>DSharpPlus</c> dependency injection container does not seem to
-    /// properly inject nested dependencies ; this could be solved in at least two ways :
-    /// - finding in their repo which tool they use and try to either
+    ///     Should be injected; however, <c>DSharpPlus</c> dependency injection container does not seem to
+    ///     properly inject nested dependencies ; this could be solved in at least two ways :
+    ///     - finding in their repo which tool they use and try to either
     ///     - override it
     ///     - fix it
-    /// - breaking the dependency injection chain by making the <see cref="Bishop.Commands.History"/> classes
-    /// the bottom of the chain by removing the need for this class to be injected 
-    /// TODO fixme
+    ///     - breaking the dependency injection chain by making the <see cref="Bishop.Commands.History" /> classes
+    ///     the bottom of the chain by removing the need for this class to be injected
+    ///     TODO fixme
     /// </summary>
     public CounterRepository CounterRepository { private get; set; } = new();
 
@@ -82,7 +81,8 @@ public class CounterService : BaseCommandModule
         CounterCategory counterCategory,
         [Description("To increment by")] long nb)
     {
-        var record = await CounterRepository.FindOneByUserAndCategory(member.Id, counterCategory)
+        var record = await CounterRepository
+                         .FindOneByUserAndCategory(member.Id, counterCategory)
                      ?? new CounterEntity(member.Id, counterCategory);
 
         var previous = record.Score;

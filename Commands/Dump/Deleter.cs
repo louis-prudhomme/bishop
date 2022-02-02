@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Dump;
 
@@ -27,21 +26,24 @@ internal class Deleter : BaseCommandModule
             var messagesToDelete = (await context.Channel
                     .GetMessagesAfterAsync(origin.Id))
                 .TakeWhile(msg => msg.Timestamp >= origin.Timestamp)
-                    .ToList();
+                .ToList();
 
-                if (messagesToDelete.Count == MAX_NUMBER_OF_DELETIONS)
-                {
-                    //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
-                    await context.RespondAsync($"There are more than a hundred messages, cannot delete.");
-                    return;
-                }
-            
+            if (messagesToDelete.Count == MAX_NUMBER_OF_DELETIONS)
+            {
+                //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
+                await context.RespondAsync("There are more than a hundred messages, cannot delete.");
+                return;
+            }
+
             await context.Channel.DeleteMessagesAsync(messagesToDelete);
 
             if (!string.IsNullOrEmpty(silentFlag)) return;
             await context.RespondAsync($"Removed {messagesToDelete.Count} 😉");
         }
-        else await context.RespondAsync("You need to answer a message.");
+        else
+        {
+            await context.RespondAsync("You need to answer a message.");
+        }
     }
 
     [Command("deleten")]
@@ -54,11 +56,11 @@ internal class Deleter : BaseCommandModule
             await context.RespondAsync($"{n} is not a valid number."); // todo cleanify
             return;
         }
-        
+
         if (n >= MAX_NUMBER_OF_DELETIONS)
         {
             //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
-            await context.RespondAsync($"There are more than a hundred messages, cannot delete.");
+            await context.RespondAsync("There are more than a hundred messages, cannot delete.");
             return;
         }
 
