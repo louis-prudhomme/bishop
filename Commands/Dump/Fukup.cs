@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.History;
@@ -57,12 +59,26 @@ public class Fukup : BaseCommandModule
     [Command("decks")]
     [Aliases("d")]
     [Description("Tool to migrate card game decks")]
-    public async Task FixMeDecks(CommandContext command, DiscordMember member)
+    public async Task FixMeDecks(CommandContext command)
     {
-        var id = member.Id;
-
         var oldDecks = await CardCollection.FindAllAsync();
-        var decks = oldDecks.Select(old => new CardGameEntity(old, id));
+
+        Func<(string, ulong), ulong> idChanger = (tuple) => tuple.Item1.Equals("PrideTheDaemon")
+            ? 258919647984746497u
+            : tuple.Item2;  
+
+        var userIdDict = oldDecks.Select(game => game.Gifter)
+            .Distinct()
+            .Select(name => (name, command.Guild.Members.Values
+                .Select(member => (member.Id, member.Username))
+                .Where(tuple => tuple.Item2.Equals(name))
+                .Select(tuple => tuple.Id)
+                .FirstOrDefault()))
+            .Select(tuple => (idChanger(tuple), tuple.name))
+            .ToDictionary(tuple => tuple.Item2, tuple => tuple.Item1);
+
+        var decks = oldDecks.Select(old => 
+            new CardGameEntity(old, userIdDict[old.Gifter]));
 
         await CardGameRepository.InsertManyAsync(decks);
         await command.RespondAsync("Finished");
