@@ -37,7 +37,7 @@ public class CounterRepository : Repository<CounterEntity>
     public async Task<List<CounterEntity>> FindByCategory(CounterCategory category)
     {
         var cursor = await Collection.FindAsync(
-            GetFilterByCategory(category));
+            GetFilterByCategory(category), GetOrderByScore());
 
         return await cursor.ToListAsync();
     }

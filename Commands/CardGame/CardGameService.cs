@@ -22,7 +22,6 @@ internal class CardGameService : BaseCommandModule
     public async Task Prompt(CommandContext context)
     {
         var cardGames = await Repository.FindAllAsync();
-        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
         if (cardGames.Count == 0)
         {
@@ -31,7 +30,7 @@ internal class CardGameService : BaseCommandModule
         }
 
         var formattedCardGames = cardGames
-            .Select(game => game.ToString(mapper))
+            .Select(game => game.ToString(AdaptUserIdTo.UserName))
             .Aggregate((key1, key2) => string.Join("\n", key1, key2));
 
         await context.RespondAsync(

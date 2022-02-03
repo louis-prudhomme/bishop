@@ -53,7 +53,7 @@ internal class Program
             .Result;
 
         var mongoClient = new MongoClient(MongoToken);
-
+        
         Enumerat.Database = MongoDatabase;
         Enumerat.Mongo = mongoClient;
 
@@ -86,6 +86,8 @@ internal class Program
         _generator.Register<Fukup>();
 
         _discord = _generator.Client;
+        AdaptUserIdTo.UserMention = id => _discord.GetUserAsync(id).Result.Mention;
+        AdaptUserIdTo.UserName = id => _discord.GetUserAsync(id).Result.Username;
 
         Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");

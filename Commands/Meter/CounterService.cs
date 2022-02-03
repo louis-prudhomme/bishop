@@ -29,13 +29,12 @@ public class CounterService : BaseCommandModule
         [Description("Target @user")] DiscordMember member)
     {
         var scores = await CounterRepository.FindByUser(member.Id);
-        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
         if (!scores.Any())
             await context.RespondAsync($"No scores for user {member.Username}");
         else
             await context.RespondAsync(scores
-                .Select(entity => entity.ToString(mapper))
+                .Select(entity => entity.ToString(AdaptUserIdTo.UserName))
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
     }
 
@@ -45,13 +44,12 @@ public class CounterService : BaseCommandModule
         CounterCategory counterCategory)
     {
         var scores = await CounterRepository.FindByCategory(counterCategory);
-        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
         if (!scores.Any())
             await context.RespondAsync($"No scores for category {counterCategory}");
         else
             await context.RespondAsync(scores
-                .Select(game => game.ToString(mapper))
+                .Select(game => game.ToString(AdaptUserIdTo.UserName))
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
     }
 
@@ -63,9 +61,8 @@ public class CounterService : BaseCommandModule
     {
         var score = await CounterRepository.FindOneByUserAndCategory(member.Id, counterCategory)
                     ?? new CounterEntity(member.Id, counterCategory);
-        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
-        await context.RespondAsync(score.ToString(mapper));
+        await context.RespondAsync(score.ToString(AdaptUserIdTo.UserName));
     }
 
     [GroupCommand]
@@ -79,13 +76,12 @@ public class CounterService : BaseCommandModule
         var record = await CounterRepository
                          .FindOneByUserAndCategory(member.Id, counterCategory)
                      ?? new CounterEntity(member.Id, counterCategory);
-        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
         var previous = record.Score;
         record.Score += nb;
 
         await CounterRepository.SaveAsync(record);
-        await context.RespondAsync($"{record.ToString(mapper)} (from {previous})");
+        await context.RespondAsync($"{record.ToString(AdaptUserIdTo.UserName)} (from {previous})");
     }
 
     [GroupCommand]
