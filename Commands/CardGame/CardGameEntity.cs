@@ -26,7 +26,7 @@ public class CardGameEntity : DbObject
     public DateTime Date { get; set; }
     public long Timestamp { get; set; }
 
-    [Obsolete]
+    [Obsolete("use ToString(mapper) instead.")]
     public override string ToString()
     {
         return $"• *{Name}*, offered by **{GifterUserId}** the {DateHelper.FromDateTimeToString(Date)}";

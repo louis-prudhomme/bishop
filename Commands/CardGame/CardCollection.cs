@@ -8,7 +8,7 @@ namespace Bishop.Commands.CardGame;
 /// <summary>
 ///     This class represents a @user's score in a certain category.
 /// </summary>
-[Obsolete]
+[Obsolete("this class was badly designed (but not as much as its counterparts and will eventually be removed, hopefully sooner than later.")]
 internal class CardCollection
 {
     /// <summary>

@@ -24,7 +24,7 @@ public class RecordEntity : DbObject
         Motive = motive;
     }
 
-    //TODO remove me
+    [Obsolete("will be removed along with Record")]
     public RecordEntity(ulong discordMemberId, CounterCategory category, Record record)
     {
         RecordedAt = DateHelper.FromOldStringToDateTime(record.Date);

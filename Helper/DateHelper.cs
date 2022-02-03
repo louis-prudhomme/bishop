@@ -51,7 +51,7 @@ public class DateHelper
     /// </summary>
     /// <param name="oldDate">Old date format (should be <c>dd/mm/yyyy hh:mm:ss</c>)</param>
     /// <returns>Corresponding <see cref="DateTime" /> instance or throws</returns>
-    [Obsolete]
+    [Obsolete("this will eventually be removed along with oldish Enumerat & CardCollection classes.")]
     public static DateTime FromOldStringToDateTime(string oldDate)
     {
         return DateTime.Parse(oldDate, CultureInfo.GetCultureInfo("fr-FR"));
