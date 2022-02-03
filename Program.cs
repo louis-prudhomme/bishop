@@ -65,7 +65,7 @@ internal class Program
         CardCollection.Database = MongoDatabase;
         CardCollection.Mongo = mongoClient;
 
-        _generator = new DiscordClientGenerator(DiscordToken, CommandSigil);
+        _generator = new DiscordClientGenerator(DiscordToken, CommandSigil, dbContext);
 
         _generator.Register<Randomizer>();
         _generator.Register<Stalk>();

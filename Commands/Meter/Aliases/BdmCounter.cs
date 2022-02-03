@@ -38,7 +38,7 @@ public class BdmCounter : BaseCommandModule
     }
 
     [GroupCommand]
-    [Description("Adds a provided value to @someone’s bdm score")]
+    [Description("Adds a record to @someone’s bdm history and increments their score")]
     public async Task ScoreBdm(CommandContext context,
         [Description("User to increment the bdm score of by 1")]
         DiscordMember member,

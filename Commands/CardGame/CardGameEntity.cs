@@ -31,11 +31,11 @@ public class CardGameEntity : DbObject
     [Obsolete]
     public override string ToString()
     {
-        return $"• *{Name}*, offered by **{GifterUserId}** on the {DateHelper.FromDateTimeToString(Date)}";
+        return $"• *{Name}*, offered by **{GifterUserId}** the {DateHelper.FromDateTimeToString(Date)}";
     }
 
     public string ToString(Func<ulong, string> idToNameMapper)
     {
-        return $"• *{Name}*, offered by **{idToNameMapper(GifterUserId)}** on the {DateHelper.FromDateTimeToString(Date)}";
+        return $"• *{Name}*, offered by **{idToNameMapper(GifterUserId)}** the {DateHelper.FromDateTimeToString(Date)}";
     }
 }

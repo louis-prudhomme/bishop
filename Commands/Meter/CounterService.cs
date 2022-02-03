@@ -23,16 +23,6 @@ namespace Bishop.Commands.Meter;
     "It is also possible to add a reason for the point, which will then be in the @user’s history.")]
 public class CounterService : BaseCommandModule
 {
-    /// <summary>
-    ///     Should be injected; however, <c>DSharpPlus</c> dependency injection container does not seem to
-    ///     properly inject nested dependencies ; this could be solved in at least two ways :
-    ///     - finding in their repo which tool they use and try to either
-    ///     - override it
-    ///     - fix it
-    ///     - breaking the dependency injection chain by making the <see cref="Bishop.Commands.History" /> classes
-    ///     the bottom of the chain by removing the need for this class to be injected
-    ///     TODO fixme
-    /// </summary>
     public CounterRepository CounterRepository { private get; set; } = new();
 
     [GroupCommand]
@@ -90,12 +80,13 @@ public class CounterService : BaseCommandModule
         var record = await CounterRepository
                          .FindOneByUserAndCategory(member.Id, counterCategory)
                      ?? new CounterEntity(member.Id, counterCategory);
+        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
         var previous = record.Score;
         record.Score += nb;
 
         await CounterRepository.SaveAsync(record);
-        await context.RespondAsync($"{record} (from {previous})");
+        await context.RespondAsync($"{record.ToString(mapper)} (from {previous})");
     }
 
     [GroupCommand]

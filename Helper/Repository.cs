@@ -19,9 +19,9 @@ public abstract class Repository<T> where T : DbObject
     }
 
     /// <summary>
-    ///     DB context with <see cref="MongoContext#MongoClient" /> and a database name.
+    ///     DB context with <see cref="MongoClient" /> and a database name.
     /// </summary>
-    public static MongoContext MongoContext { private get; set; }
+    public static MongoContext MongoContext { private get; set; } = null!;
 
 
     /// <summary>

@@ -40,7 +40,7 @@ public class CounterEntity : DbObject
     public CounterCategory Category { get; set; }
     public long Score { get; set; }
 
-    [Obsolete]
+    [Obsolete("use ToString(mapper) instead")]
     public override string ToString()
     {
         return $"{UserId}’s {Category} ⇒ {Score}";
