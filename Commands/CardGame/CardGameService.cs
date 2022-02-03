@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
@@ -35,7 +34,8 @@ internal class CardGameService : BaseCommandModule
             .Select(game => game.ToString(mapper))
             .Aggregate((key1, key2) => string.Join("\n", key1, key2));
 
-        await context.RespondAsync($"The collection currently counts *{cardGames.Count}* card games :\n{formattedCardGames}");
+        await context.RespondAsync(
+            $"The collection currently counts *{cardGames.Count}* card games :\n{formattedCardGames}");
     }
 
     [GroupCommand]

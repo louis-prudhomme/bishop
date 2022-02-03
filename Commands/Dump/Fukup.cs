@@ -10,7 +10,8 @@ using DSharpPlus.Entities;
 namespace Bishop.Commands.Dump;
 
 /// <summary>
-///     This class provides commands to migrate oldish <see cref="Enumerat" /> & <see cref="CardCollection"/> to newly created entities.
+///     This class provides commands to migrate oldish <see cref="Enumerat" /> & <see cref="CardCollection" /> to newly
+///     created entities.
 /// </summary>
 [Group("fukup")]
 [Aliases("fu")]

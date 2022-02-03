@@ -45,7 +45,7 @@ public class CounterEntity : DbObject
     {
         return $"{UserId}’s {Category} ⇒ {Score}";
     }
-    
+
     public string ToString(Func<ulong, string> idToNameMapper)
     {
         return $"{idToNameMapper(UserId)}’s {Category} ⇒ {Score}";

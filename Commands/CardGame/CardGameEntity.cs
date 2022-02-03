@@ -1,7 +1,5 @@
 ﻿using System;
 using Bishop.Helper;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Bishop.Commands.CardGame;
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
@@ -98,7 +97,7 @@ public class CounterService : BaseCommandModule
         [RemainingText] [Description("Context for the point(s) addition")]
         string motive)
     {
-        var historyService = new HistoryService();
+        var historyService = new RecordService();
         await Task.WhenAll(
             Score(context, member, counterCategory, 1),
             historyService.Add(context, member, counterCategory, motive));

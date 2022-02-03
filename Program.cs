@@ -80,7 +80,7 @@ internal class Program
         _generator.Register<RassCounter>();
 
         _generator.Register<CounterService>();
-        _generator.Register<HistoryService>();
+        _generator.Register<RecordService>();
         _generator.Register<CardGameService>();
 
         _generator.Register<Fukup>();
