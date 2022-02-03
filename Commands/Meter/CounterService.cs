@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
+using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -38,12 +40,13 @@ public class CounterService : BaseCommandModule
         [Description("Target @user")] DiscordMember member)
     {
         var scores = await CounterRepository.FindByUser(member.Id);
+        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
         if (!scores.Any())
             await context.RespondAsync($"No scores for user {member.Username}");
         else
             await context.RespondAsync(scores
-                .Select(entity => entity.ToString())
+                .Select(entity => entity.ToString(mapper))
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
     }
 
@@ -53,12 +56,13 @@ public class CounterService : BaseCommandModule
         CounterCategory counterCategory)
     {
         var scores = await CounterRepository.FindByCategory(counterCategory);
+        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
         if (!scores.Any())
             await context.RespondAsync($"No scores for category {counterCategory}");
         else
             await context.RespondAsync(scores
-                .Select(game => game.ToString())
+                .Select(game => game.ToString(mapper))
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
     }
 
@@ -70,7 +74,9 @@ public class CounterService : BaseCommandModule
     {
         var score = await CounterRepository.FindOneByUserAndCategory(member.Id, counterCategory)
                     ?? new CounterEntity(member.Id, counterCategory);
-        await context.RespondAsync(score.ToString());
+        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
+
+        await context.RespondAsync(score.ToString(mapper));
     }
 
     [GroupCommand]

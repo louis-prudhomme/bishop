@@ -28,9 +28,14 @@ public class CardGameEntity : DbObject
     public DateTime Date { get; set; }
     public long Timestamp { get; set; }
 
-
+    [Obsolete]
     public override string ToString()
     {
         return $"• *{Name}*, offered by **{GifterUserId}** on the {DateHelper.FromDateTimeToString(Date)}";
+    }
+
+    public string ToString(Func<ulong, string> idToNameMapper)
+    {
+        return $"• *{Name}*, offered by **{idToNameMapper(GifterUserId)}** on the {DateHelper.FromDateTimeToString(Date)}";
     }
 }

@@ -40,9 +40,14 @@ public class CounterEntity : DbObject
     public CounterCategory Category { get; set; }
     public long Score { get; set; }
 
-    //TODO create a formatter.
+    [Obsolete]
     public override string ToString()
     {
         return $"{UserId}’s {Category} ⇒ {Score}";
+    }
+    
+    public string ToString(Func<ulong, string> idToNameMapper)
+    {
+        return $"{idToNameMapper(UserId)}’s {Category} ⇒ {Score}";
     }
 }

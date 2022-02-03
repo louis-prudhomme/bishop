@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -22,7 +23,7 @@ internal class CardGameService : BaseCommandModule
     public async Task Prompt(CommandContext context)
     {
         var cardGames = await Repository.FindAllAsync();
-
+        var mapper = UserIdToUserMentionMapper.GetMapperFor(context);
 
         if (cardGames.Count == 0)
         {
@@ -31,7 +32,7 @@ internal class CardGameService : BaseCommandModule
         }
 
         var formattedCardGames = cardGames
-            .Select(game => game.ToString())
+            .Select(game => game.ToString(mapper))
             .Aggregate((key1, key2) => string.Join("\n", key1, key2));
 
         await context.RespondAsync($"The collection currently counts *{cardGames.Count}* card games :\n{formattedCardGames}");
