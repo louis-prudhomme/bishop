@@ -65,11 +65,11 @@ public class HistoryService : BaseCommandModule
         [Description("Category to know the history of")]
         CounterCategory counterCategory,
         [Description("Number of records to pull")]
-        int limit
+        int? limit = -1
     )
     {
         var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
-        var trueLimit = limit > -1 ? records.Count : limit;
+        var trueLimit = limit <= 0 ? records.Count : limit ?? records.Count;
 
         if (records.Any())
             await context.RespondAsync(records
@@ -82,27 +82,15 @@ public class HistoryService : BaseCommandModule
     }
 
     [Command("consult")]
-    [Description("To see the history of a @member")]
-    private async Task Consult(CommandContext context,
-        [Description("@User to know the history of")]
-        DiscordUser member,
-        [Description("Category to know the history of")]
-        CounterCategory counterCategory
-    )
-    {
-        await Consult(context, member, counterCategory, -1);
-    }
-
-    [Command("consult")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordUser member,
         [Description("Number of records to pull")]
-        int limit
+        int? limit = -1
     )
     {
         var records = await Repository.FindByUser(member.Id);
-        var trueLimit = limit > -1 ? records.Count : limit;
+        var trueLimit = limit <= 0 ? records.Count : limit ?? records.Count;
 
         if (records.Any())
             await context.RespondAsync(records
@@ -112,14 +100,5 @@ public class HistoryService : BaseCommandModule
         else
             await context.RespondAsync(
                 $"No history recorded for user {member.Username}");
-    }
-
-    [Command("consult")]
-    private async Task Consult(CommandContext context,
-        [Description("@User to know the history of")]
-        DiscordUser member
-    )
-    {
-        await Consult(context, member, -1);
     }
 }
