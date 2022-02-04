@@ -8,9 +8,9 @@ namespace Bishop.Helper;
 public class AdaptUserIdTo
 {
     //TODO clean this
-    [Obsolete("will be cleaned up")]
-    public static Func<ulong, string> UserMention { get; set; } = null!;
+    [Obsolete("will be cleaned up")] public static Func<ulong, string> UserMention { get; set; } = null!;
+
     //TODO clean this
-    [Obsolete("will be cleaned up")]
-    public static Func<ulong, string> UserName { get; set; } = null!;
+    [Obsolete("will be cleaned up")] public static Func<ulong, string> UserName { get; set; } = null!;
+    public static Func<ulong, Task<string>> UserNameAsync { get; set; } = null!;
 }

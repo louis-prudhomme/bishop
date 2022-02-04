@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
+using Bishop.Config;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -23,6 +24,7 @@ namespace Bishop.Commands.Meter;
 public class CounterService : BaseCommandModule
 {
     public CounterRepository CounterRepository { private get; set; } = new();
+    public UserNameCache Cache { private get; set; } = null!;
 
     [GroupCommand]
     public async Task Score(CommandContext context,
@@ -33,9 +35,13 @@ public class CounterService : BaseCommandModule
         if (!scores.Any())
             await context.RespondAsync($"No scores for user {member.Username}");
         else
-            await context.RespondAsync(scores
-                .Select(entity => entity.ToString(AdaptUserIdTo.UserName))
+        {
+            var entities = await Task.WhenAll(scores
+                .Select(entity => entity.ToString(Cache.GetAsync)));
+
+            await context.RespondAsync(entities
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
+        }
     }
 
     [GroupCommand]
@@ -48,9 +54,13 @@ public class CounterService : BaseCommandModule
         if (!scores.Any())
             await context.RespondAsync($"No scores for category {counterCategory}");
         else
-            await context.RespondAsync(scores
-                .Select(game => game.ToString(AdaptUserIdTo.UserName))
+        {
+            var entities = await Task.WhenAll(scores
+                .Select(entity => entity.ToString(Cache.GetAsync)));
+
+            await context.RespondAsync(entities
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
+        }
     }
 
     [GroupCommand]
@@ -62,7 +72,7 @@ public class CounterService : BaseCommandModule
         var score = await CounterRepository.FindOneByUserAndCategory(member.Id, counterCategory)
                     ?? new CounterEntity(member.Id, counterCategory);
 
-        await context.RespondAsync(score.ToString(AdaptUserIdTo.UserName));
+        await context.RespondAsync(await score.ToString(Cache.GetAsync));
     }
 
     [GroupCommand]
@@ -81,7 +91,7 @@ public class CounterService : BaseCommandModule
         record.Score += nb;
 
         await CounterRepository.SaveAsync(record);
-        await context.RespondAsync($"{record.ToString(AdaptUserIdTo.UserName)} (from {previous})");
+        await context.RespondAsync($"{record.ToString(Cache.GetAsync)} (from {previous})");
     }
 
     [GroupCommand]

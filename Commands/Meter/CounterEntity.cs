@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Bishop.Helper;
 
 namespace Bishop.Commands.Meter;
@@ -49,5 +50,10 @@ public class CounterEntity : DbObject
     public string ToString(Func<ulong, string> idToNameMapper)
     {
         return $"{idToNameMapper(UserId)}’s {Category} ⇒ {Score}";
+    }
+
+    public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper)
+    {
+        return $"{await idToNameMapper(UserId)}’s {Category} ⇒ {Score}";
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Bishop.Commands.CardGame;
+using Bishop.Commands.Dump;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Config.Converters;
@@ -59,6 +60,7 @@ public class DiscordClientGenerator
             .AddSingleton<Random>()
             .AddSingleton(nestedCounterService)
             .AddSingleton(dbContext)
+            .AddSingleton<UserNameCache>()
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>();
@@ -79,7 +81,7 @@ public class DiscordClientGenerator
         {
             Token = _token,
             TokenType = TokenType.Bot,
-            Intents = DiscordIntents.AllUnprivileged
+            Intents = DiscordIntents.AllUnprivileged | DiscordIntents.GuildMembers
         };
     }
 

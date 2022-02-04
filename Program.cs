@@ -84,10 +84,13 @@ internal class Program
         _generator.Register<CardGameService>();
 
         _generator.Register<Fukup>();
+        _generator.Register<UserNameCacheService>();
 
         _discord = _generator.Client;
         AdaptUserIdTo.UserMention = id => _discord.GetUserAsync(id).Result.Mention;
         AdaptUserIdTo.UserName = id => _discord.GetUserAsync(id).Result.Username;
+        AdaptUserIdTo.UserNameAsync = async id => (await _discord.GetUserAsync(id)).Username;
+        GuildFetcher.FetchAsync = async id => await _discord.GetGuildAsync(id);
 
         Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");
