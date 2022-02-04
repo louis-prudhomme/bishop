@@ -35,22 +35,15 @@ public class UserNameCacheService : BaseCommandModule
     [Command("force")]
     public async Task ForceFetchCache(CommandContext context)
     {
-        try
-        {
-            var members = await context.Guild.GetAllMembersAsync();
+        var members = await context.Guild.GetAllMembersAsync();
 
-            var pairs = members
-                .Select(member => (member.Id, member.Username));
+        var pairs = members
+            .Select(member => (member.Id, member.Username));
 
-            foreach (var (item1, item2) in pairs)
-                Cache.DirectAdd(item1, item2);
+        foreach (var (item1, item2) in pairs)
+            Cache.DirectAdd(item1, item2);
 
-            await context.RespondAsync("Finished");
-        }
-        catch (Exception e)
-        {
-            await context.RespondAsync(e.Message);
-        }
+        await context.RespondAsync("Finished");
     }
 
     [Command("check")]
@@ -61,5 +54,11 @@ public class UserNameCacheService : BaseCommandModule
 
         await context.RespondAsync($"In cache: {cache.Count}");
         await context.RespondAsync($"{cache.Select(Mapper).Aggregate((key1, key2) => string.Join("\n", key1, key2))}");
+    }
+
+    [Command("clear")]
+    public async Task Clear(CommandContext context)
+    {
+        Cache.Nuke();
     }
 }

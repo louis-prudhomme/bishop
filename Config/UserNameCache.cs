@@ -28,5 +28,10 @@ public class UserNameCache
         _idToName.AddOrUpdate(id, _ => userName, (_, _) => userName);
     }
 
+    public void Nuke()
+    {
+        _idToName.Clear();
+    }
+    
     public List<(ulong, string)> Stored => _idToName.Select(pair => (pair.Key, pair.Value)).ToList();
 }

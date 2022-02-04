@@ -51,16 +51,23 @@ public class DiscordClientGenerator
 
     private IServiceCollection AssembleServiceCollection(MongoContext dbContext)
     {
+        var nestedCache = new UserNameCache();
         var nestedCounterService = new CounterService
         {
-            CounterRepository = new CounterRepository()
+            CounterRepository = new CounterRepository(),
+            Cache = nestedCache
+        };
+        var nestedUserNameCacheService = new UserNameCacheService
+        {
+            Cache = nestedCache
         };
 
         return new ServiceCollection()
             .AddSingleton<Random>()
             .AddSingleton(nestedCounterService)
             .AddSingleton(dbContext)
-            .AddSingleton<UserNameCache>()
+            .AddSingleton(nestedCache)
+            .AddSingleton(nestedUserNameCacheService)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>();
