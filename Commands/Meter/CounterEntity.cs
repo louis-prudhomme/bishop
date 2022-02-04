@@ -66,7 +66,8 @@ public class CounterEntity : DbObject
             null => "",
             _ => "  ",
         };
-        
-        return $"{displayedRank}{await idToNameMapper(UserId)}’s {Category} ⇒ {Score}";
+
+        var username = await idToNameMapper(UserId);
+        return $"{displayedRank}{username}’s {Category} ⇒ {Score}";
     }
 }

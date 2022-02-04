@@ -93,7 +93,8 @@ public class CounterService : BaseCommandModule
         record.Score += nb;
 
         await CounterRepository.SaveAsync(record);
-        await context.RespondAsync($"{await record.ToString(Cache.GetAsync)} (from {previous})");
+        var formatted = await record.ToString(Cache.GetAsync);
+        await context.RespondAsync($"{formatted} (from {previous})");
     }
 
     [GroupCommand]
