@@ -64,7 +64,7 @@ public class CounterEntity : DbObject
             1 => "🥈 ",
             2 => "🥉 ",
             null => "",
-            _ => "  ",
+            _ => "⠀ ⠀",
         };
 
         var username = await idToNameMapper(UserId);
