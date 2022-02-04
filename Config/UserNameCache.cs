@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Helper;
+using DSharpPlus.Exceptions;
 
 namespace Bishop.Config;
 
@@ -17,8 +18,21 @@ public class UserNameCache
     {
         if (_idToName.ContainsKey(id))
             return _idToName[id];
+        
+        var fetched = "";
+        try
+        {
+            fetched = await AdaptUserIdTo.UserNameAsync(id);
+        }
+        catch (NotFoundException e)
+        {
+            Console.WriteLine(e);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
 
-        var fetched = await AdaptUserIdTo.UserNameAsync(id);
         _idToName.AddOrUpdate(id, _ => fetched, (_, _) => fetched);
         return fetched;
     }

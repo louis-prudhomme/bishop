@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Meter;
+using Bishop.Config;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -17,6 +18,7 @@ namespace Bishop.Commands.History;
 public class RecordService : BaseCommandModule
 {
     public Random Random { private get; set; } = null!;
+    public UserNameCache Cache { private get; set; } = null!;
     public RecordRepository Repository { private get; set; } = null!;
 
     [GroupCommand]
@@ -33,9 +35,9 @@ public class RecordService : BaseCommandModule
 
         var picked = records.ElementAt(Random.Next(0, records.Count));
         // TODO default value as l'étranger
-        var originalUser = context.Guild.Members[picked.UserId];
+        var originalUser = Cache.GetAsync(picked.UserId);
 
-        await context.RespondAsync($"• {picked.Motive} — {originalUser.Mention}");
+        await context.RespondAsync($"{picked.Motive} — {originalUser}");
     }
 
     [Command("add")]
@@ -49,7 +51,7 @@ public class RecordService : BaseCommandModule
         [Description("Record to add")] [RemainingText]
         string motive)
     {
-        var record = new RecordEntity(member.Id, counterCategory, motive);
+         var record = new RecordEntity(member.Id, counterCategory, motive);
 
         await Repository.SaveAsync(record);
         await context.RespondAsync(

@@ -54,6 +54,19 @@ public class CounterEntity : DbObject
 
     public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper)
     {
-        return $"{await idToNameMapper(UserId)}’s {Category} ⇒ {Score}";
+        return await ToString(idToNameMapper, null);
+    }
+    public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper, int? rank)
+    {
+        var displayedRank = rank switch
+        {
+            0 => "🥇 ",
+            1 => "🥈 ",
+            2 => "🥉 ",
+            null => "",
+            _ => "  ",
+        };
+        
+        return $"{displayedRank}{await idToNameMapper(UserId)}’s {Category} ⇒ {Score}";
     }
 }
