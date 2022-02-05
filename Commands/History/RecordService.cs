@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Meter;
@@ -90,15 +91,39 @@ public class RecordService : BaseCommandModule
     )
     {
         var records = await Repository.FindByUser(member.Id);
-        var trueLimit = limit <= 0 ? records.Count : limit ?? records.Count;
 
         if (records.Any())
-            await context.RespondAsync(records
-                .Select(entity => entity.ToString())
-                .Take(trueLimit)
-                .Aggregate((acc, h) => string.Join("\n", acc, h)));
+            await FormatRecordList(context, records, limit ?? -1);
         else
             await context.RespondAsync(
                 $"No history recorded for user {member.Username}");
+    }
+
+    [Command("consult")]
+    private async Task Consult(CommandContext context,
+        [Description("Category to pull records of")]
+        CounterCategory category,
+        [Description("Number of records to pull")]
+        int? limit = -1
+    )
+    {
+        var records = await Repository.FindByCategory(category);
+
+        if (records.Any())
+            await FormatRecordList(context, records, limit ?? -1);
+        else
+
+            await context.RespondAsync(
+                $"No history recorded for category {category}");
+    }
+
+    private async Task FormatRecordList(CommandContext context, List<RecordEntity> records, int limit)
+    {
+        var trueLimit = limit <= 0 ? records.Count : limit;
+
+        await context.RespondAsync(records
+            .Select(entity => entity.ToString())
+            .Take(trueLimit)
+            .Aggregate((acc, h) => string.Join("\n", acc, h)));
     }
 }
