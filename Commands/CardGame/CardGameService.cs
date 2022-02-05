@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Config;
-using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -33,7 +32,7 @@ internal class CardGameService : BaseCommandModule
 
         var formattedCardGames = await Task.WhenAll(cardGames
             .Select(game => game.ToString(Cache.GetAsync)));
-        
+
         var joinedCardGames = formattedCardGames
             .Aggregate((key1, key2) => string.Join("\n", key1, key2));
 

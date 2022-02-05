@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Config;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Dump;
 
@@ -19,7 +16,10 @@ public class UserNameCacheService : BaseCommandModule
     [GroupCommand]
     public async Task FetchCache(CommandContext context)
     {
-        async Task<(ulong, string)> PairMapper(ulong id) => (id, await AdaptUserIdTo.UserNameAsync(id));
+        async Task<(ulong, string)> PairMapper(ulong id)
+        {
+            return (id, await AdaptUserIdTo.UserNameAsync(id));
+        }
 
         var pairs = await Task.WhenAll(context.Guild.Members
             .Select(pair => pair.Key)
@@ -50,14 +50,18 @@ public class UserNameCacheService : BaseCommandModule
     public async Task Check(CommandContext context)
     {
         var cache = Cache.Stored;
-        string Mapper((ulong, string) tuple) => $"({tuple.Item1}, {tuple.Item2})";
+
+        string Mapper((ulong, string) tuple)
+        {
+            return $"({tuple.Item1}, {tuple.Item2})";
+        }
 
         await context.RespondAsync($"In cache: {cache.Count}");
         await context.RespondAsync($"{cache.Select(Mapper).Aggregate((key1, key2) => string.Join("\n", key1, key2))}");
     }
 
     [Command("clear")]
-    public async Task Clear(CommandContext context)
+    public void Clear(CommandContext context)
     {
         Cache.Nuke();
     }

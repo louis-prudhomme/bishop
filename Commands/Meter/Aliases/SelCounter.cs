@@ -9,7 +9,7 @@ namespace Bishop.Commands.Meter.Aliases;
 [Description("Sel-related commands")]
 public class SelCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; }
+    public CounterService Service { private get; set; } = null!;
 
     [GroupCommand]
     [Description("Adds a provided value to @someone’s sel score")]

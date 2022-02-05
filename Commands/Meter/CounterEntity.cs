@@ -27,7 +27,7 @@ public class CounterEntity : DbObject
 
     public CounterCategory Category { get; set; }
     public long Score { get; set; }
-    
+
     public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper)
     {
         return $"{await idToNameMapper(UserId)}’s {Category} ⇒ {Score}";

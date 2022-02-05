@@ -9,7 +9,7 @@ namespace Bishop.Commands.Meter.Aliases;
 [Description("Bdm-related commands")]
 public class BdmCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; }
+    public CounterService Service { private get; set; } = null!;
 
     [GroupCommand]
     [Description("Adds a provided value to @someone’s bdm score")]

@@ -50,9 +50,9 @@ public class RecordRepository : Repository<RecordEntity>
     private FilterDefinition<RecordEntity> GetFilterByUserAndCategory(ulong userId, CounterCategory counterCategory)
     {
         return Builders<RecordEntity>
-                .Filter.And(
-                    Builders<RecordEntity>.Filter.Eq("UserId", userId),
-                    Builders<RecordEntity>.Filter.Eq("Category", counterCategory));
+            .Filter.And(
+                Builders<RecordEntity>.Filter.Eq("UserId", userId),
+                Builders<RecordEntity>.Filter.Eq("Category", counterCategory));
     }
 
     /// <summary>

@@ -53,7 +53,7 @@ internal class Program
             .Result;
 
         var mongoClient = new MongoClient(MongoToken);
-        
+
         var dbContext = new MongoContext(mongoClient, MongoDatabase);
         Repository<CardGameEntity>.MongoContext = dbContext;
         Repository<CounterEntity>.MongoContext = dbContext;

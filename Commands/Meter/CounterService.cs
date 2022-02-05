@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
 using Bishop.Config;
-using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -33,7 +32,9 @@ public class CounterService : BaseCommandModule
         var scores = await CounterRepository.FindByUser(member.Id);
 
         if (!scores.Any())
+        {
             await context.RespondAsync($"No scores for user {member.Username}");
+        }
         else
         {
             var entities = await Task.WhenAll(scores
@@ -52,7 +53,9 @@ public class CounterService : BaseCommandModule
         var scores = await CounterRepository.FindByCategory(counterCategory);
 
         if (!scores.Any())
+        {
             await context.RespondAsync($"No scores for category {counterCategory}");
+        }
         else
         {
             var entities = await Task.WhenAll(scores

@@ -20,7 +20,7 @@ public class Randomizer : BaseCommandModule
     /// </summary>
     private const int MaxEmojiHex = 44;
 
-    public Random Rand { private get; set; }
+    public Random Rand { private get; set; } = null!;
 
     [Command("Random")]
     [Aliases("rand", "r")]

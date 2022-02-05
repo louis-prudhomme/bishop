@@ -10,7 +10,7 @@ namespace Bishop.Commands.Meter.Aliases;
 [Description("Rass-related commands")]
 public class RassCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; }
+    public CounterService Service { private get; set; } = null!;
 
     [GroupCommand]
     [Description("Adds a provided value to @someone’s rass score")]

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -21,6 +22,11 @@ public class StalkConfigurator
     public async Task<Dictionary<string, string>> ReadStalkAsync()
     {
         using var sr = File.OpenText(_path);
-        return await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(sr.BaseStream);
+        var result = await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(sr.BaseStream);
+
+        if (result == null)
+            throw new NullReferenceException();
+
+        return result;
     }
 }

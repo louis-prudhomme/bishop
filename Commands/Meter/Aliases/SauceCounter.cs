@@ -9,7 +9,7 @@ namespace Bishop.Commands.Meter.Aliases;
 [Description("Sauce-related commands")]
 public class SauceCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; }
+    public CounterService Service { private get; set; } = null!;
 
     [GroupCommand]
     [Description("Adds a provided value to @someone’s sauce score")]

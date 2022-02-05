@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,9 @@ public class UserNameCache
     private readonly ConcurrentDictionary<ulong, string> _idToName = new();
 
     public List<ulong> Keys => new(_idToName.Keys);
-    
+
+    public List<(ulong, string)> Stored => _idToName.Select(pair => (pair.Key, pair.Value)).ToList();
+
     public async Task<string> GetAsync(ulong id)
     {
         if (_idToName.ContainsKey(id))
@@ -32,6 +33,4 @@ public class UserNameCache
     {
         _idToName.Clear();
     }
-    
-    public List<(ulong, string)> Stored => _idToName.Select(pair => (pair.Key, pair.Value)).ToList();
 }

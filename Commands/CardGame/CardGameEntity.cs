@@ -21,6 +21,7 @@ public class CardGameEntity : DbObject
 
     public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper)
     {
-        return $"• *{Name}*, offered by **{await idToNameMapper(GifterUserId)}** the {DateHelper.FromDateTimeToString(Date)}";
+        return
+            $"• *{Name}*, offered by **{await idToNameMapper(GifterUserId)}** the {DateHelper.FromDateTimeToString(Date)}";
     }
 }

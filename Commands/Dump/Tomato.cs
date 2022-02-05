@@ -12,8 +12,8 @@ namespace Bishop.Commands.Dump;
 /// </summary>
 public class Tomato : BaseCommandModule
 {
-    public Random Rand { private get; set; }
-    public static List<string> Tomatoes { get; set; }
+    public Random Rand { private get; set; } = null!;
+    public static List<string> Tomatoes { get; set; } = null!;
 
     [Command("tomato")]
     [Aliases("t")]

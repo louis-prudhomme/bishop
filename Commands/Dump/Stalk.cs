@@ -17,7 +17,7 @@ public class Stalk : BaseCommandModule
     /// <summary>
     ///     Slenders dialogue lines.
     /// </summary>
-    public static Dictionary<string, string> Lines { get; set; }
+    public static Dictionary<string, string> Lines { get; set; } = null!;
 
     [Command("stalk")]
     [Aliases("st")]
