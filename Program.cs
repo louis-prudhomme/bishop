@@ -40,7 +40,7 @@ internal class Program
     private static DiscordClientGenerator _generator = null!;
 
     [STAThread]
-    private static void Main(string[] args)
+    private static void Main()
     {
         XmlConfigurator.Configure();
 
@@ -54,16 +54,10 @@ internal class Program
 
         var mongoClient = new MongoClient(MongoToken);
         
-        Enumerat.Database = MongoDatabase;
-        Enumerat.Mongo = mongoClient;
-
         var dbContext = new MongoContext(mongoClient, MongoDatabase);
         Repository<CardGameEntity>.MongoContext = dbContext;
         Repository<CounterEntity>.MongoContext = dbContext;
         Repository<RecordEntity>.MongoContext = dbContext;
-
-        CardCollection.Database = MongoDatabase;
-        CardCollection.Mongo = mongoClient;
 
         _generator = new DiscordClientGenerator(DiscordToken, CommandSigil, dbContext);
 
@@ -83,12 +77,9 @@ internal class Program
         _generator.Register<RecordService>();
         _generator.Register<CardGameService>();
 
-        _generator.Register<Fukup>();
         _generator.Register<UserNameCacheService>();
 
         _discord = _generator.Client;
-        AdaptUserIdTo.UserMention = id => _discord.GetUserAsync(id).Result.Mention;
-        AdaptUserIdTo.UserName = id => _discord.GetUserAsync(id).Result.Username;
         AdaptUserIdTo.UserNameAsync = async id => (await _discord.GetUserAsync(id)).Username;
         GuildFetcher.FetchAsync = async id => await _discord.GetGuildAsync(id);
 

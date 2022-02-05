@@ -24,17 +24,6 @@ public class RecordEntity : DbObject
         Motive = motive;
     }
 
-    [Obsolete("will be removed along with Record")]
-    public RecordEntity(ulong discordMemberId, CounterCategory category, Record record)
-    {
-        RecordedAt = DateHelper.FromOldStringToDateTime(record.Date);
-        Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
-
-        Motive = record.Motive;
-        Category = category;
-        UserId = discordMemberId;
-    }
-
     public ulong UserId { get; set; }
     public CounterCategory Category { get; set; }
     public DateTime RecordedAt { get; set; }

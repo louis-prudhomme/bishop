@@ -45,15 +45,4 @@ public class DateHelper
     {
         return date.ToString("d", CultureInfo.GetCultureInfo("fr-FR"));
     }
-
-    /// <summary>
-    ///     Used to parse and convert screxed up date format previously used into <see cref="DateTime" />
-    /// </summary>
-    /// <param name="oldDate">Old date format (should be <c>dd/mm/yyyy hh:mm:ss</c>)</param>
-    /// <returns>Corresponding <see cref="DateTime" /> instance or throws</returns>
-    [Obsolete("this will eventually be removed along with oldish Enumerat & CardCollection classes.")]
-    public static DateTime FromOldStringToDateTime(string oldDate)
-    {
-        return DateTime.Parse(oldDate, CultureInfo.GetCultureInfo("fr-FR"));
-    }
 }
