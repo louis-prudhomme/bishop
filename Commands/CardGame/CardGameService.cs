@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Config;
 using DSharpPlus.CommandsNext;
@@ -20,24 +21,27 @@ internal class CardGameService : BaseCommandModule
 
     [GroupCommand]
     [Description("Prompts all card games owned by Vayames.")]
-    public async Task Prompt(CommandContext context)
+    public async Task Prompt(CommandContext context, [Description("How many decks do you want to prompt")] int? limit = 0)
     {
-        var cardGames = await Repository.FindAllAsync();
+            var cardGames = await Repository.FindAllAsync();
+            var trueLimit = limit <= 0 ? cardGames.Count : limit ?? 0;
 
-        if (cardGames.Count == 0)
-        {
-            await context.RespondAsync("No cards in the collection (weird).");
-            return;
-        }
+            if (cardGames.Count == 0)
+            {
+                await context.RespondAsync("No cards in the collection (weird).");
+                return;
+            }
 
-        var formattedCardGames = await Task.WhenAll(cardGames
-            .Select(game => game.ToString(Cache.GetAsync)));
+            var formattedCardGames = await Task.WhenAll(cardGames
+                .Take(trueLimit)
+                .Select(game => game.ToString(Cache.GetAsync)));
 
-        var joinedCardGames = formattedCardGames
-            .Aggregate((key1, key2) => string.Join("\n", key1, key2));
+            var joinedCardGames = formattedCardGames
+                .Aggregate((key1, key2) => string.Join("\n", key1, key2));
 
-        await context.RespondAsync(
-            $"The collection currently counts *{cardGames.Count}* card games :\n{joinedCardGames}");
+            await context.RespondAsync(
+                $"The collection currently counts *{cardGames.Count}* card games :\n{joinedCardGames}");
+        
     }
 
     [GroupCommand]

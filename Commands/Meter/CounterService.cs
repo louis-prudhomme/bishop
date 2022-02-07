@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
@@ -24,6 +25,7 @@ public class CounterService : BaseCommandModule
 {
     public CounterRepository CounterRepository { private get; set; } = new();
     public UserNameCache Cache { private get; set; } = null!;
+    public RecordService HistoryService { private get; set; } = null!;
 
     [GroupCommand]
     public async Task Score(CommandContext context,
@@ -38,7 +40,7 @@ public class CounterService : BaseCommandModule
         else
         {
             var entities = await Task.WhenAll(scores
-                .Select(entity => entity.ToString(Cache.GetAsync)));
+                .Select((entity, i) => entity.ToString(Cache.GetAsync, i)));
 
             await context.RespondAsync(entities
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
@@ -59,7 +61,7 @@ public class CounterService : BaseCommandModule
         else
         {
             var entities = await Task.WhenAll(scores
-                .Select(entity => entity.ToString(Cache.GetAsync)));
+                .Select((entity, i) => entity.ToString(Cache.GetAsync, i)));
 
             await context.RespondAsync(entities
                 .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
@@ -94,7 +96,8 @@ public class CounterService : BaseCommandModule
         record.Score += nb;
 
         await CounterRepository.SaveAsync(record);
-        await context.RespondAsync($"{record.ToString(Cache.GetAsync)} (from {previous})");
+        var formatted = await record.ToString(Cache.GetAsync);
+        await context.RespondAsync($"{formatted} (from {previous})");
     }
 
     [GroupCommand]
@@ -106,9 +109,8 @@ public class CounterService : BaseCommandModule
         [RemainingText] [Description("Context for the point(s) addition")]
         string motive)
     {
-        var historyService = new RecordService();
         await Task.WhenAll(
             Score(context, member, counterCategory, 1),
-            historyService.Add(context, member, counterCategory, motive));
+            HistoryService.Add(context, member, counterCategory, motive));
     }
 }
