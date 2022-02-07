@@ -112,7 +112,6 @@ public class RecordService : BaseCommandModule
         if (records.Any())
             await FormatRecordList(context, records, limit ?? -1);
         else
-
             await context.RespondAsync(
                 $"No history recorded for category {category}");
     }
