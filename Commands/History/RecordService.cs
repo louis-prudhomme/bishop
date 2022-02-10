@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Meter;
 using Bishop.Config;
+using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -36,9 +37,27 @@ public class RecordService : BaseCommandModule
 
         var picked = records.ElementAt(Random.Next(0, records.Count));
         // TODO default value as l'étranger
-        var originalUser = Cache.GetAsync(picked.UserId);
+        var originalUser = await Cache.GetAsync(picked.UserId);
 
-        await context.RespondAsync($"{picked.Motive} — {originalUser}");
+        await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
+    }
+
+    [GroupCommand]
+    [Description("Returns a @member's random record")]
+    public async Task ConsultShort(CommandContext context, DiscordMember member)
+    {
+        var records = await Repository.FindByUser(member.Id);
+        if (!records.Any())
+        {
+            await context.RespondAsync("No history recorded.");
+            return;
+        }
+
+        var picked = records.ElementAt(Random.Next(0, records.Count));
+        // TODO default value as l'étranger
+        var originalUser = await Cache.GetAsync(picked.UserId);
+
+        await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
     }
 
     [Command("add")]
@@ -68,17 +87,14 @@ public class RecordService : BaseCommandModule
         [Description("Category to know the history of")]
         CounterCategory counterCategory,
         [Description("Number of records to pull")]
-        int? limit = -1
+        int? limit = 10
     )
     {
         var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
         var trueLimit = limit <= 0 ? records.Count : limit ?? records.Count;
 
         if (records.Any())
-            await context.RespondAsync(records
-                .Select(entity => entity.ToString())
-                .Take(trueLimit)
-                .Aggregate((acc, h) => string.Join("\n", acc, h)));
+            await FormatRecordList(context, records, limit ?? 10);
         else
             await context.RespondAsync(
                 $"No history recorded for category user {member.Username} and {counterCategory}");
@@ -89,13 +105,13 @@ public class RecordService : BaseCommandModule
         [Description("@User to know the history of")]
         DiscordUser member,
         [Description("Number of records to pull")]
-        int? limit = -1
+        int? limit = 10
     )
     {
         var records = await Repository.FindByUser(member.Id);
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? -1);
+            await FormatRecordList(context, records, limit ?? 10);
         else
             await context.RespondAsync(
                 $"No history recorded for user {member.Username}");
@@ -106,25 +122,27 @@ public class RecordService : BaseCommandModule
         [Description("Category to pull records of")]
         CounterCategory category,
         [Description("Number of records to pull")]
-        int? limit = -1
+        int? limit = 10
     )
     {
         var records = await Repository.FindByCategory(category);
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? -1);
+            await FormatRecordList(context, records, limit ?? 10);
         else
             await context.RespondAsync(
                 $"No history recorded for category {category}");
     }
 
-    private async Task FormatRecordList(CommandContext context, List<RecordEntity> records, int limit)
+    private async Task FormatRecordList(CommandContext context, IReadOnlyCollection<RecordEntity> records, int limit)
     {
         var trueLimit = limit <= 0 ? records.Count : limit;
 
-        await context.RespondAsync(records
+        var toSend = records
             .Select(entity => entity.ToString())
             .Take(trueLimit)
-            .Aggregate((acc, h) => string.Join("\n", acc, h)));
+            .ToList();
+
+        await DiscordMessageCutter.PaginateAnswer(toSend, context.RespondAsync);
     }
 }

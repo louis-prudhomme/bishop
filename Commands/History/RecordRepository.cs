@@ -84,7 +84,7 @@ public class RecordRepository : Repository<RecordEntity>
     {
         return new FindOptions<RecordEntity, RecordEntity>
         {
-            Sort = Builders<RecordEntity>.Sort.Ascending("Timestamp")
+            Sort = Builders<RecordEntity>.Sort.Descending("Timestamp")
         };
     }
 }
