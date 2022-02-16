@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Exceptions;
 
 namespace Bishop.Commands.Dump;
 
@@ -49,7 +51,7 @@ internal class Deleter : BaseCommandModule
     [Command("deleten")]
     [Aliases("dn")]
     [Description("Deletes the n last messages.")]
-    public async Task Delete(CommandContext context, int n)
+    public async Task DeleteN(CommandContext context, int n)
     {
         if (n <= 0)
         {
@@ -66,14 +68,20 @@ internal class Deleter : BaseCommandModule
 
         var limit = context.Message;
         var messagesToDelete = (await context.Channel
-                .GetMessagesBeforeAsync(limit.Id))
+                .GetMessagesBeforeAsync(limit.Id, n))
             .Take(n)
             .ToList();
 
+        try
+        {
+            await context.Channel.DeleteMessagesAsync(messagesToDelete);
+            await limit.DeleteAsync();
 
-        await context.Channel.DeleteMessagesAsync(messagesToDelete);
-        await limit.DeleteAsync();
-
-        await context.RespondAsync($"Removed {messagesToDelete.Count} 😉");
+            await context.RespondAsync($"Removed {messagesToDelete.Count} 😉");
+        }
+        catch (BadRequestException)
+        {
+            await context.RespondAsync("Messages more than 14 days old cannot be deleted through my services.");
+        }
     }
 }
