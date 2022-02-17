@@ -27,8 +27,11 @@ public class DiscordMessageCutter
         return paragraphs;
     }
 
-    public static async Task PaginateAnswer(List<string> toSend, FollowUp initialNext)
+    public static async Task PaginateAnswer(List<string> toSend, FollowUp initialNext, string? firstLine = null)
     {
+        if (firstLine!=null)
+            toSend.Insert(0, firstLine);
+        
         var paragraphs = DispatchIntoParagraphs(toSend);
 
         var next = initialNext;
