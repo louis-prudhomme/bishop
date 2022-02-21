@@ -19,6 +19,7 @@ namespace Bishop;
 internal class Program
 {
     private const string TomatoFilePath = "./Resources/tomatoes.json";
+    private const string AledFilePath = "./Resources/aleds.json";
     private const string StalkFilePath = "./Resources/slenders.json";
 
     private static readonly string DiscordToken = Environment
@@ -49,6 +50,10 @@ internal class Program
             .ReadTomatoesAsync()
             .Result;
 
+        Aled.Aleds = new AledConfigurator(AledFilePath)
+            .ReadAledsAsync()
+            .Result;
+
         Stalk.Lines = new StalkConfigurator(StalkFilePath)
             .ReadStalkAsync()
             .Result;
@@ -65,6 +70,7 @@ internal class Program
         _generator.Register<Randomizer>();
         _generator.Register<Stalk>();
         _generator.Register<Tomato>();
+        _generator.Register<Aled>();
         _generator.Register<Vote>();
         _generator.Register<Deleter>();
 

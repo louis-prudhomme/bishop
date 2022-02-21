@@ -7,11 +7,15 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
+        <None Remove="Resources\aleds.json" />
         <None Remove="Resources\slenders.json" />
         <None Remove="Resources\Slenders.png" />
         <None Remove="Resources\tomatoes.json" />
     </ItemGroup>
     <ItemGroup>
+        <EmbeddedResource Include="Resources\aleds.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
         <EmbeddedResource Include="Resources\tomatoes.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
