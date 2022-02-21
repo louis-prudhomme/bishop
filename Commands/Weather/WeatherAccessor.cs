@@ -17,16 +17,16 @@ public class WeatherAccessor
 
     private readonly RestClient _client = new(Options);
 
-    public async Task<WeatherEntity> Current()
+    public async Task<WeatherEntity> Current(string city)
     {
         var request = new RestRequest(CurrentRoute)
             .AddQueryParameter("key", _apiKey)
-            .AddQueryParameter("q", "Paris")
+            .AddQueryParameter("q", city)
             .AddQueryParameter("aqi", "no");
         
         var response = await _client.ExecuteAsync<WeatherDTO>(request);
 
-        if (response.Data == null) throw new ArgumentNullException("weather");
+        if (response.Data == null) throw new Exception("weather");
         
         return WeatherAdapter.FromDtoToEntity(response.Data);
     }

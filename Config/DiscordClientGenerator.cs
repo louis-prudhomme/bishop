@@ -69,7 +69,10 @@ public class DiscordClientGenerator
         {
             Cache = nestedCache
         };
-        var weatherAccessor = new WeatherAccessor();
+        var weatherService = new WeatherService
+        {
+            Accessor = new WeatherAccessor()
+        };
 
         return new ServiceCollection()
             .AddSingleton<Random>()
@@ -78,7 +81,7 @@ public class DiscordClientGenerator
             .AddSingleton(dbContext)
             .AddSingleton(nestedCache)
             .AddSingleton(nestedUserNameCacheService)
-            .AddSingleton(weatherAccessor)
+            .AddSingleton(weatherService)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>();
