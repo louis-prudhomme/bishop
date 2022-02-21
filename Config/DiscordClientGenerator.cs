@@ -4,6 +4,7 @@ using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
+using Bishop.Commands.Weather;
 using Bishop.Config.Converters;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -68,6 +69,7 @@ public class DiscordClientGenerator
         {
             Cache = nestedCache
         };
+        var weatherAccessor = new WeatherAccessor();
 
         return new ServiceCollection()
             .AddSingleton<Random>()
@@ -76,6 +78,7 @@ public class DiscordClientGenerator
             .AddSingleton(dbContext)
             .AddSingleton(nestedCache)
             .AddSingleton(nestedUserNameCacheService)
+            .AddSingleton(weatherAccessor)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>();

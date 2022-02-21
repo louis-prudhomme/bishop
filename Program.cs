@@ -6,6 +6,7 @@ using Bishop.Commands.Dump;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Commands.Meter.Aliases;
+using Bishop.Commands.Weather;
 using Bishop.Config;
 using Bishop.Helper;
 using Bishop.Helper.Database;
@@ -32,6 +33,9 @@ internal class Program
 
     private static readonly string CommandSigil = Environment
         .GetEnvironmentVariable("COMMAND_SIGIL")!;
+
+    private static readonly string WeatherApiKey = Environment
+        .GetEnvironmentVariable("WEATHER_API_KEY")!;
 
     private static readonly ILog Log = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
@@ -60,6 +64,8 @@ internal class Program
         Repository<CounterEntity>.MongoContext = dbContext;
         Repository<RecordEntity>.MongoContext = dbContext;
 
+        WeatherAccessor._apiKey = WeatherApiKey;
+        
         _generator = new DiscordClientGenerator(DiscordToken, CommandSigil, dbContext);
 
         _generator.Register<Randomizer>();
@@ -77,6 +83,8 @@ internal class Program
         _generator.Register<CounterService>();
         _generator.Register<RecordService>();
         _generator.Register<CardGameService>();
+
+        _generator.Register<WeatherController>();
 
         _generator.Register<UserNameCacheService>();
 

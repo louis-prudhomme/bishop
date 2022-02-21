@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using RestSharp;
 
 namespace Bishop.Commands.Weather;
@@ -6,7 +7,8 @@ namespace Bishop.Commands.Weather;
 public class WeatherAccessor
 {
     public static string _apiKey { private get; set; } = null!;
-    public static string _currentRoute { private get; set; } = "/v1/current.json";
+
+    public const string CurrentRoute = "/v1/current.json";
 
     private static readonly RestClientOptions Options = new("https://api.weatherapi.com/")
     {
@@ -15,14 +17,17 @@ public class WeatherAccessor
 
     private readonly RestClient _client = new(Options);
 
-    public async Task Current()
+    public async Task<WeatherEntity> Current()
     {
-        var request = new RestRequest()
+        var request = new RestRequest(CurrentRoute)
             .AddQueryParameter("key", _apiKey)
             .AddQueryParameter("q", "Paris")
             .AddQueryParameter("aqi", "no");
+        
+        var response = await _client.ExecuteAsync<WeatherDTO>(request);
 
-
-        var response = await _client.ExecuteAsync(request);
+        if (response.Data == null) throw new ArgumentNullException("weather");
+        
+        return WeatherAdapter.FromDtoToEntity(response.Data);
     }
 }
