@@ -1,13 +1,14 @@
 ﻿using System;
 using Bishop.Commands.Meter;
 using Bishop.Helper;
+using Bishop.Helper.Database;
 
 namespace Bishop.Commands.History;
 
 /// <summary>
 ///     Specifies and implements interactions of <see cref="RecordEntity" /> with DB.
 /// </summary>
-public class RecordEntity : DbObject
+public class RecordEntity : DbEntity
 {
     public RecordEntity()
     {

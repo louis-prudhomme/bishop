@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bishop.Helper;
+using Bishop.Helper.Database;
 
 namespace Bishop.Commands.CardGame;
 
-public class CardGameEntity : DbObject
+public class CardGameEntity : DbEntity
 {
     public CardGameEntity(string name, ulong gifterUserId)
     {

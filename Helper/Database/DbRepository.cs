@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Bishop.Config;
 using MongoDB.Driver;
 
-namespace Bishop.Helper;
+namespace Bishop.Helper.Database;
 
-public abstract class Repository<T> where T : DbObject
+public abstract class Repository<T> where T : DbEntity
 {
     /// <summary>
     ///     Default name of the Mongo collection. Should be a constant in children classes.

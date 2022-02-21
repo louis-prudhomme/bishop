@@ -8,6 +8,7 @@ using Bishop.Commands.Meter;
 using Bishop.Commands.Meter.Aliases;
 using Bishop.Config;
 using Bishop.Helper;
+using Bishop.Helper.Database;
 using DSharpPlus;
 using log4net;
 using log4net.Config;

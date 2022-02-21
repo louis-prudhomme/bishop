@@ -1,4 +1,5 @@
 ﻿using Bishop.Helper;
+using Bishop.Helper.Database;
 
 namespace Bishop.Commands.CardGame;
 

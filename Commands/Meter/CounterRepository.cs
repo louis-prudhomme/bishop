@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Helper;
+using Bishop.Helper.Database;
 using MongoDB.Driver;
 
 namespace Bishop.Commands.Meter;

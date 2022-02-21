@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bishop.Helper;
+using Bishop.Helper.Database;
 
 namespace Bishop.Commands.Meter;
 
 /// <summary>
 ///     Represents users' counters of points in a specific category.
 /// </summary>
-public class CounterEntity : DbObject
+public class CounterEntity : DbEntity
 {
     public CounterEntity()
     {
