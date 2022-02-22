@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
@@ -19,8 +20,8 @@ namespace Bishop;
 
 internal class Program
 {
-    private const string TomatoFilePath = "./Resources/tomatoes.json";
-    private const string StalkFilePath = "./Resources/slenders.json";
+    private const string TomatoFilePath = "tomatoes.json";
+    private const string StalkFilePath = "slenders.json";
 
     private static readonly string DiscordToken = Environment
         .GetEnvironmentVariable("DISCORD_TOKEN")!;
@@ -49,12 +50,12 @@ internal class Program
     {
         XmlConfigurator.Configure();
 
-        Tomato.Tomatoes = new TomatoConfigurator(TomatoFilePath)
-            .ReadTomatoesAsync()
+        Tomato.Tomatoes = new JsonDeserializer<List<string>>(TomatoFilePath)
+            .Get()
             .Result;
 
-        Stalk.Lines = new StalkConfigurator(StalkFilePath)
-            .ReadStalkAsync()
+        Stalk.Lines = new JsonDeserializer<Dictionary<string, string>>(StalkFilePath)
+            .Get()
             .Result;
 
         var mongoClient = new MongoClient(MongoToken);
@@ -65,7 +66,7 @@ internal class Program
         Repository<RecordEntity>.MongoContext = dbContext;
 
         WeatherAccessor._apiKey = WeatherApiKey;
-        
+
         _generator = new DiscordClientGenerator(DiscordToken, CommandSigil, dbContext);
 
         _generator.Register<Randomizer>();

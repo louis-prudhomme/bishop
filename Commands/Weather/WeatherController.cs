@@ -13,7 +13,7 @@ public class WeatherController : BaseCommandModule
     public WeatherService Service { private get; set; } = null!;
 
     [GroupCommand]
-    public async Task Demo(CommandContext context, [Description("City to know the weather of")] string city)
+    public async Task Get(CommandContext context, [Description("City to know the weather of")] string city)
     {
         try
         {
