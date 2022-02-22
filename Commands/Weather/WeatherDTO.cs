@@ -1,4 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
+
 namespace Bishop.Commands.Weather;
 
 public record WeatherDTO(Location location, Current current);

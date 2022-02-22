@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Config;
 using Bishop.Helper;
@@ -24,7 +22,8 @@ internal class CardGameService : BaseCommandModule
     [GroupCommand]
     [Description("Prompts all card games owned by Vayames.")]
     public async Task Prompt(CommandContext context,
-        [Description("How many decks do you want to prompt")] int? limit = 0)
+        [Description("How many decks do you want to prompt")]
+        int? limit = 0)
     {
         var cardGames = await Repository.FindAllAsync();
         var trueLimit = limit <= 0 ? cardGames.Count : limit ?? 0;

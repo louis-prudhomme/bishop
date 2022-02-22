@@ -71,7 +71,7 @@ public class RecordService : BaseCommandModule
         [Description("Record to add")] [RemainingText]
         string motive)
     {
-         var record = new RecordEntity(member.Id, counterCategory, motive);
+        var record = new RecordEntity(member.Id, counterCategory, motive);
 
         await Repository.SaveAsync(record);
         await context.RespondAsync(

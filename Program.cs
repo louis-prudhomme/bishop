@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
@@ -10,18 +9,14 @@ using Bishop.Commands.Meter.Aliases;
 using Bishop.Commands.Weather;
 using Bishop.Config;
 using Bishop.Helper;
-using Bishop.Helper.Database;
 using DSharpPlus;
 using log4net;
 using log4net.Config;
-using MongoDB.Driver;
 
 namespace Bishop;
 
 internal class Program
 {
-
-
     private static readonly ILog Log = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
             .DeclaringType);

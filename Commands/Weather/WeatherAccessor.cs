@@ -6,10 +6,10 @@ namespace Bishop.Commands.Weather;
 
 public class WeatherAccessor
 {
+    private const string CurrentRoute = "/v1/current.json";
+
     private static readonly string ApiKey = Environment
         .GetEnvironmentVariable("WEATHER_API_KEY")!;
-
-    private const string CurrentRoute = "/v1/current.json";
 
     private static readonly RestClientOptions Options = new("https://api.weatherapi.com/")
     {
@@ -24,11 +24,11 @@ public class WeatherAccessor
             .AddQueryParameter("key", ApiKey)
             .AddQueryParameter("q", city)
             .AddQueryParameter("aqi", "no");
-        
+
         var response = await _client.ExecuteAsync<WeatherDTO>(request);
 
         if (response.Data == null) throw new Exception("weather");
-        
+
         return WeatherAdapter.FromDtoToEntity(response.Data);
     }
 }

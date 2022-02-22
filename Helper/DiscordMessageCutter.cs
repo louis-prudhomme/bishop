@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DSharpPlus.Entities;
@@ -17,27 +16,22 @@ public class DiscordMessageCutter
         var paragraphs = new List<string>();
 
         for (var i = 0; i <= lines.Count; i += MessageMaxNumberOfLines)
-        {
             paragraphs.Add(lines
                 .Skip(i)
                 .Take(MessageMaxNumberOfLines)
                 .Aggregate((acc, h) => string.Join("\n", acc, h)));
-        }
 
         return paragraphs;
     }
 
     public static async Task PaginateAnswer(List<string> toSend, FollowUp initialNext, string? firstLine = null)
     {
-        if (firstLine!=null)
+        if (firstLine != null)
             toSend.Insert(0, firstLine);
-        
+
         var paragraphs = DispatchIntoParagraphs(toSend);
 
         var next = initialNext;
-        foreach (var paragraph in paragraphs)
-        {
-            next = (await next(paragraph)).RespondAsync;
-        }
+        foreach (var paragraph in paragraphs) next = (await next(paragraph)).RespondAsync;
     }
 }

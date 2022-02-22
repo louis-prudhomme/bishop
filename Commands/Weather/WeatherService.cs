@@ -9,25 +9,27 @@ public class WeatherService
 {
     public const long CacheFor = 14400;
 
-    public WeatherAccessor Accessor { private get; set; } = null!;
-
     public Dictionary<string, WeatherEntity> Cache = new();
+
+    public WeatherAccessor Accessor { private get; set; } = null!;
 
     public async Task<WeatherEntity> CurrentFor(string city)
     {
         var currentEpoch = DateHelper.FromDateTimeToTimestamp(DateTime.Now);
         var cityKey = city.Trim().ToLower();
-        
+
         if (Cache.ContainsKey(cityKey))
         {
             var cachedEntity = Cache[cityKey];
             if (currentEpoch - cachedEntity.Epoch <= CacheFor) return Cache[cityKey];
-            
+
             Cache.Remove(cityKey);
             Cache.Add(cityKey, await Accessor.Current(cityKey));
         }
         else
+        {
             Cache.Add(cityKey, await Accessor.Current(cityKey));
+        }
 
         return Cache[cityKey];
     }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bishop.Commands.Meter;
-using Bishop.Helper;
 using Bishop.Helper.Database;
 using MongoDB.Driver;
 

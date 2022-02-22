@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Bishop.Helper;
 
 /// <summary>
-/// It allows us to persist the data using serialization;
+///     It allows us to persist the data using serialization;
 /// </summary>
 /// <typeparam name="T">entity to deserialize</typeparam>
 public class JsonDeserializer<T>
@@ -25,7 +25,7 @@ public class JsonDeserializer<T>
         var entity = await JsonSerializer.DeserializeAsync<T>(sr);
 
         if (entity == null) throw new Exception("Shouldn't be null");
-        
+
         return entity;
     }
 }

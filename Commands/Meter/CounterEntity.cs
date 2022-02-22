@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bishop.Helper;
 using Bishop.Helper.Database;
 
 namespace Bishop.Commands.Meter;
@@ -33,6 +32,7 @@ public class CounterEntity : DbEntity
     {
         return await ToString(idToNameMapper, null);
     }
+
     public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper, int? rank)
     {
         var displayedRank = rank switch
@@ -41,7 +41,7 @@ public class CounterEntity : DbEntity
             1 => "🥈 ",
             2 => "🥉 ",
             null => "",
-            _ => "⠀ ⠀",
+            _ => "⠀ ⠀"
         };
 
         var username = await idToNameMapper(UserId);

@@ -24,6 +24,7 @@ public class DiscordClientGenerator
     /// </summary>
     private static readonly string BaseSigil = Environment
         .GetEnvironmentVariable("COMMAND_SIGIL") ?? ";";
+
     private static readonly string DiscordToken = Environment
         .GetEnvironmentVariable("DISCORD_TOKEN")!;
 
@@ -57,7 +58,7 @@ public class DiscordClientGenerator
         {
             Cache = nestedCache,
             Random = new Random(),
-            Repository = new RecordRepository(),
+            Repository = new RecordRepository()
         };
         var nestedCounterService = new CounterService
         {
