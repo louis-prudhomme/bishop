@@ -20,23 +20,7 @@ namespace Bishop;
 
 internal class Program
 {
-    private const string TomatoFilePath = "tomatoes.json";
-    private const string StalkFilePath = "slenders.json";
 
-    private static readonly string DiscordToken = Environment
-        .GetEnvironmentVariable("DISCORD_TOKEN")!;
-
-    private static readonly string MongoToken = Environment
-        .GetEnvironmentVariable("MONGO_TOKEN")!;
-
-    private static readonly string MongoDatabase = Environment
-        .GetEnvironmentVariable("MONGO_DB")!;
-
-    private static readonly string CommandSigil = Environment
-        .GetEnvironmentVariable("COMMAND_SIGIL")!;
-
-    private static readonly string WeatherApiKey = Environment
-        .GetEnvironmentVariable("WEATHER_API_KEY")!;
 
     private static readonly ILog Log = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
@@ -50,24 +34,7 @@ internal class Program
     {
         XmlConfigurator.Configure();
 
-        Tomato.Tomatoes = new JsonDeserializer<List<string>>(TomatoFilePath)
-            .Get()
-            .Result;
-
-        Stalk.Lines = new JsonDeserializer<Dictionary<string, string>>(StalkFilePath)
-            .Get()
-            .Result;
-
-        var mongoClient = new MongoClient(MongoToken);
-
-        var dbContext = new MongoContext(mongoClient, MongoDatabase);
-        Repository<CardGameEntity>.MongoContext = dbContext;
-        Repository<CounterEntity>.MongoContext = dbContext;
-        Repository<RecordEntity>.MongoContext = dbContext;
-
-        WeatherAccessor._apiKey = WeatherApiKey;
-
-        _generator = new DiscordClientGenerator(DiscordToken, CommandSigil, dbContext);
+        _generator = new DiscordClientGenerator();
 
         _generator.Register<Randomizer>();
         _generator.Register<Stalk>();

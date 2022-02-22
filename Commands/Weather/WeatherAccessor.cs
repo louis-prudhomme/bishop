@@ -6,9 +6,10 @@ namespace Bishop.Commands.Weather;
 
 public class WeatherAccessor
 {
-    public static string _apiKey { private get; set; } = null!;
+    private static readonly string ApiKey = Environment
+        .GetEnvironmentVariable("WEATHER_API_KEY")!;
 
-    public const string CurrentRoute = "/v1/current.json";
+    private const string CurrentRoute = "/v1/current.json";
 
     private static readonly RestClientOptions Options = new("https://api.weatherapi.com/")
     {
@@ -20,7 +21,7 @@ public class WeatherAccessor
     public async Task<WeatherEntity> Current(string city)
     {
         var request = new RestRequest(CurrentRoute)
-            .AddQueryParameter("key", _apiKey)
+            .AddQueryParameter("key", ApiKey)
             .AddQueryParameter("q", city)
             .AddQueryParameter("aqi", "no");
         

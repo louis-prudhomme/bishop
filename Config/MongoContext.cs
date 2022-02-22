@@ -1,15 +1,18 @@
-﻿using MongoDB.Driver;
+﻿using System;
+using Google.Apis.Auth.OAuth2.Requests;
+using MongoDB.Driver;
 
 namespace Bishop.Config;
 
 public class MongoContext
 {
-    public MongoContext(MongoClient mongo, string database)
-    {
-        Mongo = mongo;
-        Database = database;
-    }
+    private static readonly string MongoToken = Environment
+        .GetEnvironmentVariable("MONGO_TOKEN")!;
+    private static readonly string MongoDatabase = Environment
+        .GetEnvironmentVariable("MONGO_DB")!;
+    
+    private static readonly MongoClient MongoClient = new (MongoToken);
 
-    public MongoClient Mongo { get; }
-    public string Database { get; }
+    public static MongoClient Mongo => MongoClient;
+    public static string Database => MongoDatabase;
 }

@@ -22,7 +22,10 @@ public class DiscordClientGenerator
     /// <summary>
     ///     Can be overriden by environment variables. See <see cref="Program" />.
     /// </summary>
-    private static readonly string[] Prefix = {";"};
+    private static readonly string BaseSigil = Environment
+        .GetEnvironmentVariable("COMMAND_SIGIL") ?? ";";
+    private static readonly string DiscordToken = Environment
+        .GetEnvironmentVariable("DISCORD_TOKEN")!;
 
     private readonly CommandsNextExtension _commands;
 
@@ -30,17 +33,14 @@ public class DiscordClientGenerator
         .GetLogger(MethodBase.GetCurrentMethod()?
             .DeclaringType);
 
-    private readonly string?[] _sigil;
+    private readonly string[] _sigil;
 
-    private readonly string _token;
-
-    public DiscordClientGenerator(string token, string? sigil, MongoContext dbContext)
+    public DiscordClientGenerator()
     {
-        _token = token;
-        _sigil = new[] {sigil};
+        _sigil = new[] {BaseSigil};
         Client = new DiscordClient(AssembleConfig());
 
-        _commands = Client.UseCommandsNext(AssembleCommands(AssembleServiceCollection(dbContext)));
+        _commands = Client.UseCommandsNext(AssembleCommands(AssembleServiceCollection()));
         _commands.SetHelpFormatter<DefaultHelpFormatter>();
 
         _commands.RegisterConverter(new MeterKeysConverter());
@@ -50,10 +50,10 @@ public class DiscordClientGenerator
     public DiscordClient Client { get; }
     public string Sigil => string.Join(" ", _sigil);
 
-    private IServiceCollection AssembleServiceCollection(MongoContext dbContext)
+    private IServiceCollection AssembleServiceCollection()
     {
         var nestedCache = new UserNameCache();
-        var nestedRecordsService = new RecordService()
+        var nestedRecordsService = new RecordService
         {
             Cache = nestedCache,
             Random = new Random(),
@@ -78,7 +78,6 @@ public class DiscordClientGenerator
             .AddSingleton<Random>()
             .AddSingleton(nestedRecordsService)
             .AddSingleton(nestedCounterService)
-            .AddSingleton(dbContext)
             .AddSingleton(nestedCache)
             .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(weatherService)
@@ -92,7 +91,7 @@ public class DiscordClientGenerator
         return new CommandsNextConfiguration
         {
             Services = services.BuildServiceProvider(),
-            StringPrefixes = _sigil ?? Prefix
+            StringPrefixes = _sigil
         };
     }
 
@@ -100,7 +99,7 @@ public class DiscordClientGenerator
     {
         return new DiscordConfiguration
         {
-            Token = _token,
+            Token = DiscordToken,
             TokenType = TokenType.Bot,
             Intents = DiscordIntents.AllUnprivileged | DiscordIntents.GuildMembers
         };

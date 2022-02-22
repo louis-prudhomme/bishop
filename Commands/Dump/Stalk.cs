@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -9,23 +10,15 @@ namespace Bishop.Commands.Dump;
 
 public class Stalk : BaseCommandModule
 {
-    /// <summary>
-    ///     Where to find the slender file.
-    /// </summary>
-    private const string Path = "./Resources/Slenders.png";
+    private const string StalkFilePath = "slenders.json";
 
     /// <summary>
     ///     Slenders dialogue lines.
     /// </summary>
-    public static Dictionary<string, string> Lines { get; set; } = null!;
-
-    [Command("stalk")]
-    [Aliases("st")]
-    [Description("Invoke a discussion between you and one of the five Slenders")]
-    public async Task Roast(CommandContext context)
-    {
-        await context.RespondAsync(new DiscordMessageBuilder().WithFile(new FileStream(Path, FileMode.Open)));
-    }
+    private static readonly Dictionary<string, string> Lines =
+        new JsonDeserializer<Dictionary<string, string>>(StalkFilePath)
+            .Get()
+            .Result;
 
     [Command("stalk")]
     [Description("Invoke a discussion between you and one of the five Slenders")]
