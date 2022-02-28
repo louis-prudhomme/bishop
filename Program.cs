@@ -20,6 +20,7 @@ internal class Program
 {
     private const string TomatoFilePath = "./Resources/tomatoes.json";
     private const string AledFilePath = "./Resources/aleds.json";
+    private const string QuoteFilePath = "./Resources/quotes.json";
     private const string StalkFilePath = "./Resources/slenders.json";
 
     private static readonly string DiscordToken = Environment
@@ -53,6 +54,16 @@ internal class Program
         Aled.Aleds = new AledConfigurator(AledFilePath)
             .ReadAledsAsync()
             .Result;
+        try
+        {
+            Quote.Quotes = new QuoteConfigurator(QuoteFilePath)
+                .ReadQuotesAsync()
+                .Result;
+        }
+        catch (Exception e)
+        {
+            Log.Error(e);
+        }
 
         Stalk.Lines = new StalkConfigurator(StalkFilePath)
             .ReadStalkAsync()
@@ -71,6 +82,7 @@ internal class Program
         _generator.Register<Stalk>();
         _generator.Register<Tomato>();
         _generator.Register<Aled>();
+        _generator.Register<Quote>();
         _generator.Register<Vote>();
         _generator.Register<Deleter>();
 
