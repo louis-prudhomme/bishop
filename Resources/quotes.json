@@ -1,6 +1,9 @@
 ﻿[
   {
-    "name": "Zemmour",
+    "names": [
+      "Zemmour",
+      "Eric Zemmour"
+    ],
     "quotes": [
       "Je pense qu'il y a un lien entre le pouvoir et la virilité. Les hommes ont inventé le pouvoir.",
       "La discrimination c'est la vie les employeurs ont le droit [de refuser des arabes ou des noirs].",
@@ -41,9 +44,9 @@
     ]
   },
   {
-    "name": "Macron",
+    "names": [ "Macron" ],
     "quotes": [
-      "Je ne dirait pas que c'est un échec, je dirait que ça a pas marché.",
+      "Je ne dirait pas que c'est un échec, ça n'a pas marché.",
       "Je traverse la rue, je vous trouve du travail.",
       "Des Gaulois réfractaires au changement.",
       "On met un pognon de dingue dans les minimas sociaux et les gens sont quand même pauvres.",
@@ -70,7 +73,13 @@
     ]
   },
   {
-    "name": "Jean-Marie Le Pen",
+    "names": [
+      "Jean-Marie Le Pen",
+      "Jean Marie Le Pen",
+      "JMLP",
+      "Jean-Marie",
+      "Jean Marie"
+    ],
     "quotes": [
       "L'immigration? Monseigneur Ebola peut régler ça en trois mois.",
       "Jeanne! Au-secours!",
@@ -91,6 +100,54 @@
       "Sans inégalité, la France ne serait pas la France.",
       "Monsieur Durafour-crématoire, merci de cet aveu.",
       "Je comprends tout à fait qu'on mette en cause la démocratie, qu'on la combatte."
+    ]
+  },
+  {
+    "names": [
+      "Charles De Gaulle",
+      "De Gaulle",
+      "Gaulle",
+      "DeGaulle",
+      "CDG"
+    ],
+    "quotes": [
+      "La difficulté attire l’homme de caractère, car c’est en l’étreignant qu’il se réalise lui-même.",
+      "La fin de l’espoir est le commencement de la mort.",
+      "La France ne peut être la France sans la grandeur.",
+      "Il est vrai, que parfois, les militaires s'exagérant l'impuissance relative de l'intelligence, négligent de s'en servir.",
+      "Toutes les doctrines, toutes les écoles, toutes les révoltes, n'ont qu'un temps.",
+      "Il n’y a que les arrivistes pour arriver.",
+      "Quant au pouvoir, je ne saurais, en tout cas, quitter les choses avant qu'elles ne me quittent.",
+      "La guerre, c'est comme la chasse, sauf qu'à la guerre les lapins tirent.",
+      "Pour faire le blocus de Monaco, il suffit de deux panneaux de sens interdit.",
+      "Ce qu’il faut surtout pour la paix, c’est la compréhension des peuples. Les régimes, nous savons ce que c’est : des choses qui passent. Mais les peuples ne passent pas.",
+      "L’avenir n’appartient pas aux hommes...",
+      "Je ne vais pas mal. Mais rassurez-vous, un jour, je ne manquerai pas de mourir.",
+      "Comment voulez-vous gouverner un pays où il existe 258 variétés de fromage ?",
+      "Recevoir un grand nombre de journalistes est un plaisir. Un petit nombre un ennui. Un seul d'entre eux : un supplice.",
+      "J'aime bien ceux qui me résistent ; l'ennui, c'est que je ne peux les supporter.",
+      "Comme un homme politique ne croit jamais ce qu'il dit, il est étonné quand il est cru sur parole.",
+      "La vie n'est pas le travail : travailler sans cesse rend fou.",
+      "Il vaut mieux avoir une méthode mauvaise plutôt que de n’en avoir aucune.",
+      "C’est purement négatif de toujours remettre tout en cause, c’est, en somme, la marque des faibles, des incapables.",
+      "J’ai entendu vos points de vue. Ils ne rencontrent pas les miens. La décision est prise à l’unanimité.",
+      "Les diplomates ne sont utiles que par beau temps. Dès qu’il pleut, ils se noient dans chaque goutte.",
+      "Les hommes peuvent avoir des amis, pas les hommes d'Etat.",
+      "On ne devrait plus accepter de responsabilités suprêmes au-delà de soixante ans.",
+      "Si les policiers n'étaient pas bêtes, ils ne seraient pas des policiers.",
+      "Le patriotisme, c'est aimer son pays. Le nationalisme, c'est détester celui des autres.",
+      "Les traités, voyez-vous, sont comme les jeunes filles et les roses : ça dure ce que ça dure!",
+      "Je suis un monarchiste, la République n'est pas le régime qu'il faut à la France.",
+      "Il est proposé, en même temps, de rénover le Sénat, actuellement réduit à un rôle de plus en plus accessoire.",
+      "La France essaie d'aider les autres à avancer sur le chemin de la civilisation.",
+      "Je me détends beaucoup à regarder votre télévision. Surtout vos informations. C’est comme les films comiques. C’est tellement bête que c’en est drôle.",
+      "Aujourd’hui, tout type qui, pendant la guerre, a lu un jour aux cabinets un tract trouvé par hasard, affirme qu’il a été résistant !",
+      "[La Nouvelle Caldéonie], une bande de terre peuplée par une bande de cons.",
+      "[Sur l'association des anciens combattants] Être fait prisonnier, ce n’est pas de chance, c’est comme d’être cocu. Mais de là à en faire des défilés !",
+      "Des chercheurs qui cherchent, on en trouve. Mais des chercheurs qui trouvent, on en cherche…",
+      "[Après son opération de la prostate] Avant, les Français me regardaient comme si j’étais la France. Maintenant, ils savent que je suis incontinent.",
+      "C’est utile la Flotte. Quand ça va mal, les maris descendent à terre et rétablissent l’ordre. Quand ça va bien, les marins descendent à terre et engrossent les filles.",
+      "[Sur le mouvement de la 4e République] Je ne peux pas dire que je les déteste. On peut détester Hitler, Staline. On ne peut pas détester le néant."
     ]
   }
 ]

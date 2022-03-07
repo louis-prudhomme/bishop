@@ -26,10 +26,13 @@ public class Quote : BaseCommandModule
 
         foreach (Politician politician in Quotes)
         {
-            if (politician.name.Equals(person, StringComparison.CurrentCultureIgnoreCase))
+            foreach (string name in politician.names)
             {
-                quoted = true;
-                await context.RespondAsync($"“{politician.quotes[Rand.Next(politician.quotes.Count)]}” - {politician.name}");
+                if (name.Equals(person, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    quoted = true;
+                    await context.RespondAsync($"“{politician.quotes[Rand.Next(politician.quotes.Count)]}” - {politician.names[0]}");
+                }
             }
         }
 
