@@ -7,10 +7,10 @@ public class WeatherAdapter
         var entity = new WeatherEntity();
         var (location, current) = dto;
         entity.Cloud = current.cloud;
+        entity.IsDay = current.is_day;
         entity.Humidity = current.humidity;
-        entity.Precipitation = current.precip_mm;
+        entity.Rain = current.precip_mm;
         entity.Temperature = current.temp_c;
-        entity.IsDay = current.is_day == 1;
         entity.Wind = current.wind_kph;
         entity.Epoch = location.localtime_epoch;
         return entity;

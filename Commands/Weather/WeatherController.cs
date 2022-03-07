@@ -14,27 +14,13 @@ namespace Bishop.Commands.Weather;
 [Description("Weather-related commands")]
 public class WeatherController : BaseCommandModule
 {
-    private const string WeatherFilePath = "weatherBeacons.json";
-
-    private static readonly List<WeatherBeaconEntity> Beacon =
-        new JsonDeserializer<List<WeatherBeaconEntity>>(WeatherFilePath)
-            .Get().Result;
 
     public WeatherService Service { private get; set; } = null!;
 
     [GroupCommand]
     public async Task Get(CommandContext context)
     {
-        try
-        {
-            var v = await new JsonDeserializer<List<WeatherBeaconEntity>>(WeatherFilePath)
-                .Get();
-            await context.RespondAsync(v.First().Type.ToString());
-        }
-        catch (Exception e)
-        {
-            await context.RespondAsync(e.Message);
-        }
+        await Get(context, "paris");
     }
 
     [GroupCommand]
@@ -42,7 +28,7 @@ public class WeatherController : BaseCommandModule
     {
         try
         {
-            var current = await Service.CurrentFor(city);
+            var current = await Service.CurrentRatios(city);
             await context.RespondAsync(current.ToString());
         }
         catch (Exception e)
