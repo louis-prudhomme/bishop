@@ -19,7 +19,7 @@ public class QuoteConfigurator
         _path = path;
     }
 
-    public record Politician(string name, List<string> quotes);
+    public record Politician(List<string> names, List<string> quotes);
 
     public async Task<List<Politician>> ReadQuotesAsync()
     {
