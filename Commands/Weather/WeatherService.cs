@@ -47,12 +47,14 @@ public class WeatherService
         return string.Join("\n", ratios);
     }
 
-    public async Task<float> CurrentRatio(string city, WeatherMetric metric)
+    public async Task<string> CurrentRatio(string city, WeatherMetric metric)
     {
         var currentWeather = await CurrentFor(city);
-        return WeatherBeaconsHolder
-            .GetTypeBeacon(metric)
-            .Ratio(currentWeather
-                .Get(metric));
+        var beacon = WeatherBeaconsHolder
+            .GetTypeBeacon(metric);
+        var ratio = beacon.Ratio(currentWeather.Get(metric));
+        var level = beacon.LevelFor(ratio);
+
+        return level;
     }
 }

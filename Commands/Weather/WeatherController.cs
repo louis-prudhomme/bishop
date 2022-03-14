@@ -42,8 +42,8 @@ public class WeatherController : BaseCommandModule
     {
         try
         {
-            var current = await Service.CurrentRatio(city, metric);
-            await context.RespondAsync($"{Math.Round(current * 100)}%");
+            var response = await Service.CurrentRatio(city, metric);
+            await context.RespondAsync($"{response}");
         }
         catch (Exception e)
         {
