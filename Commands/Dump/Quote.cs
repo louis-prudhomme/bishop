@@ -23,6 +23,19 @@ public class Quote : BaseCommandModule
         [Description("Person to quote")][RemainingText] string person)
     {
         Boolean quoted = false;
+        List<string> list_aliases = new List<string>{ "liste", "list" };
+
+        if (list_aliases.Contains(person))
+        {
+            quoted = true;
+            string response = "Here are the current available people to quote: \n";
+            foreach (Politician politician in Quotes)
+            {
+                response += politician.names[0] + "\n";
+            }
+
+            await context.RespondAsync(response);
+        }
 
         foreach (Politician politician in Quotes)
         {
@@ -31,7 +44,7 @@ public class Quote : BaseCommandModule
                 if (name.Equals(person, StringComparison.CurrentCultureIgnoreCase))
                 {
                     quoted = true;
-                    await context.RespondAsync($"“{politician.quotes[Rand.Next(politician.quotes.Count)]}” - {politician.names[0]}");
+                    await context.RespondAsync($"*“{politician.quotes[Rand.Next(politician.quotes.Count)]}”*\n                                       - {politician.names[0]}");
                 }
             }
         }
