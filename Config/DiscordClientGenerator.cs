@@ -45,6 +45,7 @@ public class DiscordClientGenerator
         _commands.SetHelpFormatter<DefaultHelpFormatter>();
 
         _commands.RegisterConverter(new MeterKeysConverter());
+        _commands.RegisterConverter(new WeatherMetricConverter());
     }
 
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,9 @@ public class WeatherService
     public const long CacheFor = 14400;
 
     public Dictionary<string, WeatherEntity> Cache = new();
+
+    public List<WeatherMetric> types =
+        new List<WeatherMetric>(Enum.GetValues(typeof(WeatherMetric)).Cast<WeatherMetric>());
 
     public WeatherAccessor Accessor { private get; set; } = null!;
 
@@ -38,18 +42,20 @@ public class WeatherService
     public async Task<string> CurrentRatios(string city)
     {
         var currentWeather = await CurrentFor(city);
-        List<float> ratios = new()
-        {
-            WeatherBeaconsHolder.GetTypeBeacon(WeatherMetric.Cloud).Ratio(currentWeather.Cloud),
-            WeatherBeaconsHolder.GetTypeBeacon(WeatherMetric.Day).Ratio(currentWeather.IsDay),
-            WeatherBeaconsHolder.GetTypeBeacon(WeatherMetric.Humidity).Ratio(currentWeather.Humidity),
-            WeatherBeaconsHolder.GetTypeBeacon(WeatherMetric.Rain).Ratio(currentWeather.Rain),
-            WeatherBeaconsHolder.GetTypeBeacon(WeatherMetric.Temperature).Ratio(currentWeather.Temperature),
-            WeatherBeaconsHolder.GetTypeBeacon(WeatherMetric.Wind).Ratio(currentWeather.Wind)
-        };
-        var beacon = WeatherBeaconsHolder.GetTypeBeacon(WeatherMetric.Rain);
-        var ratio = $"{beacon.Type}: {currentWeather.Rain} vs {beacon.Max}/{beacon.Min} = {beacon.Ratio(currentWeather.Rain)}";
-        
-        return string.Join("\n", ratio);
+        var ratios = types
+            .Select(type => WeatherBeaconsHolder.GetTypeBeacon(type)
+                .Ratio(currentWeather.Get(type)))
+            .ToList();
+
+        return string.Join("\n", ratios);
+    }
+
+    public async Task<float> CurrentRatio(string city, WeatherMetric metric)
+    {
+        var currentWeather = await CurrentFor(city);
+        return WeatherBeaconsHolder
+            .GetTypeBeacon(metric)
+            .Ratio(currentWeather
+                .Get(metric));
     }
 }
