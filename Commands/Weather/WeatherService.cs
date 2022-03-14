@@ -13,9 +13,6 @@ public class WeatherService
 
     public Dictionary<string, WeatherEntity> Cache = new();
 
-    public List<WeatherMetric> types =
-        new List<WeatherMetric>(Enum.GetValues(typeof(WeatherMetric)).Cast<WeatherMetric>());
-
     public WeatherAccessor Accessor { private get; set; } = null!;
 
     public async Task<WeatherEntity> CurrentFor(string city)
@@ -42,7 +39,7 @@ public class WeatherService
     public async Task<string> CurrentRatios(string city)
     {
         var currentWeather = await CurrentFor(city);
-        var ratios = types
+        var ratios = WeatherBeaconsHolder.Types
             .Select(type => WeatherBeaconsHolder.GetTypeBeacon(type)
                 .Ratio(currentWeather.Get(type)))
             .ToList();
