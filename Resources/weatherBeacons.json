@@ -3,54 +3,110 @@
     "Min": 0,
     "Max": 100,
     "Type": 0,
-    "Levels": {
-      "0": "Black as the bottom of a dead horse bum",
-      "1": "Shoiny!"
-    }
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "Black as the bottom of a dead horse bum"
+      },
+      {
+        "Level": 1,
+        "Description": "Open your motherfucking window and go soak up some sun, nerd"
+      }
+    ]
   },
   {
     "Min": 0,
     "Max": 1,
     "Type": 1,
-    "Levels": {
-      "0": "Black as the bottom of a dead horse bum",
-      "1": "Shoiny!"
-    }
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "Black as the bottom of a dead horse bum"
+      },
+      {
+        "Level": 0,
+        "Description": "Darker than the morning coffee your mother serves"
+      },
+      {
+        "Level": 0,
+        "Description": "I’ve known shadows fucking brighter than this sky"
+      },
+      {
+        "Level": 0,
+        "Description": "Yet another day ends"
+      },
+      {
+        "Level": 1,
+        "Description": "Shoiny!"
+      },
+      {
+        "Level": 1,
+        "Description": "Brighter than any foreseeable future"
+      },
+      {
+        "Level": 1,
+        "Description": "Open your motherfucking window and go soak up some sun, nerd"
+      }
+    ]
   },
   {
     "Min": 45,
     "Max": 85,
     "Type": 2,
-    "Levels": {
-      "0": "Black as the bottom of a dead horse bum",
-      "1": "Shoiny!"
-    }
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "Black as the bottom of a dead horse bum"
+      },
+      {
+        "Level": 1,
+        "Description": "Shoiny!"
+      }
+    ]
   },
   {
     "Min": 0,
     "Max": 25,
     "Type": 3,
-    "Levels": {
-      "0": "Black as the bottom of a dead horse bum",
-      "1": "Shoiny!"
-    }
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "Black as the bottom of a dead horse bum"
+      },
+      {
+        "Level": 1,
+        "Description": "Shoiny!"
+      }
+    ]
   },
   {
     "Min": -10,
     "Max": 40,
     "Type": 4,
-    "Levels": {
-      "0": "Black as the bottom of a dead horse bum",
-      "1": "Shoiny!"
-    }
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "Black as the bottom of a dead horse bum"
+      },
+      {
+        "Level": 1,
+        "Description": "Shoiny!"
+      }
+    ]
   },
   {
     "Min": 7,
     "Max": 72,
     "Type": 5,
-    "Levels": {
-      "0": "Black as the bottom of a dead horse bum",
-      "1": "Shoiny!"
-    }
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "Black as the bottom of a dead horse bum"
+      },
+      {
+        "Level": 1,
+        "Description": "Shoiny!"
+      }
+    ]
   }
 ]

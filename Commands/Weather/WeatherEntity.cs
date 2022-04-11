@@ -16,23 +16,16 @@ public class WeatherEntity
 
     public float Get(WeatherMetric type)
     {
-        switch(type)
+        return type switch
         {
-            case WeatherMetric.Cloud:
-                return Cloud;
-            case WeatherMetric.Day:
-                return IsDay;
-            case WeatherMetric.Humidity:
-                return Humidity;
-            case WeatherMetric.Rain:
-                return Rain;
-            case WeatherMetric.Temperature:
-                return Temperature;
-            case WeatherMetric.Wind:
-                return Wind;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
+            WeatherMetric.Cloud => Cloud,
+            WeatherMetric.Day => IsDay,
+            WeatherMetric.Humidity => Humidity,
+            WeatherMetric.Rain => Rain,
+            WeatherMetric.Temperature => Temperature,
+            WeatherMetric.Wind => Wind,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
     }
 
     public override string ToString()
