@@ -6,7 +6,7 @@ public class WeatherAdapter
     {
         var entity = new WeatherEntity();
         var (location, current) = dto;
-        entity.Cloud = current.cloud;
+        entity.Cloud = current.cloud * 100;
         entity.IsDay = current.is_day;
         entity.Humidity = current.humidity;
         entity.Rain = current.precip_mm;

@@ -14,7 +14,6 @@ namespace Bishop.Commands.Weather;
 [Description("Weather-related commands")]
 public class WeatherController : BaseCommandModule
 {
-
     public WeatherService Service { private get; set; } = null!;
 
     [GroupCommand]
@@ -23,7 +22,7 @@ public class WeatherController : BaseCommandModule
         await Get(context, "paris", WeatherMetric.Cloud);
     }
 
-    [Command("test")]
+    [Command("debug")]
     public async Task Get(CommandContext context, [Description("City to know the weather of")] string city)
     {
         try

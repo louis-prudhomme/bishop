@@ -41,7 +41,7 @@ public class WeatherService
         var currentWeather = await CurrentFor(city);
         var ratios = WeatherBeaconsHolder.Types
             .Select(type => WeatherBeaconsHolder.GetTypeBeacon(type)
-                .Ratio(currentWeather.Get(type)))
+                .Ratio(currentWeather.Get(type)) * 100)
             .ToList();
 
         return string.Join("\n", ratios);
@@ -53,7 +53,7 @@ public class WeatherService
         var beacon = WeatherBeaconsHolder
             .GetTypeBeacon(metric);
         var ratio = beacon.Ratio(currentWeather.Get(metric));
-        var level = beacon.LevelFor(ratio);
+        var level = beacon.LevelFor(ratio * 100);
 
         return level;
     }
