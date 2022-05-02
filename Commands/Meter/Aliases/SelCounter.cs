@@ -5,13 +5,11 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Meter.Aliases;
 
-[Group("sel")]
-[Description("Sel-related commands")]
 public class SelCounter : BaseCommandModule
 {
     public CounterService Service { private get; set; } = null!;
 
-    [GroupCommand]
+    [Command("sel")]
     [Description("Adds a provided value to @someone’s sel score")]
     public async Task ScoreSel(CommandContext context,
         [Description("User to increment the sel score of")]
@@ -21,7 +19,7 @@ public class SelCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Sel, nb);
     }
 
-    [GroupCommand]
+    [Command("sel")]
     [Description("Returns the value of @someone’s sel score")]
     public async Task ScoreSel(CommandContext context,
         [Description("User to know the sel score of")]
@@ -30,14 +28,14 @@ public class SelCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Sel);
     }
 
-    [GroupCommand]
+    [Command("sel")]
     [Description("Returns all sel scores")]
     public async Task ScoreSel(CommandContext context)
     {
         await Service.Score(context, CounterCategory.Sel);
     }
 
-    [GroupCommand]
+    [Command("sel")]
     [Description("Adds a provided value to @someone’s sel score")]
     public async Task ScoreSel(CommandContext context,
         [Description("User to increment the sel score of by 1")]

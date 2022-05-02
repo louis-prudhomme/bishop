@@ -27,9 +27,9 @@
         <None Remove="Resources\credentials.json" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="DSharpPlus" Version="4.0.1" />
-        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.1" />
-        <PackageReference Include="DSharpPlus.Interactivity" Version="4.0.1" />
+        <PackageReference Include="DSharpPlus" Version="4.3.0-nightly-01127" />
+        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.3.0-nightly-01127" />
+        <PackageReference Include="DSharpPlus.Interactivity" Version="4.3.0-nightly-01127" />
         <PackageReference Include="Google.Apis.Discovery.v1" Version="1.52.0" />
         <PackageReference Include="Google.Apis.Drive.v3" Version="1.52.0.2383" />
         <PackageReference Include="log4net" Version="2.0.12" />

@@ -14,19 +14,17 @@ namespace Bishop.Commands.Meter;
 ///     This file contains all the general and generic commands.
 ///     Classes specific to each category exist (ex: <see cref="SelCounter" />).
 /// </summary>
-[Group("score")]
-[Aliases("s")]
-[Description(
-    "Allows interaction with @users’ scores. The scores can be seen by key or by @user, " +
-    "and it is possible to add points to a player in a certain category. " +
-    "It is also possible to add a reason for the point, which will then be in the @user’s history.")]
 public class CounterService : BaseCommandModule
 {
     public CounterRepository CounterRepository { private get; set; } = new();
     public UserNameCache Cache { private get; set; } = null!;
     public RecordService HistoryService { private get; set; } = null!;
 
-    [GroupCommand]
+    [Command("score")]
+    [Description(
+        "Allows interaction with @users’ scores. The scores can be seen by key or by @user, " +
+        "and it is possible to add points to a player in a certain category. " +
+        "It is also possible to add a reason for the point, which will then be in the @user’s history.")]
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member)
     {
@@ -46,7 +44,7 @@ public class CounterService : BaseCommandModule
         }
     }
 
-    [GroupCommand]
+    [Command("score")]
     public async Task Score(CommandContext context,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
         CounterCategory counterCategory)
@@ -67,7 +65,7 @@ public class CounterService : BaseCommandModule
         }
     }
 
-    [GroupCommand]
+    [Command("score")]
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
@@ -79,7 +77,7 @@ public class CounterService : BaseCommandModule
         await context.RespondAsync(await score.ToString(Cache.GetAsync));
     }
 
-    [GroupCommand]
+    [Command("score")]
     public async Task Score(CommandContext context,
         [Description("User to add some score to")]
         DiscordMember member,
@@ -99,7 +97,7 @@ public class CounterService : BaseCommandModule
         await context.RespondAsync($"{formatted} (from {previous})");
     }
 
-    [GroupCommand]
+    [Command("score")]
     public async Task Score(CommandContext context,
         [Description("User to increment score of")]
         DiscordMember member,

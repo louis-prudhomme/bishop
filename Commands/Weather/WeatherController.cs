@@ -23,7 +23,7 @@ public class WeatherController : BaseCommandModule
         await Get(context, "paris", WeatherMetric.Cloud);
     }
 
-    [GroupCommand]
+    [Command("test")]
     public async Task Get(CommandContext context, [Description("City to know the weather of")] string city)
     {
         try
@@ -37,7 +37,7 @@ public class WeatherController : BaseCommandModule
         }
     }
 
-    [GroupCommand]
+    [Command("test")]
     public async Task Get(CommandContext context, [Description("City to know the weather of")] string city, [Description("Metric to learn about")] WeatherMetric metric)
     {
         try

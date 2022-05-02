@@ -42,7 +42,7 @@ internal class CardGameService : BaseCommandModule
             $"The collection currently counts *{cardGames.Count}* card games :");
     }
 
-    [GroupCommand]
+    [Command("add")]
     [Description("Adds a card game to the collection in the name of provided user.")]
     public async Task AddFrom(CommandContext context,
         [Description("User offering the card game")]
@@ -57,7 +57,7 @@ internal class CardGameService : BaseCommandModule
         await context.RespondAsync($"*{cardGameName}* was added to the collection by **{gifter.Mention}** !");
     }
 
-    [GroupCommand]
+    [Command("gift")]
     [Description("Adds a card game to the collection in your name.")]
     public async Task Add(CommandContext context,
         [Description("Name of the card game")] [RemainingText]

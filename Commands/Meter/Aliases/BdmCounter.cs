@@ -5,13 +5,11 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Meter.Aliases;
 
-[Group("bdm")]
-[Description("Bdm-related commands")]
 public class BdmCounter : BaseCommandModule
 {
     public CounterService Service { private get; set; } = null!;
 
-    [GroupCommand]
+    [Command("bdm")]
     [Description("Adds a provided value to @someone’s bdm score")]
     public async Task ScoreBdm(CommandContext context,
         [Description("User to increment the bdm score of")]
@@ -21,7 +19,7 @@ public class BdmCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Bdm, nb);
     }
 
-    [GroupCommand]
+    [Command("bdm")]
     [Description("Returns the value of @someone’s bdm score")]
     public async Task ScoreBdm(CommandContext context,
         [Description("User to know the bdm score of")]
@@ -30,14 +28,14 @@ public class BdmCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Bdm);
     }
 
-    [GroupCommand]
+    [Command("bdm")]
     [Description("Returns all bdm scores")]
     public async Task ScoreBdm(CommandContext context)
     {
         await Service.Score(context, CounterCategory.Bdm);
     }
 
-    [GroupCommand]
+    [Command("bdm")]
     [Description("Adds a record to @someone’s bdm history and increments their score")]
     public async Task ScoreBdm(CommandContext context,
         [Description("User to increment the bdm score of by 1")]
