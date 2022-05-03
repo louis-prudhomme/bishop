@@ -5,13 +5,11 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Meter.Aliases;
 
-[Group("beauf")]
-[Description("Beauf-related commands")]
 public class BeaufCounter : BaseCommandModule
 {
     public CounterService Service { private get; set; } = null!;
 
-    [GroupCommand]
+    [Command("beauf")]
     [Description("Adds a provided value to @someone’s beauf score")]
     public async Task ScoreBeauf(CommandContext context,
         [Description("User to increment the beauf score of")]
@@ -21,7 +19,7 @@ public class BeaufCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Beauf, nb);
     }
 
-    [GroupCommand]
+    [Command("beauf")]
     [Description("Returns the value of @someone’s beauf score")]
     public async Task ScoreBeauf(CommandContext context,
         [Description("User to know the beauf score of")]
@@ -30,14 +28,14 @@ public class BeaufCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Beauf);
     }
 
-    [GroupCommand]
+    [Command("beauf")]
     [Description("Returns all beauf scores")]
     public async Task ScoreBeauf(CommandContext context)
     {
         await Service.Score(context, CounterCategory.Beauf);
     }
 
-    [GroupCommand]
+    [Command("beauf")]
     [Description("Adds a provided value to @someone’s beauf score")]
     public async Task ScoreBeauf(CommandContext context,
         [Description("User to increment the beauf score of by 1")]

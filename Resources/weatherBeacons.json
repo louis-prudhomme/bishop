@@ -1,0 +1,184 @@
+﻿[
+  {
+    "Min": 0,
+    "Max": 100,
+    "Type": 0,
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "I wish I had a future that clear"
+      },
+      {
+        "Level": 0,
+        "Description": "You could almost see grandma waving at you from up there"
+      },
+      {
+        "Level": 0,
+        "Description": "Not a single fucking cloud in sight!"
+      },
+      {
+        "Level": 10,
+        "Description": "“It’s a wonderful day to be at the beach. The cloudless sky means nothing’s going to ruin our day!” Yeah, except your darn face."
+      },
+      {
+        "Level": 20,
+        "Description": "Just as spotted as the last surface you fucking wanker masturbated on."
+      },
+      {
+        "Level": 30,
+        "Description": "The soft, woolly blanket of indifference."
+      },
+      {
+        "Level": 40,
+        "Description": "Dull (\\ˈdəl\\) : lacking sharpness of edge or point; also tedious, uninteresting. Ex: the sky, you. See also: lacking brilliance, lust, zest or action."
+      },
+      {
+        "Level": 50,
+        "Description  ": "Can’t you see it’s fucking white??"
+      },
+      {
+        "Level": 80,
+        "Description": "Just like a warm blanket of sperm. Or rotten milk."
+      },
+      {
+        "Level": 90,
+        "Description": "Looks like shit splattered over a canvas"
+      },
+      {
+        "Level": 90,
+        "Description": "I've seen guerrilla soldiers less threatening"
+      },
+      {
+        "Level": 100,
+        "Description": "Absolutely fucking dreadful."
+      }
+    ]
+  },
+  {
+    "Min": 0,
+    "Max": 1,
+    "Type": 1,
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "Black as the bottom of a dead horse bum"
+      },
+      {
+        "Level": 0,
+        "Description": "Darker than the morning coffee your mother serves"
+      },
+      {
+        "Level": 0,
+        "Description": "I’ve known shadows fucking brighter than this sky"
+      },
+      {
+        "Level": 0,
+        "Description": "Yet another day ends"
+      },
+      {
+        "Level": 1,
+        "Description": "Shoiny!"
+      },
+      {
+        "Level": 1,
+        "Description": "Brighter than any foreseeable future"
+      },
+      {
+        "Level": 1,
+        "Description": "Open your motherfucking window and go soak up some sun, nerd"
+      }
+    ]
+  },
+  {
+    "Min": 45,
+    "Max": 85,
+    "Type": 2,
+    "Levels": [
+      {
+        "Level": 45,
+        "Description": "Drier than that chicken casserole you're so proud of"
+      },
+      {
+        "Level": 45,
+        "Description": "Dry as a four weeks old turd on the pavement by a battering fucking thousand suns."
+      },
+      {
+        "Level": 45,
+        "Description": "Having sex someone this dry is an excellent way to force peel your penis skin off."
+      },
+      {
+        "Level": 50,
+        "Description": "Dry as a fucking bone."
+      },
+      {
+        "Level": 60,
+        "Description": "Barry White's armpits"
+      },
+      {
+        "Level": 65,
+        "Description": "Moisture level : fuckable."
+      },
+      {
+        "Level": 75,
+        "Description": "As humid as the god-forsaken Guyena jungle in between your arse cheeks"
+      },
+      {
+        "Level": 80,
+        "Description": "Any human this wet is a slippery slope to sin."
+      },
+      {
+        "Level": 85,
+        "Description": "Wetter than your mom watching Fifty Shades of Grey"
+      }
+    ]
+  },
+  {
+    "Min": 0,
+    "Max": 25,
+    "Type": 3,
+    "Levels": [
+      {
+        "Level": 0,
+        "Description": "Basically Africa"
+      },
+      {
+        "Level": 25,
+        "Description": "Wetter than Thatcher's grave"
+      }
+    ]
+  },
+  {
+    "Min": -10,
+    "Max": 40,
+    "Type": 4,
+    "Levels": [
+      {
+        "Level": -10,
+        "Description": "Testicles turn to ice-icles"
+      },
+      {
+        "Level": -10,
+        "Description": "Ladies, time to freeze some ovaries before its too late!"
+      },
+      {
+        "Level": 40,
+        "Description": "As hot as the flames of Hell, right where you should be"
+      }
+    ]
+  },
+  {
+    "Min": 7,
+    "Max": 72,
+    "Type": 5,
+    "Levels": [
+      {
+        "Level": 7,
+        "Description": "Not a breeze in sight, kind of like your social life"
+      },
+      {
+        "Level": 72,
+        "Description": "You could spread your arms and fly away if you weren't a fat fuck"
+      }
+    ]
+  }
+]

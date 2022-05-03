@@ -5,13 +5,11 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Meter.Aliases;
 
-[Group("sauce")]
-[Description("Sauce-related commands")]
 public class SauceCounter : BaseCommandModule
 {
     public CounterService Service { private get; set; } = null!;
 
-    [GroupCommand]
+    [Command("sauce")]
     [Description("Adds a provided value to @someone’s sauce score")]
     public async Task ScoreSauce(CommandContext context,
         [Description("User to increment the sauce score of")]
@@ -21,7 +19,7 @@ public class SauceCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Sauce, nb);
     }
 
-    [GroupCommand]
+    [Command("sauce")]
     [Description("Returns the value of @someone’s sauce score")]
     public async Task ScoreSauce(CommandContext context,
         [Description("User to know the sauce score of")]
@@ -30,14 +28,14 @@ public class SauceCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Sauce);
     }
 
-    [GroupCommand]
+    [Command("sauce")]
     [Description("Returns all sauce scores")]
     public async Task ScoreSauce(CommandContext context)
     {
         await Service.Score(context, CounterCategory.Sauce);
     }
 
-    [GroupCommand]
+    [Command("sauce")]
     [Description("Adds a provided value to @someone’s sauce score")]
     public async Task ScoreSauce(CommandContext context,
         [Description("User to increment the sauce score of by 1")]

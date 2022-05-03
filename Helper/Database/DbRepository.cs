@@ -19,12 +19,6 @@ public abstract class Repository<T> where T : DbEntity
     }
 
     /// <summary>
-    ///     DB context with <see cref="MongoClient" /> and a database name.
-    /// </summary>
-    public static MongoContext MongoContext { private get; set; } = null!;
-
-
-    /// <summary>
     ///     Returns the Mongo Collection for the meter.
     /// </summary>
     protected IMongoCollection<T> Collection =>

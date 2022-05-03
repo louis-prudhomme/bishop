@@ -23,7 +23,7 @@ public class RecordService : BaseCommandModule
     public UserNameCache Cache { private get; set; } = null!;
     public RecordRepository Repository { private get; set; } = null!;
 
-    [GroupCommand]
+    [Command("rand")]
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
     {
@@ -41,8 +41,8 @@ public class RecordService : BaseCommandModule
 
         await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
     }
-
-    [GroupCommand]
+    
+    [Command("rand")]
     [Description("Returns a @member's random record")]
     public async Task ConsultShort(CommandContext context, DiscordMember member)
     {
@@ -71,7 +71,7 @@ public class RecordService : BaseCommandModule
         [Description("Record to add")] [RemainingText]
         string motive)
     {
-         var record = new RecordEntity(member.Id, counterCategory, motive);
+        var record = new RecordEntity(member.Id, counterCategory, motive);
 
         await Repository.SaveAsync(record);
         await context.RespondAsync(

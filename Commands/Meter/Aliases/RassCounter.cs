@@ -5,14 +5,11 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Meter.Aliases;
 
-[Group("rass")]
-[Aliases("n")]
-[Description("Rass-related commands")]
 public class RassCounter : BaseCommandModule
 {
     public CounterService Service { private get; set; } = null!;
 
-    [GroupCommand]
+    [Command("rass")]
     [Description("Adds a provided value to @someone’s rass score")]
     public async Task ScoreRass(CommandContext context,
         [Description("User to increment the rass score of")]
@@ -22,7 +19,7 @@ public class RassCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Rass, nb);
     }
 
-    [GroupCommand]
+    [Command("rass")]
     [Description("Returns the value of @someone’s rass score")]
     public async Task ScoreRass(CommandContext context,
         [Description("User to know the rass score of")]
@@ -31,14 +28,14 @@ public class RassCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Rass);
     }
 
-    [GroupCommand]
+    [Command("rass")]
     [Description("Returns all rass scores")]
     public async Task ScoreRass(CommandContext context)
     {
         await Service.Score(context, CounterCategory.Rass);
     }
 
-    [GroupCommand]
+    [Command("rass")]
     [Description("Adds a provided value to @someone’s rass score")]
     public async Task ScoreRass(CommandContext context,
         [Description("User to increment the rass score of by 1")]

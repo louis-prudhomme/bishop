@@ -1,15 +1,15 @@
-﻿using MongoDB.Driver;
+﻿using System;
+using MongoDB.Driver;
 
 namespace Bishop.Config;
 
 public class MongoContext
 {
-    public MongoContext(MongoClient mongo, string database)
-    {
-        Mongo = mongo;
-        Database = database;
-    }
+    private static readonly string MongoToken = Environment
+        .GetEnvironmentVariable("MONGO_TOKEN")!;
 
-    public MongoClient Mongo { get; }
-    public string Database { get; }
+    public static MongoClient Mongo { get; } = new(MongoToken);
+
+    public static string Database { get; } = Environment
+        .GetEnvironmentVariable("MONGO_DB")!;
 }
