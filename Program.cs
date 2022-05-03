@@ -17,42 +17,9 @@ namespace Bishop;
 
 internal class Program
 {
-<<<<<<< HEAD
-    private const string TomatoFilePath = "./Resources/tomatoes.json";
+
     private const string AledFilePath = "./Resources/aleds.json";
     private const string QuoteFilePath = "./Resources/quotes.json";
-    private const string StalkFilePath = "./Resources/slenders.json";
-
-    private static readonly string DiscordToken = Environment
-        .GetEnvironmentVariable("DISCORD_TOKEN")!;
-
-    private static readonly string MongoToken = Environment
-        .GetEnvironmentVariable("MONGO_TOKEN")!;
-
-    private static readonly string MongoDatabase = Environment
-        .GetEnvironmentVariable("MONGO_DB")!;
-
-    private static readonly string CommandSigil = Environment
-        .GetEnvironmentVariable("COMMAND_SIGIL")!;
-
-||||||| b64cc2a
-    private const string TomatoFilePath = "./Resources/tomatoes.json";
-    private const string StalkFilePath = "./Resources/slenders.json";
-
-    private static readonly string DiscordToken = Environment
-        .GetEnvironmentVariable("DISCORD_TOKEN")!;
-
-    private static readonly string MongoToken = Environment
-        .GetEnvironmentVariable("MONGO_TOKEN")!;
-
-    private static readonly string MongoDatabase = Environment
-        .GetEnvironmentVariable("MONGO_DB")!;
-
-    private static readonly string CommandSigil = Environment
-        .GetEnvironmentVariable("COMMAND_SIGIL")!;
-
-=======
->>>>>>> origin/fucking-weather
     private static readonly ILog Log = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
             .DeclaringType);
@@ -65,10 +32,8 @@ internal class Program
     {
         XmlConfigurator.Configure();
 
-<<<<<<< HEAD
-        Tomato.Tomatoes = new TomatoConfigurator(TomatoFilePath)
-            .ReadTomatoesAsync()
-            .Result;
+        _generator = new DiscordClientGenerator();
+
 
         Aled.Aleds = new AledConfigurator(AledFilePath)
             .ReadAledsAsync()
@@ -83,40 +48,7 @@ internal class Program
         {
             Log.Error(e);
         }
-
-        Stalk.Lines = new StalkConfigurator(StalkFilePath)
-            .ReadStalkAsync()
-            .Result;
-
-        var mongoClient = new MongoClient(MongoToken);
-
-        var dbContext = new MongoContext(mongoClient, MongoDatabase);
-        Repository<CardGameEntity>.MongoContext = dbContext;
-        Repository<CounterEntity>.MongoContext = dbContext;
-        Repository<RecordEntity>.MongoContext = dbContext;
-
-        _generator = new DiscordClientGenerator(DiscordToken, CommandSigil, dbContext);
-||||||| b64cc2a
-        Tomato.Tomatoes = new TomatoConfigurator(TomatoFilePath)
-            .ReadTomatoesAsync()
-            .Result;
-
-        Stalk.Lines = new StalkConfigurator(StalkFilePath)
-            .ReadStalkAsync()
-            .Result;
-
-        var mongoClient = new MongoClient(MongoToken);
-
-        var dbContext = new MongoContext(mongoClient, MongoDatabase);
-        Repository<CardGameEntity>.MongoContext = dbContext;
-        Repository<CounterEntity>.MongoContext = dbContext;
-        Repository<RecordEntity>.MongoContext = dbContext;
-
-        _generator = new DiscordClientGenerator(DiscordToken, CommandSigil, dbContext);
-=======
-        _generator = new DiscordClientGenerator();
->>>>>>> origin/fucking-weather
-
+        
         _generator.Register<Randomizer>();
         _generator.Register<Stalk>();
         _generator.Register<Tomato>();

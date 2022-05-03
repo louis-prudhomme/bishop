@@ -29,7 +29,7 @@
         <EmbeddedResource Include="Resources\Slenders.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
-        <EmbeddedResource Include="Resources\WeatherBeacons.json">
+        <EmbeddedResource Include="Resources\weatherBeacons.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
         <None Remove="Resources\credentials.json" />
