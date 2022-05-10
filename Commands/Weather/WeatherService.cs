@@ -36,6 +36,18 @@ public class WeatherService
         return Cache[cityKey];
     }
 
+    public async Task<Dictionary<WeatherMetric, string>> CurrentRatiosByMetrics(string city)
+    {
+        var currentWeather = await CurrentFor(city);
+        return WeatherBeaconsHolder.Types
+            .Select(type => (type, WeatherBeaconsHolder.GetTypeBeacon(type)
+                .Ratio(currentWeather.Get(type)) * 100))
+            .Select(tuple => (tuple.type, WeatherBeaconsHolder
+                .GetTypeBeacon(tuple.type)
+                .LevelFor(tuple.Item2)))
+            .ToDictionary(tuple => tuple.type, tuple => tuple.Item2);
+    }
+
     public async Task<string> CurrentRatios(string city)
     {
         var currentWeather = await CurrentFor(city);
