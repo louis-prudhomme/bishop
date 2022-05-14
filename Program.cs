@@ -19,6 +19,7 @@ internal class Program
 {
 
     private const string AledFilePath = "./Resources/aleds.json";
+    private const string HoroscopeFilePath = "./Resources/horoscopes.json";
     private const string QuoteFilePath = "./Resources/quotes.json";
     private static readonly ILog Log = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
@@ -38,6 +39,13 @@ internal class Program
         Aled.Aleds = new AledConfigurator(AledFilePath)
             .ReadAledsAsync()
             .Result;
+
+        HoroscopeConfigurator.Horoscope horoscope = new HoroscopeConfigurator(HoroscopeFilePath)
+            .ReadHoroscopeAsync()
+            .Result;
+        Horoscope.links = horoscope.links;
+        Horoscope.signs = horoscope.signs;
+
         try
         {
             Quote.Quotes = new QuoteConfigurator(QuoteFilePath)
@@ -53,6 +61,7 @@ internal class Program
         _generator.Register<Stalk>();
         _generator.Register<Tomato>();
         _generator.Register<Aled>();
+        _generator.Register<Horoscope>();
         _generator.Register<Quote>();
         _generator.Register<Vote>();
         _generator.Register<Deleter>();

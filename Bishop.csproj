@@ -7,7 +7,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <None Remove="Resources\aleds.json" />
+		<None Remove="Resources\aleds.json" />
+		<None Remove="Resources\horoscopes.json" />
         <None Remove="Resources\quotes.json" />
         <None Remove="Resources\slenders.json" />
         <None Remove="Resources\Slenders.png" />
@@ -17,9 +18,12 @@
         <EmbeddedResource Include="Resources\quotes.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
-        <EmbeddedResource Include="Resources\aleds.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </EmbeddedResource>
+		<EmbeddedResource Include="Resources\aleds.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\horoscopes.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
         <EmbeddedResource Include="Resources\tomatoes.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
@@ -40,6 +44,7 @@
         <PackageReference Include="DSharpPlus.Interactivity" Version="4.3.0-nightly-01127" />
         <PackageReference Include="Google.Apis.Discovery.v1" Version="1.52.0" />
         <PackageReference Include="Google.Apis.Drive.v3" Version="1.52.0.2383" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
         <PackageReference Include="log4net" Version="2.0.12" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
