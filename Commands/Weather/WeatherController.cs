@@ -32,14 +32,13 @@ public class WeatherController : BaseCommandModule
                 .Aggregate((line1, line2) => string.Join("\n", line1, line2));
             
             await context.RespondAsync($"__Weather forecast for *{Capital.ToTitleCase(city)}* " +
-                                       $"at *{DateHelper.FromDateTimeToStringDate(DateTime.Now)} at {DateHelper.FromDateTimeToStringTime(DateTime.Now)}*__" +
+                                       $"the *{DateHelper.FromDateTimeToStringDate(DateTime.Now)} at {DateHelper.FromDateTimeToStringTime(DateTime.Now)}*__" +
                                        $":\n{weatherForecast}");
         }
         catch (HttpRequestException e)
         {
-            var moncuq =  city.ToLower().Equals("moncuq") ? ", sale fils de pute" : "";
             if (e.StatusCode == HttpStatusCode.BadRequest)
-                await context.RespondAsync($"No city was found with the name {city}{moncuq}");
+                await context.RespondAsync($"No city was found with the name {city}");
         }
     }
 
@@ -52,13 +51,48 @@ public class WeatherController : BaseCommandModule
         try
         {
             var current = await Service.CurrentRatiosByMetrics(city);
-            await context.RespondAsync($"__Currently in *{Capital.ToTitleCase(city)}* :__ {WeatherFormatter.CreateFor(metric, current[metric]).ToString(true)}");
+            await context.RespondAsync($"__Currently in *{Capital.ToTitleCase(city)}*__ {WeatherFormatter.CreateFor(metric, current[metric]).ToString(true)}");
         }
         catch (HttpRequestException e)
         {
-            var moncuq =  city.ToLower().Equals("moncuq") ? ", sale fils de pute" : "";
             if (e.StatusCode == HttpStatusCode.BadRequest)
-                await context.RespondAsync($"No city was found with the name « {city} »{moncuq}");
+                await context.RespondAsync($"No city was found with the name « {city} »");
+        }
+    }
+
+    [Command("_weather_debug_1")]
+    [Aliases("_wd1")]
+    public async Task GetDebugRatios(CommandContext context, [Description("City to know the weather of")] string city)
+    {
+        if (string.IsNullOrEmpty(city)) return;
+        
+        try
+        {
+            var current = await Service.CurrentRatios(city);
+            await context.RespondAsync(current);
+        }
+        catch (HttpRequestException e)
+        {
+            if (e.StatusCode == HttpStatusCode.BadRequest)
+                await context.RespondAsync($"No city was found with the name {city}");
+        }
+    }
+
+    [Command("_weather_debug_2")]
+    [Aliases("_wd2")]
+    public async Task GetDebugMetrics(CommandContext context, [Description("City to know the weather of")] string city)
+    {
+        if (string.IsNullOrEmpty(city)) return;
+        
+        try
+        {
+            var current = await Service.CurrentMetrics(city);
+            await context.RespondAsync(current);
+        }
+        catch (HttpRequestException e)
+        {
+            if (e.StatusCode == HttpStatusCode.BadRequest)
+                await context.RespondAsync($"No city was found with the name {city}");
         }
     }
 }

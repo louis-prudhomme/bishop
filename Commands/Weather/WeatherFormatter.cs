@@ -1,4 +1,6 @@
-﻿namespace Bishop.Commands.Weather;
+﻿using System;
+
+namespace Bishop.Commands.Weather;
 
 public class WeatherFormatter
 {
@@ -21,7 +23,7 @@ public class WeatherFormatter
     public string ToString(bool isShort)
     {
         return isShort
-            ? $" about {_label} - *{_description}*"
+            ? $" about {_label} : *{_description}*"
             : $" • {_label}: *{_description}*";
     }
 
@@ -32,6 +34,7 @@ public class WeatherFormatter
         WeatherMetric.Humidity => "Humidity",
         WeatherMetric.Rain => "Rain",
         WeatherMetric.Temperature => "Temperature",
-        WeatherMetric.Wind => "Wind"
+        WeatherMetric.Wind => "Wind",
+        _ => "Suck it, bitch"
     };
 }

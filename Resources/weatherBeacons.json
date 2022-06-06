@@ -167,12 +167,12 @@
     ]
   },
   {
-    "Min": 7,
+    "Min": 5,
     "Max": 72,
     "Type": 5,
     "Levels": [
       {
-        "Level": 7,
+        "Level": 5,
         "Description": "Not a breeze in sight, kind of like your social life"
       },
       {
