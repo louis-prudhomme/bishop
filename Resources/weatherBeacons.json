@@ -142,6 +142,10 @@
         "Description": "Basically Africa"
       },
       {
+        "Level": 15,
+        "Description": "Raining stair rods big enough to satisfying your gaping arse"
+      },
+      {
         "Level": 25,
         "Description": "Wetter than Thatcher's grave"
       }
@@ -161,8 +165,48 @@
         "Description": "Ladies, time to freeze some ovaries before its too late!"
       },
       {
+        "Level": -10,
+        "Description": "Did you know? It is entirely possible to freeze a long turd and stab someone with it by this temperature."
+      },
+      {
+        "Level": -5,
+        "Description": "Cold enough to freeze the balls off a brass monkey"
+      },
+      {
+        "Level": -5,
+        "Description": "Go and grab daddy some ice outside, would ya?"
+      },
+      {
+        "Level": 0,
+        "Description": "Colder than a witch’s tit"
+      },
+      {
+        "Level": 0,
+        "Description": "They tell you water freezes at around this temperature, which is quite exactly how much attention you deserve."
+      },
+      {
+        "Level": 25,
+        "Description": "I'm getting all sweaty here"
+      },
+      {
+        "Level": 35,
+        "Description": "Un-fucking-bearably hot"
+      },
+      {
+        "Level": 35,
+        "Description": "UGH WOULD YA PISS OFF ALREADY?? CAN'T YOU SEE I'M FUCKING DYING FROM THE HEAT??"
+      },
+      {
+        "Level": 40,
+        "Description": "Couldn't be possibly fucking hotter"
+      },
+      {
         "Level": 40,
         "Description": "As hot as the flames of Hell, right where you should be"
+      },
+      {
+        "Level": 40,
+        "Description": "Furnace-y hot, which could give some mustache ideas…"
       }
     ]
   },
