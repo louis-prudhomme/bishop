@@ -36,25 +36,33 @@ public class WeatherService
         return Cache[cityKey];
     }
 
+    public async Task<Dictionary<WeatherMetric, string>> CurrentRatiosByMetrics(string city)
+    {
+        var currentWeather = await CurrentFor(city);
+        return WeatherBeaconsHolder.Types
+            .Select(type => (type, WeatherBeaconsHolder.GetTypeBeacon(type)
+                .Ratio(currentWeather.Get(type)) * 100))
+            .Select(tuple => (tuple.type, WeatherBeaconsHolder
+                .GetTypeBeacon(tuple.type)
+                .LevelFor(tuple.Item2)))
+            .ToDictionary(tuple => tuple.type, tuple => tuple.Item2);
+    }
+
     public async Task<string> CurrentRatios(string city)
     {
         var currentWeather = await CurrentFor(city);
-        var ratios = WeatherBeaconsHolder.Types
-            .Select(type => WeatherBeaconsHolder.GetTypeBeacon(type)
-                .Ratio(currentWeather.Get(type)) * 100)
-            .ToList();
-
-        return string.Join("\n", ratios);
+        return WeatherBeaconsHolder.Types
+            .Select(metric => (metric, currentWeather.Get(metric)))
+            .Select(tuple => (tuple.metric, WeatherBeaconsHolder
+                .GetTypeBeacon(tuple.metric)
+                .Ratio(tuple.Item2)))
+            .Select(tuple => $"{tuple.metric}: {tuple.Item2}%")
+            .Aggregate((s, s1) => string.Join("\n", s, s1));
     }
 
-    public async Task<string> CurrentRatio(string city, WeatherMetric metric)
+    public async Task<string> CurrentMetrics(string city)
     {
         var currentWeather = await CurrentFor(city);
-        var beacon = WeatherBeaconsHolder
-            .GetTypeBeacon(metric);
-        var ratio = beacon.Ratio(currentWeather.Get(metric));
-        var level = beacon.LevelFor(ratio * 100);
-
-        return level;
+        return currentWeather.ToString();
     }
 }

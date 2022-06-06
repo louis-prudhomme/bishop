@@ -41,8 +41,18 @@ public class DateHelper
     /// </summary>
     /// <param name="date">To format.</param>
     /// <returns>String representation of input <see cref="DateTime" /></returns>
-    public static string FromDateTimeToString(DateTime date)
+    public static string FromDateTimeToStringDate(DateTime date)
     {
         return date.ToString("d", CultureInfo.GetCultureInfo("fr-FR"));
+    }
+
+    /// <summary>
+    ///     Formats a date to the <c>dd/mm/yyyy hh:mm</c> representation.
+    /// </summary>
+    /// <param name="date">To format.</param>
+    /// <returns>String representation of input <see cref="DateTime" /></returns>
+    public static string FromDateTimeToStringTime(DateTime date)
+    {
+        return date.ToString("HH:mm", CultureInfo.GetCultureInfo("fr-FR"));
     }
 }

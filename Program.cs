@@ -17,7 +17,6 @@ namespace Bishop;
 
 internal class Program
 {
-
     private const string AledFilePath = "./Resources/aleds.json";
     private const string HoroscopeFilePath = "./Resources/horoscopes.json";
     private const string QuoteFilePath = "./Resources/quotes.json";
@@ -34,8 +33,7 @@ internal class Program
         XmlConfigurator.Configure();
 
         _generator = new DiscordClientGenerator();
-
-
+        
         Aled.Aleds = new AledConfigurator(AledFilePath)
             .ReadAledsAsync()
             .Result;

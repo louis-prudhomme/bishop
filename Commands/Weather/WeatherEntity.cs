@@ -31,8 +31,8 @@ public class WeatherEntity
     public override string ToString()
     {
         return $"Epoch: {DateHelper.FromTimestampToDateTime(Epoch)}\n" +
-               $"Cloud: {Cloud} %\n" +
-               $"IsDay: {IsDay}\n" +
+               $"Clouds: {Cloud} %\n" +
+               $"Day cycle: {IsDay}\n" +
                $"Humidity: {Humidity} %\n" +
                $"Rain: {Rain} mm\n" +
                $"Temperature: {Temperature} °C\n " +
