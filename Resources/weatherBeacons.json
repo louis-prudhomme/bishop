@@ -142,8 +142,16 @@
         "Description": "Basically Africa"
       },
       {
+        "Level": 3,
+        "Description": "Maybe that was a drop, or perhaps your upstairs neighbour taking a piss"
+      },
+      {
         "Level": 15,
-        "Description": "Raining stair rods big enough to satisfying your gaping arse"
+        "Description": "Can't even bother to look outside for 2 seconds to notice it's raining and ask me instead?"
+      },
+      {
+        "Level": 20,
+        "Description": "Better hope your dumb ass didn't forget their umbrella like last time"
       },
       {
         "Level": 25,
@@ -177,6 +185,10 @@
         "Description": "Go and grab daddy some ice outside, would ya?"
       },
       {
+        "Level": -5,
+        "Description": "Too cold to think, but that never really was an issue for you was it?"
+      },
+      {
         "Level": 0,
         "Description": "Colder than a witch’s tit"
       },
@@ -185,12 +197,20 @@
         "Description": "They tell you water freezes at around this temperature, which is quite exactly how much attention you deserve."
       },
       {
+        "Level": 10,
+        "Description": "The musquitos are coming back for you"
+      },
+      {
         "Level": 25,
         "Description": "I'm getting all sweaty here"
       },
       {
         "Level": 35,
         "Description": "Un-fucking-bearably hot"
+      },
+      {
+        "Level": 35,
+        "Description": "If whining about how winter is better than summer is half of your personnality, now's your time"
       },
       {
         "Level": 35,
@@ -218,6 +238,10 @@
       {
         "Level": 5,
         "Description": "Not a breeze in sight, kind of like your social life"
+      },
+      {
+        "Level": 60,
+        "Description": "Mary Poppins is probably over the Atlantic by now"
       },
       {
         "Level": 72,

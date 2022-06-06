@@ -18,7 +18,7 @@ public class Horoscope : BaseCommandModule
     public HoroscopeScraper ScraperService = new HoroscopeScraper();
 
     [Command("horoscope")]
-    [Aliases("Irma", "h")]
+    [Aliases("Irma", "ho")]
     [Description("Prints a horoscope for @sign")]
     public async Task Predicting(CommandContext context,
         [Description("Horoscope sign")][RemainingText] string userSign)
