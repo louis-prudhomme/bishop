@@ -1,57 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
-using static Bishop.Config.QuoteConfigurator;
 
 namespace Bishop.Commands.Dump;
 
 /// <summary>
 ///     Provide a command to send quotes to @users.
 /// </summary>
+[Group("quote")]
+[Aliases("quotes", "q")]
+[Description("Prints a quote of @person")]
 public class Quote : BaseCommandModule
 {
+    private const string QuoteFilePath = "quotes.json";
+
+    private static readonly List<Politician> Politicians = new JsonDeserializer<List<Politician>>(QuoteFilePath)
+        .Get()
+        .Result;
+
+    private static readonly List<string> ListAliases = new() {"liste", "list"};
+
     public Random Rand { private get; set; } = null!;
-    public static List<Politician> Quotes { get; set; } = null!;
 
-    [Command("quote")]
-    [Aliases("quotes", "q")]
-    [Description("Prints a quote of @person")]
+    [GroupCommand]
     public async Task Quoting(CommandContext context,
-        [Description("Person to quote")][RemainingText] string person)
+        [Description("Person to quote")] [RemainingText]
+        string person)
     {
-        Boolean quoted = false;
-        List<string> list_aliases = new List<string>{ "liste", "list" };
-
-        if (list_aliases.Contains(person))
+        if (ListAliases.Contains(person))
         {
-            quoted = true;
-            string response = "Here are the current available people to quote: \n";
-            foreach (Politician politician in Quotes)
-            {
-                response += politician.names[0] + "\n";
-            }
-
-            await context.RespondAsync(response);
+            await ListQuotes(context);
+            return;
         }
 
-        foreach (Politician politician in Quotes)
-        {
-            foreach (string name in politician.names)
-            {
-                if (name.Equals(person, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    quoted = true;
-                    await context.RespondAsync($"*“{politician.quotes[Rand.Next(politician.quotes.Count)]}”*\n                                       - {politician.names[0]}");
-                }
-            }
-        }
+        var target = Politicians.FirstOrDefault(politician => politician.Names
+            .Contains(person, StringComparer.InvariantCultureIgnoreCase));
 
-        if (!quoted)
-        {
-            await context.RespondAsync("Nom pas reconnu, probablement");
-        }
+        if (target == null) await context.RespondAsync("Nom pas reconnu, probablement");
+        await context.RespondAsync($"*“{target?.Quotes[Rand.Next(target.Quotes.Count)]}”*" +
+                                   $"\n                                       - {target?.Names.First()}");
     }
+
+    [Command("list")]
+    public async Task ListQuotes(CommandContext context)
+    {
+        var response = Politicians.Aggregate("Here are the current available people to quote: \n",
+            (current, politician) => string.Join("\n", current, politician.Names.First()));
+
+        await context.RespondAsync(response);
+    }
+
+    private record Politician(List<string> Names, List<string> Quotes);
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Bishop.Helper;
 
 namespace Bishop.Commands.Weather;

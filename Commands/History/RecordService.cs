@@ -41,7 +41,7 @@ public class RecordService : BaseCommandModule
 
         await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
     }
-    
+
     [Command("rand")]
     [Description("Returns a @member's random record")]
     public async Task ConsultShort(CommandContext context, DiscordMember member)

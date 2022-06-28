@@ -1,16 +1,10 @@
-﻿using System;
-
-namespace Bishop.Commands.Weather;
+﻿namespace Bishop.Commands.Weather;
 
 public class WeatherFormatter
 {
-    public static WeatherFormatter CreateFor(WeatherMetric metric, string description)
-    {
-        return new WeatherFormatter(metric, description);
-    }
+    private readonly string _description;
 
     private readonly string _label;
-    private readonly string _description;
 
     private WeatherFormatter(WeatherMetric metric, string description)
     {
@@ -18,8 +12,16 @@ public class WeatherFormatter
         _label = MetricToLabel(metric);
     }
 
-    public override string ToString() => ToString(false);
-    
+    public static WeatherFormatter CreateFor(WeatherMetric metric, string description)
+    {
+        return new WeatherFormatter(metric, description);
+    }
+
+    public override string ToString()
+    {
+        return ToString(false);
+    }
+
     public string ToString(bool isShort)
     {
         return isShort
@@ -27,14 +29,17 @@ public class WeatherFormatter
             : $" • {_label}: *{_description}*";
     }
 
-    private static string MetricToLabel(WeatherMetric metric) => metric switch
+    private static string MetricToLabel(WeatherMetric metric)
     {
-        WeatherMetric.Cloud => "Cloud",
-        WeatherMetric.Day => "Day",
-        WeatherMetric.Humidity => "Humidity",
-        WeatherMetric.Rain => "Rain",
-        WeatherMetric.Temperature => "Temperature",
-        WeatherMetric.Wind => "Wind",
-        _ => "Suck it, bitch"
-    };
+        return metric switch
+        {
+            WeatherMetric.Cloud => "Cloud",
+            WeatherMetric.Day => "Day",
+            WeatherMetric.Humidity => "Humidity",
+            WeatherMetric.Rain => "Rain",
+            WeatherMetric.Temperature => "Temperature",
+            WeatherMetric.Wind => "Wind",
+            _ => "Suck it, bitch"
+        };
+    }
 }

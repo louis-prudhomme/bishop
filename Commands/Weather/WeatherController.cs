@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -30,7 +29,7 @@ public class WeatherController : BaseCommandModule
                     .CreateFor(tuple.Key, tuple.Value))
                 .Select(formatter => formatter.ToString())
                 .Aggregate((line1, line2) => string.Join("\n", line1, line2));
-            
+
             await context.RespondAsync($"__Weather forecast for *{Capital.ToTitleCase(city)}* " +
                                        $"the *{DateHelper.FromDateTimeToStringDate(DateTime.Now)} at {DateHelper.FromDateTimeToStringTime(DateTime.Now)}*__" +
                                        $":\n{weatherForecast}");
@@ -51,7 +50,8 @@ public class WeatherController : BaseCommandModule
         try
         {
             var current = await Service.CurrentRatiosByMetrics(city);
-            await context.RespondAsync($"__Currently in *{Capital.ToTitleCase(city)}*__ {WeatherFormatter.CreateFor(metric, current[metric]).ToString(true)}");
+            await context.RespondAsync(
+                $"__Currently in *{Capital.ToTitleCase(city)}*__ {WeatherFormatter.CreateFor(metric, current[metric]).ToString(true)}");
         }
         catch (HttpRequestException e)
         {
@@ -65,7 +65,7 @@ public class WeatherController : BaseCommandModule
     public async Task GetDebugRatios(CommandContext context, [Description("City to know the weather of")] string city)
     {
         if (string.IsNullOrEmpty(city)) return;
-        
+
         try
         {
             var current = await Service.CurrentRatios(city);
@@ -83,7 +83,7 @@ public class WeatherController : BaseCommandModule
     public async Task GetDebugMetrics(CommandContext context, [Description("City to know the weather of")] string city)
     {
         if (string.IsNullOrEmpty(city)) return;
-        
+
         try
         {
             var current = await Service.CurrentMetrics(city);

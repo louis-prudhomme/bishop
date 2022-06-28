@@ -63,6 +63,7 @@ internal class CardGameService : BaseCommandModule
         [Description("Name of the card game")] [RemainingText]
         string cardGameName)
     {
-        await AddFrom(context, context.Member, cardGameName);
+        if (context.Member != null) await AddFrom(context, context.Member, cardGameName);
+        else await context.RespondAsync("Wtf happened ?!");
     }
 }

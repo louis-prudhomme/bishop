@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Dump;
 
@@ -12,8 +12,14 @@ namespace Bishop.Commands.Dump;
 /// </summary>
 public class Aled : BaseCommandModule
 {
+    private const string AledFilePath = "aleds.json";
+
+    private static readonly List<string> Aleds = new JsonDeserializer<List<string>>(AledFilePath)
+        .Get()
+        .Result;
+
     public Random Rand { private get; set; } = null!;
-    public static List<string> Aleds { get; set; } = null!;
+
 
     [Command("aled")]
     [Aliases("suicide", "oskour", "halp", "pls")]

@@ -1,49 +1,57 @@
-﻿using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static HoroscopeConfigurator;
+using Bishop.Helper;
+using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext.Attributes;
+
+namespace Bishop.Commands.Dump;
 
 /// <summary>
 ///     Provide a command to send horoscopes to @users.
 /// </summary>
 public class Horoscope : BaseCommandModule
 {
+    private const string HoroscopeFilePath = "horoscopes.json";
+
+    private static readonly HoroscopeDb Full = new JsonDeserializer<HoroscopeDb>(HoroscopeFilePath)
+        .Get()
+        .Result;
+
+    private readonly HoroscopeScraper _scraperService = new();
+
     public Random Rand { private get; set; } = null!;
-    public static List<string> links { get; set; } = null!;
-    public static List<HoroscopeSign> signs { get; set; } = null!;
-    public HoroscopeScraper ScraperService = new HoroscopeScraper();
+
+
+    private static List<string> Links => Full.Links;
+    private static List<HoroscopeSign> Signs => Full.Signs;
 
     [Command("horoscope")]
     [Aliases("Irma", "ho")]
     [Description("Prints a horoscope for @sign")]
     public async Task Predicting(CommandContext context,
-        [Description("Horoscope sign")][RemainingText] string userSign)
+        [Description("Horoscope sign")] [RemainingText]
+        string userSign)
     {
-        Boolean found = false;
+        var found = false;
 
-        foreach (HoroscopeSign sign in signs)
+        foreach (var (sign, aliases) in Signs)
+        foreach (var alias in aliases)
         {
-            foreach (string alias in sign.aliases)
-            {
-                if (alias.Equals(userSign, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    found = true;
-                    string link = links[Rand.Next(links.Count)];
-                    string horoscope = ScraperService.GetHoroscopes(link, sign.sign);
-                    string response = "*" + sign.sign + "*\n" + horoscope;
+            if (!alias.Equals(userSign, StringComparison.CurrentCultureIgnoreCase)) continue;
 
-                    await context.RespondAsync(response);
-                }
-            }
+            found = true;
+            var link = Links[Rand.Next(Links.Count)];
+            var horoscope = _scraperService.GetHoroscopes(link, sign);
+            var response = "*" + sign + "*\n" + horoscope;
+
+            await context.RespondAsync(response);
         }
 
-        if (!found)
-        {
-            await context.RespondAsync("wtf is a " + userSign + "???");
-        }
+        if (!found) await context.RespondAsync("wtf is a " + userSign + "???");
     }
+
+    private record HoroscopeDb(List<string> Links, List<HoroscopeSign> Signs);
+
+    private record HoroscopeSign(string Sign, List<string> Aliases);
 }

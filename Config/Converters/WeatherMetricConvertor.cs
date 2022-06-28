@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Bishop.Commands.Meter;
 using Bishop.Commands.Weather;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;

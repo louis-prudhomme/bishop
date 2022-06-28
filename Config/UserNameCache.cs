@@ -32,5 +32,5 @@ public class UserNameCache
     public void Nuke()
     {
         _idToName.Clear();
-    }   
+    }
 }

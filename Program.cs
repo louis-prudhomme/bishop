@@ -17,9 +17,6 @@ namespace Bishop;
 
 internal class Program
 {
-    private const string AledFilePath = "./Resources/aleds.json";
-    private const string HoroscopeFilePath = "./Resources/horoscopes.json";
-    private const string QuoteFilePath = "./Resources/quotes.json";
     private static readonly ILog Log = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
             .DeclaringType);
@@ -33,28 +30,7 @@ internal class Program
         XmlConfigurator.Configure();
 
         _generator = new DiscordClientGenerator();
-        
-        Aled.Aleds = new AledConfigurator(AledFilePath)
-            .ReadAledsAsync()
-            .Result;
 
-        HoroscopeConfigurator.Horoscope horoscope = new HoroscopeConfigurator(HoroscopeFilePath)
-            .ReadHoroscopeAsync()
-            .Result;
-        Horoscope.links = horoscope.links;
-        Horoscope.signs = horoscope.signs;
-
-        try
-        {
-            Quote.Quotes = new QuoteConfigurator(QuoteFilePath)
-                .ReadQuotesAsync()
-                .Result;
-        }
-        catch (Exception e)
-        {
-            Log.Error(e);
-        }
-        
         _generator.Register<Randomizer>();
         _generator.Register<Stalk>();
         _generator.Register<Tomato>();
@@ -80,7 +56,6 @@ internal class Program
 
         _discord = _generator.Client;
         AdaptUserIdTo.UserNameAsync = async id => (await _discord.GetUserAsync(id)).Username;
-        GuildFetcher.FetchAsync = async id => await _discord.GetGuildAsync(id);
 
         Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");

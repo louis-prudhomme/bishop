@@ -5,11 +5,12 @@ using System.Linq;
 namespace Bishop.Commands.Weather;
 
 public record WeatherDescription(float Level, string Description);
+
 public record WeatherBeaconEntity(float Min, float Max, WeatherMetric Type, List<WeatherDescription>? Levels)
 {
     private const float Tolerance = 0.00001f;
     private static readonly Random Random = new();
-    
+
     private float Base => Max - Min;
 
     public float Ratio(float level)
@@ -26,7 +27,7 @@ public record WeatherBeaconEntity(float Min, float Max, WeatherMetric Type, List
             .Select(description => description.Level)
             .OrderBy(theoreticalLevel => Math.Abs(targetLevel - theoreticalLevel))
             .First();
-        
+
         var suitableLines = Levels
             .Where(description => Math.Abs(description.Level - closestLevel) < Tolerance)
             .Select(description => description.Description)
@@ -35,4 +36,3 @@ public record WeatherBeaconEntity(float Min, float Max, WeatherMetric Type, List
         return suitableLines.ElementAt(Random.Next(suitableLines.Count));
     }
 }
-

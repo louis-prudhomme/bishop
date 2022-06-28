@@ -7,5 +7,5 @@ public enum WeatherMetric
     Humidity,
     Rain,
     Temperature,
-    Wind,
+    Wind
 }

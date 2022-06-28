@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -50,13 +52,9 @@ internal class Deleter : BaseCommandModule
     [Command("deleten")]
     [Aliases("dn")]
     [Description("Deletes the n last messages.")]
-    public async Task DeleteN(CommandContext context, int n)
+    public async Task DeleteN(CommandContext context, uint n)
     {
-        if (n <= 0)
-        {
-            await context.RespondAsync($"{n} is not a valid number."); // todo cleanify
-            return;
-        }
+        var n32 = Convert.ToInt32(n);
 
         if (n >= MAX_NUMBER_OF_DELETIONS)
         {
@@ -67,8 +65,8 @@ internal class Deleter : BaseCommandModule
 
         var limit = context.Message;
         var messagesToDelete = (await context.Channel
-                .GetMessagesBeforeAsync(limit.Id, n))
-            .Take(n)
+                .GetMessagesBeforeAsync(limit.Id, n32))
+            .Take(n32)
             .ToList();
 
         try

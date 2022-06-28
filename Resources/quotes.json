@@ -1,11 +1,11 @@
 ﻿[
   {
-    "names": [
+    "Names": [
       "Zemmour",
       "Eric Zemmour",
       "Zouzou"
     ],
-    "quotes": [
+    "Quotes": [
       "Je pense qu'il y a un lien entre le pouvoir et la virilité. Les hommes ont inventé le pouvoir.",
       "La discrimination c'est la vie les employeurs ont le droit [de refuser des arabes ou des noirs].",
       "Mais tout est raciste, c'est pas possible. On ne peut plus rien dire sans se faire insulter de raciste, j'en sais quelque chose. Il faut arrêter avec ça. Il faut arrêter.",
@@ -47,13 +47,14 @@
       "Elles n’expriment pas le pouvoir, elles n’incarnent pas le pouvoir, c’est comme ça. Le pouvoir s’évapore dès qu’elles arrivent.",
       "Les femmes ont une forme d’intelligence différente de celle des hommes. Et les grands génies sont hommes.",
       "Les hommes sont très primaires. Nous avons un cerveau archaïque, reptilien et il faut en tenir compte. À vouloir le nier nous créons des générations d’impuissants, d’homosexuels et de divorcés.",
-      "DSK, menottes derrière le dos entre deux cops new-yorkais, marchant tête baissée, (...) c’est une castration de tous les hommes français.",
-      ""
+      "DSK, menottes derrière le dos entre deux cops new-yorkais, marchant tête baissée, (...) c’est une castration de tous les hommes français."
     ]
   },
   {
-    "names": [ "Macron" ],
-    "quotes": [
+    "Names": [
+      "Macron"
+    ],
+    "Quotes": [
       "Je ne dirait pas que c'est un échec, ça n'a pas marché.",
       "Je traverse la rue, je vous trouve du travail.",
       "Des Gaulois réfractaires au changement.",
@@ -81,14 +82,16 @@
     ]
   },
   {
-    "names": [
+    "Names": [
       "Jean-Marie Le Pen",
       "Jean Marie Le Pen",
       "JMLP",
       "Jean-Marie",
-      "Jean Marie"
+      "Jean Marie",
+      "Jean Ma",
+      "Jean-Ma"
     ],
-    "quotes": [
+    "Quotes": [
       "L'immigration? Monseigneur Ebola peut régler ça en trois mois.",
       "Jeanne! Au-secours!",
       "[En parlant des femmes] L'affirmation que leur corps leur appartient est tout à fait dérisoire, il appartient à la vie et aussi en partie à la nation.",
@@ -111,14 +114,14 @@
     ]
   },
   {
-    "names": [
+    "Names": [
       "Charles De Gaulle",
       "De Gaulle",
       "Gaulle",
       "DeGaulle",
       "CDG"
     ],
-    "quotes": [
+    "Quotes": [
       "La difficulté attire l’homme de caractère, car c’est en l’étreignant qu’il se réalise lui-même.",
       "La fin de l’espoir est le commencement de la mort.",
       "La France ne peut être la France sans la grandeur.",
@@ -159,13 +162,13 @@
     ]
   },
   {
-    "names": [
+    "Names": [
       "Le Pen",
       "Marine Le Pen",
       "Marine",
       "MLP"
     ],
-    "quotes": [
+    "Quotes": [
       "De toute façon la France sera dirigée par une femme : ce sera, ou moi, ou Madame Merkel.",
       "Je rends leur argent aux Français.",
       "Je pense que la France n’est pas responsable du Vél’d’Hiv.",
@@ -185,11 +188,11 @@
     ]
   },
   {
-    "names": [
+    "Names": [
       "Mélenchon",
       "Méluche"
     ],
-    "quotes": [
+    "Quotes": [
       "La République, c'est moi! Vous savez qui je suis ? Enfoncez la porte, camarades!",
       "Moi? MOI? MOI? Mais qui elle est celle là??!",
       "Ne me touchez pas ! Vous n'avez pas le droit de me toucher ! Personne ne me touche, ma personne est sacrée, je suis un parlementaire.",
@@ -208,13 +211,13 @@
     ]
   },
   {
-    "names": [
+    "Names": [
       "Lassalle",
       "Jean Lassalle",
       "La Salle",
       "Jean La Salle"
     ],
-    "quotes": [
+    "Quotes": [
       "L'amour et la politique sont des feux qui dévorent mais l'envie de pipi est plus forte encore !",
       "Je suis celui qui connaît le mieux le pays.",
       "Je sais que je tiendrai tête à Monsieur Trump, à Monsieur Poutine parce que moi j’ai eu affaire aux ours, aux loups et aux cavernes.",

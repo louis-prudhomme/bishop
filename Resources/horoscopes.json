@@ -1,5 +1,5 @@
 ﻿{
-  "links": [
+  "Links": [
     "november-17-2020-1845695752",
     "november-10-2020-1845630302",
     "october-20-2020-1845423225",
@@ -85,25 +85,25 @@
     "january-15-2019-1831765953",
     "january-8-2019-1831576085"
   ],
-  "signs": [
+  "Signs": [
     {
-      "sign": "Aries",
-      "aliases": [
+      "Sign": "Aries",
+      "Aliases": [
         "Aries",
         "Bélier",
         "Belier"
       ]
     },
     {
-      "sign": "Taurus",
-      "aliases": [
+      "Sign": "Taurus",
+      "Aliases": [
         "Taurus",
         "Taureau"
       ]
     },
     {
-      "sign": "Gemini",
-      "aliases": [
+      "Sign": "Gemini",
+      "Aliases": [
         "Gemini",
         "Gémeaux",
         "Gémeau",
@@ -112,22 +112,22 @@
       ]
     },
     {
-      "sign": "Cancer",
-      "aliases": [
+      "Sign": "Cancer",
+      "Aliases": [
         "Cancer"
       ]
     },
     {
-      "sign": "Leo",
-      "aliases": [
+      "Sign": "Leo",
+      "Aliases": [
         "Leo",
         "Lion",
         "Léo"
       ]
     },
     {
-      "sign": "Virgo",
-      "aliases": [
+      "Sign": "Virgo",
+      "Aliases": [
         "Virgo",
         "Vierge",
         "Puceau",
@@ -135,44 +135,44 @@
       ]
     },
     {
-      "sign": "Libra",
-      "aliases": [
+      "Sign": "Libra",
+      "Aliases": [
         "Libra",
         "Balance"
       ]
     },
     {
-      "sign": "Scorpio",
-      "aliases": [
+      "Sign": "Scorpio",
+      "Aliases": [
         "Scorpio",
         "Scorpion"
       ]
     },
     {
-      "sign": "Sagittarius",
-      "aliases": [
+      "Sign": "Sagittarius",
+      "Aliases": [
         "Sagittarius",
         "Sagittaire"
       ]
     },
     {
-      "sign": "Capricorn",
-      "aliases": [
+      "Sign": "Capricorn",
+      "Aliases": [
         "Capricorn",
         "Capricorne"
       ]
     },
     {
-      "sign": "Aquarius",
-      "aliases": [
+      "Sign": "Aquarius",
+      "Aliases": [
         "Aquarius",
         "Aqua",
         "Verseau"
       ]
     },
     {
-      "sign": "Pisces",
-      "aliases": [
+      "Sign": "Pisces",
+      "Aliases": [
         "Pisces",
         "Poissons",
         "Poisson"

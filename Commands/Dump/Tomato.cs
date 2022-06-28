@@ -19,7 +19,7 @@ public class Tomato : BaseCommandModule
         .Get()
         .Result;
 
-    public Random Rand { private get; set; } = null!;
+    private Random Rand { get; } = null!;
 
 
     [Command("tomato")]
