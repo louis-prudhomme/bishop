@@ -8,9 +8,9 @@ namespace Bishop.Commands.Weather;
 
 public class WeatherService
 {
-    public const long CacheFor = 14400;
+    private const long CacheFor = 14400;
 
-    public Dictionary<string, WeatherEntity> Cache = new();
+    private Dictionary<string, WeatherEntity> Cache = new();
 
     public WeatherAccessor Accessor { private get; set; } = null!;
 

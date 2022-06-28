@@ -14,7 +14,7 @@ namespace Bishop.Commands.Dump;
 /// </summary>
 internal class Deleter : BaseCommandModule
 {
-    private static readonly int MAX_NUMBER_OF_DELETIONS = 100;
+    private const int MaxNumberOfDeletions = 100;
 
     [Command("delete")]
     [Aliases("d")]
@@ -31,7 +31,7 @@ internal class Deleter : BaseCommandModule
                 .TakeWhile(msg => msg.Timestamp >= origin.Timestamp)
                 .ToList();
 
-            if (messagesToDelete.Count == MAX_NUMBER_OF_DELETIONS)
+            if (messagesToDelete.Count == MaxNumberOfDeletions)
             {
                 //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
                 await context.RespondAsync("There are more than a hundred messages, cannot delete.");
@@ -56,7 +56,7 @@ internal class Deleter : BaseCommandModule
     {
         var n32 = Convert.ToInt32(n);
 
-        if (n >= MAX_NUMBER_OF_DELETIONS)
+        if (n >= MaxNumberOfDeletions)
         {
             //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
             await context.RespondAsync("There are more than a hundred messages, cannot delete.");

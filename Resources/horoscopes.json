@@ -87,7 +87,7 @@
   ],
   "Signs": [
     {
-      "Sign": "Aries",
+      "Name": "Aries",
       "Aliases": [
         "Aries",
         "Bélier",
@@ -95,14 +95,14 @@
       ]
     },
     {
-      "Sign": "Taurus",
+      "Name": "Taurus",
       "Aliases": [
         "Taurus",
         "Taureau"
       ]
     },
     {
-      "Sign": "Gemini",
+      "Name": "Gemini",
       "Aliases": [
         "Gemini",
         "Gémeaux",
@@ -112,13 +112,13 @@
       ]
     },
     {
-      "Sign": "Cancer",
+      "Name": "Cancer",
       "Aliases": [
         "Cancer"
       ]
     },
     {
-      "Sign": "Leo",
+      "Name": "Leo",
       "Aliases": [
         "Leo",
         "Lion",
@@ -126,7 +126,7 @@
       ]
     },
     {
-      "Sign": "Virgo",
+      "Name": "Virgo",
       "Aliases": [
         "Virgo",
         "Vierge",
@@ -135,35 +135,35 @@
       ]
     },
     {
-      "Sign": "Libra",
+      "Name": "Libra",
       "Aliases": [
         "Libra",
         "Balance"
       ]
     },
     {
-      "Sign": "Scorpio",
+      "Name": "Scorpio",
       "Aliases": [
         "Scorpio",
         "Scorpion"
       ]
     },
     {
-      "Sign": "Sagittarius",
+      "Name": "Sagittarius",
       "Aliases": [
         "Sagittarius",
         "Sagittaire"
       ]
     },
     {
-      "Sign": "Capricorn",
+      "Name": "Capricorn",
       "Aliases": [
         "Capricorn",
         "Capricorne"
       ]
     },
     {
-      "Sign": "Aquarius",
+      "Name": "Aquarius",
       "Aliases": [
         "Aquarius",
         "Aqua",
@@ -171,7 +171,7 @@
       ]
     },
     {
-      "Sign": "Pisces",
+      "Name": "Pisces",
       "Aliases": [
         "Pisces",
         "Poissons",

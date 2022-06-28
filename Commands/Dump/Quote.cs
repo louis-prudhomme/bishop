@@ -48,8 +48,8 @@ public class Quote : BaseCommandModule
     [Command("list")]
     public async Task ListQuotes(CommandContext context)
     {
-        var response = Politicians.Aggregate("Here are the current available people to quote: \n",
-            (current, politician) => string.Join("\n", current, politician.Names.First()));
+        var response = Politicians.Aggregate("Here are the current available people to quote:",
+            (current, politician) => string.Join("\n - ", current, politician.Names.First()));
 
         await context.RespondAsync(response);
     }

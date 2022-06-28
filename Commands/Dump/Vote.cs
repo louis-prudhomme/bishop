@@ -12,15 +12,15 @@ namespace Bishop.Commands.Dump;
 /// </summary>
 public class Vote : BaseCommandModule
 {
-    private const string EMOJI_PREFIX = ":regional_indicator_*:";
-    private const char EMOJI_PREFIX_PLACEHOLDER = '*';
-    private const string MESSAGE_BASE = "**Aux urnes !**";
-    private const int A_ASCII_INDEX = 97;
+    private const string EmojiPrefix = ":regional_indicator_*:";
+    private const char EmojiPrefixPlaceholder = '*';
+    private const string MessageBase = "**Aux urnes !**";
+    private const int AAsciiIndex = 97;
 
     /// <summary>
     ///     Valued at 20 as Discord does not allow more reactions to a message.
     /// </summary>
-    private const int MAX_POLL_CHOICE = 20;
+    private const int MaxPollChoice = 20;
 
     [Command("referendum")]
     [Aliases("vote", "v")]
@@ -34,13 +34,13 @@ public class Vote : BaseCommandModule
             case 1:
                 await context.RespondAsync("…Not an easy choice, eh ?");
                 break;
-            case > MAX_POLL_CHOICE:
+            case > MaxPollChoice:
                 await context.RespondAsync(
-                    $"Too much voting options ! Maximum is {MAX_POLL_CHOICE}, got {args.Length}");
+                    $"Too much voting options ! Maximum is {MaxPollChoice}, got {args.Length}");
                 return;
         }
 
-        var messageBuilder = new StringBuilder(MESSAGE_BASE);
+        var messageBuilder = new StringBuilder(MessageBase);
 
         for (var i = 0; i < args.Length; i++)
             messageBuilder.Append($"\n{args[i]} ⇒ {RegionalIndicatorFromIndex(context.Client, i)}");
@@ -60,6 +60,6 @@ public class Vote : BaseCommandModule
     private DiscordEmoji RegionalIndicatorFromIndex(DiscordClient client, int index)
     {
         return DiscordEmoji.FromName(client,
-            EMOJI_PREFIX.Replace(EMOJI_PREFIX_PLACEHOLDER, (char) (A_ASCII_INDEX + index)));
+            EmojiPrefix.Replace(EmojiPrefixPlaceholder, (char) (AAsciiIndex + index)));
     }
 }
