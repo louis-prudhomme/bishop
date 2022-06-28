@@ -22,8 +22,6 @@ public class Quote : BaseCommandModule
         .Get()
         .Result;
 
-    private static readonly List<string> ListAliases = new() {"liste", "list"};
-
     public Random Rand { private get; set; } = null!;
 
     [GroupCommand]
@@ -31,12 +29,6 @@ public class Quote : BaseCommandModule
         [Description("Person to quote")] [RemainingText]
         string person)
     {
-        if (ListAliases.Contains(person))
-        {
-            await ListQuotes(context);
-            return;
-        }
-
         var target = Politicians.FirstOrDefault(politician => politician.Names
             .Contains(person, StringComparer.InvariantCultureIgnoreCase));
 
@@ -46,6 +38,7 @@ public class Quote : BaseCommandModule
     }
 
     [Command("list")]
+    [Aliases("liste")]
     public async Task ListQuotes(CommandContext context)
     {
         var response = Politicians.Aggregate("Here are the current available people to quote:",

@@ -15,7 +15,7 @@ public class Horoscope : BaseCommandModule
 {
     private const string HoroscopeFilePath = "horoscopes.json";
 
-    private static readonly HoroscopeDb Full = new JsonDeserializer<HoroscopeDb>(HoroscopeFilePath)
+    private static readonly HoroscopeDb Db = new JsonDeserializer<HoroscopeDb>(HoroscopeFilePath)
         .Get()
         .Result;
 
@@ -47,8 +47,8 @@ public class Horoscope : BaseCommandModule
     }
 
 
-    private static List<string> Links => Full.Links;
-    private static List<HoroscopeSign> Signs => Full.Signs;
+    private static List<string> Links => Db.Links;
+    private static List<HoroscopeSign> Signs => Db.Signs;
 
     private record HoroscopeDb(List<string> Links, List<HoroscopeSign> Signs);
 
