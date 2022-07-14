@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
@@ -56,5 +56,10 @@
     <ItemGroup>
         <Resource Include="Resources\slenders.json"/>
         <Resource Include="Resources\Slenders.png"/>
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Resources\credentials.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 </Project>

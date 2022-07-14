@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
@@ -53,6 +53,7 @@ internal class Program
         _generator.Register<WeatherController>();
 
         _generator.Register<UserNameCacheService>();
+        _generator.Register<Pigs>();
 
         _discord = _generator.Client;
         AdaptUserIdTo.UserNameAsync = async id => (await _discord.GetUserAsync(id)).Username;
