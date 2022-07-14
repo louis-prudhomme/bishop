@@ -10,7 +10,7 @@ public class WeatherService
 {
     private const long CacheFor = 14400;
 
-    private Dictionary<string, WeatherEntity> Cache = new();
+    private readonly Dictionary<string, WeatherEntity> _cache = new();
 
     public WeatherAccessor Accessor { private get; set; } = null!;
 
@@ -19,20 +19,20 @@ public class WeatherService
         var currentEpoch = DateHelper.FromDateTimeToTimestamp(DateTime.Now);
         var cityKey = city.Trim().ToLower();
 
-        if (Cache.ContainsKey(cityKey))
+        if (_cache.ContainsKey(cityKey))
         {
-            var cachedEntity = Cache[cityKey];
-            if (currentEpoch - cachedEntity.Epoch <= CacheFor) return Cache[cityKey];
+            var cachedEntity = _cache[cityKey];
+            if (currentEpoch - cachedEntity.Epoch <= CacheFor) return _cache[cityKey];
 
-            Cache.Remove(cityKey);
-            Cache.Add(cityKey, await Accessor.Current(cityKey));
+            _cache.Remove(cityKey);
+            _cache.Add(cityKey, await Accessor.Current(cityKey));
         }
         else
         {
-            Cache.Add(cityKey, await Accessor.Current(cityKey));
+            _cache.Add(cityKey, await Accessor.Current(cityKey));
         }
 
-        return Cache[cityKey];
+        return _cache[cityKey];
     }
 
     public async Task<Dictionary<WeatherMetric, string>> CurrentRatiosByMetrics(string city)
@@ -56,7 +56,7 @@ public class WeatherService
                 .GetTypeBeacon(tuple.metric)
                 .Ratio(tuple.Item2)))
             .Select(tuple => $"{tuple.metric}: {tuple.Item2}%")
-            .Aggregate((s, s1) => string.Join("\n", s, s1));
+            .JoinWithNewlines();
     }
 
     public async Task<string> CurrentMetrics(string city)

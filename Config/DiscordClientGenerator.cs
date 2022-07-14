@@ -30,10 +30,6 @@ public class DiscordClientGenerator
 
     private readonly CommandsNextExtension _commands;
 
-    private readonly ILog _logger = LogManager
-        .GetLogger(MethodBase.GetCurrentMethod()?
-            .DeclaringType);
-
     private readonly string[] _sigil;
 
     public DiscordClientGenerator()

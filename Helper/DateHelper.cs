@@ -22,7 +22,6 @@ public class DateHelper
     {
         return DateTimeOffset
             .FromUnixTimeSeconds(timestamp).LocalDateTime;
-        ;
     }
 
     /// <summary>

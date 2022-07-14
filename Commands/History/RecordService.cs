@@ -94,7 +94,7 @@ public class RecordService : BaseCommandModule
         var trueLimit = limit <= 0 ? records.Count : limit ?? records.Count;
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? 10);
+            await FormatRecordList(context, records, trueLimit);
         else
             await context.RespondAsync(
                 $"No history recorded for category user {member.Username} and {counterCategory}");

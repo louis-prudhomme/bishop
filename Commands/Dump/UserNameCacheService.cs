@@ -57,7 +57,7 @@ public class UserNameCacheService : BaseCommandModule
         }
 
         await context.RespondAsync($"In cache: {cache.Count}");
-        await context.RespondAsync($"{cache.Select(Mapper).Aggregate((key1, key2) => string.Join("\n", key1, key2))}");
+        await context.RespondAsync($"{cache.Select(Mapper).JoinWithNewlines()}");
     }
 
     [Command("clear")]
