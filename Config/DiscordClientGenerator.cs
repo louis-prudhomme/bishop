@@ -6,6 +6,7 @@ using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Commands.Weather;
 using Bishop.Config.Converters;
+using Bishop.Helper.Grive;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
@@ -71,6 +72,11 @@ public class DiscordClientGenerator
         {
             Accessor = new WeatherAccessor()
         };
+        var credentialsService = new GriveCredentialsService();
+        var grive = new Grive
+        {
+            Service = credentialsService.Drive
+        };
 
         return new ServiceCollection()
             .AddSingleton<Random>()
@@ -79,6 +85,7 @@ public class DiscordClientGenerator
             .AddSingleton(nestedCache)
             .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(weatherService)
+            .AddSingleton(grive)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>();

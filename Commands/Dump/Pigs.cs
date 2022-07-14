@@ -30,8 +30,8 @@ public class Pigs : BaseCommandModule
             var file = await Grive.FetchCompleteFile(_pigtures[Rand.Next(_pigtures.Count)]);
 
             if (file == null) await context.RespondAsync("File was not found");
-            
-            await context.RespondAsync(file?.WebContentLink!);
+
+            await context.RespondAsync($"{file?.ThumbnailLink}");
         }
         catch (Exception e)
         {
