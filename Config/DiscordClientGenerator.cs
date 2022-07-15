@@ -72,10 +72,10 @@ public class DiscordClientGenerator
         {
             Accessor = new WeatherAccessor()
         };
-        var credentialsService = new GriveCredentialsService();
+        //var credentialsService = new GriveCredentialsService();
         var grive = new Grive
         {
-            Service = credentialsService.Drive
+            Service = null!
         };
 
         return new ServiceCollection()
