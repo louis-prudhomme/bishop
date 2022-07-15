@@ -22,7 +22,7 @@ public class Quote : BaseCommandModule
         .Get()
         .Result;
 
-    public Random Rand { private get; set; } = null!;
+    private readonly Random _rand = new();
 
     [GroupCommand]
     public async Task Quoting(CommandContext context,
@@ -33,7 +33,7 @@ public class Quote : BaseCommandModule
             .Contains(person, StringComparer.InvariantCultureIgnoreCase));
 
         if (target == null) await context.RespondAsync("Nom pas reconnu, probablement");
-        await context.RespondAsync($"*“{target?.Quotes[Rand.Next(target.Quotes.Count)]}”*" +
+        await context.RespondAsync($"*“{target?.Quotes[_rand.Next(target.Quotes.Count)]}”*" +
                                    $"\n                                       - {target?.Names.First()}");
     }
 

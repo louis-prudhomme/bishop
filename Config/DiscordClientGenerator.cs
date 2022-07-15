@@ -79,7 +79,6 @@ public class DiscordClientGenerator
         };
 
         return new ServiceCollection()
-            .AddSingleton<Random>()
             .AddSingleton(nestedRecordsService)
             .AddSingleton(nestedCounterService)
             .AddSingleton(nestedCache)
@@ -113,5 +112,13 @@ public class DiscordClientGenerator
     public void Register<T>() where T : BaseCommandModule
     {
         _commands.RegisterCommands<T>();
+    }
+
+    public void RegisterBulk(params Type[] types)
+    {
+        foreach (var type in types)
+        {
+            _commands.RegisterCommands(type);
+        }
     }
 }

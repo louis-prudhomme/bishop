@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading;
 using Google.Apis.Auth.OAuth2;
@@ -10,16 +11,17 @@ namespace Bishop.Helper.Grive;
 public class GriveCredentialsService
 {
     private static readonly string[] Scopes = { DriveService.Scope.DriveReadonly };
+    private static readonly string GoogleCredentials = Environment
+        .GetEnvironmentVariable("GOOGLE_CREDS")!;
     private const string CredPath = "token.json";
-    private const string CredentialsFile = "Resources/credentials.json";
     private const string AppName = "bishop";
 
-    public UserCredential Credentials { get; private set; }
-    public DriveService Drive { get; private set; }
+    private UserCredential Credentials { get; }
+    public DriveService Drive { get; }
 
     public GriveCredentialsService()
     {
-        using var stream = new FileStream(CredentialsFile, FileMode.Open, FileAccess.Read);
+        using var stream = GoogleCredentials.ToStream();
         Credentials = GoogleWebAuthorizationBroker.AuthorizeAsync(
             GoogleClientSecrets.FromStream(stream).Secrets,
             Scopes,

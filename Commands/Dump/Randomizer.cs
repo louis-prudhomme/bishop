@@ -20,7 +20,7 @@ public class Randomizer : BaseCommandModule
     /// </summary>
     private const int MaxEmojiHex = 44;
 
-    public Random Rand { private get; set; } = null!;
+    private readonly Random _rand = new();
 
     [Command("Random")]
     [Aliases("rand", "r")]
@@ -29,7 +29,7 @@ public class Randomizer : BaseCommandModule
         [Description("Options to choose from")]
         params string[] args)
     {
-        await context.RespondAsync($"🎲 ⇒ {args[Rand.Next(args.Length)]}");
+        await context.RespondAsync($"🎲 ⇒ {args[_rand.Next(args.Length)]}");
     }
 
     [Command("Randomoji")]
@@ -37,7 +37,7 @@ public class Randomizer : BaseCommandModule
     [Description("Picks a random emoji")]
     public async Task RandomEmoji(CommandContext context)
     {
-        var emojiCode = BaseEmojiHex + Rand.Next(0, MaxEmojiHex);
+        var emojiCode = BaseEmojiHex + _rand.Next(0, MaxEmojiHex);
 
         await context.RespondAsync($"I’ve picked : {char.ConvertFromUtf32(emojiCode)}");
     }

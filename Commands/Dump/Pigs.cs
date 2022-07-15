@@ -16,10 +16,10 @@ public class Pigs : BaseCommandModule
     private static DateTime _updateAfter = DateTime.MinValue;
 
     public Grive Grive { private get; set; } = null!;
-    public Random Rand { private get; set; } = null!;
+    private readonly Random _rand = new();
 
     [Command("piggy")]
-    [Aliases("oink")]
+    [Aliases("oink", "gruik", "huiiiii")]
     public async Task Oink(CommandContext context)
     {
         try
@@ -27,7 +27,7 @@ public class Pigs : BaseCommandModule
             if (_updateAfter.CompareTo(DateTime.Now) <= 0)
                 await RebuildCache();
             
-            var file = await Grive.FetchCompleteFile(_pigtures[Rand.Next(_pigtures.Count)]);
+            var file = await Grive.FetchCompleteFile(_pigtures[_rand.Next(_pigtures.Count)]);
 
             if (file == null) await context.RespondAsync("File was not found");
 

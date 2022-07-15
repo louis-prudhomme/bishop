@@ -18,7 +18,7 @@ public class Aled : BaseCommandModule
         .Get()
         .Result;
 
-    public Random Rand { private get; set; } = null!;
+    private readonly Random _rand = new();
 
 
     [Command("aled")]
@@ -26,6 +26,6 @@ public class Aled : BaseCommandModule
     [Description("Help @someone in need")]
     public async Task Help(CommandContext context)
     {
-        await context.RespondAsync($"{Aleds[Rand.Next(Aleds.Count)]}");
+        await context.RespondAsync($"{Aleds[_rand.Next(Aleds.Count)]}");
     }
 }
