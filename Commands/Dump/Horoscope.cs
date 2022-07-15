@@ -21,7 +21,7 @@ public class Horoscope : BaseCommandModule
 
     private readonly HoroscopeScraper _scraperService = new();
 
-    public Random Rand { private get; set; } = null!;
+    private readonly Random _rand = new();
 
     [Command("horoscope")]
     [Aliases("Irma", "ho")]
@@ -39,7 +39,7 @@ public class Horoscope : BaseCommandModule
             return;
         }
 
-        var link = Links[Rand.Next(Links.Count)];
+        var link = Links[_rand.Next(Links.Count)];
         // TODO: add caching
         var horoscope = await _scraperService.GetHoroscopes(link, sign.Name);
         var response = "*" + sign.Name + "*\n" + horoscope;

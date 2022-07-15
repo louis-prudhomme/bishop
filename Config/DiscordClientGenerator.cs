@@ -6,6 +6,7 @@ using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Commands.Weather;
 using Bishop.Config.Converters;
+using Bishop.Helper.Grive;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
@@ -29,10 +30,6 @@ public class DiscordClientGenerator
         .GetEnvironmentVariable("DISCORD_TOKEN")!;
 
     private readonly CommandsNextExtension _commands;
-
-    private readonly ILog _logger = LogManager
-        .GetLogger(MethodBase.GetCurrentMethod()?
-            .DeclaringType);
 
     private readonly string[] _sigil;
 
@@ -75,14 +72,19 @@ public class DiscordClientGenerator
         {
             Accessor = new WeatherAccessor()
         };
+        var credentialsService = new GriveCredentialsService();
+        var grive = new Grive
+        {
+            Service = credentialsService.Drive
+        };
 
         return new ServiceCollection()
-            .AddSingleton<Random>()
             .AddSingleton(nestedRecordsService)
             .AddSingleton(nestedCounterService)
             .AddSingleton(nestedCache)
             .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(weatherService)
+            .AddSingleton(grive)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>();
@@ -110,5 +112,13 @@ public class DiscordClientGenerator
     public void Register<T>() where T : BaseCommandModule
     {
         _commands.RegisterCommands<T>();
+    }
+
+    public void RegisterBulk(params Type[] types)
+    {
+        foreach (var type in types)
+        {
+            _commands.RegisterCommands(type);
+        }
     }
 }

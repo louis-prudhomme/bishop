@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
 using Bishop.Config;
+using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -39,8 +40,7 @@ public class CounterService : BaseCommandModule
             var entities = await Task.WhenAll(scores
                 .Select((entity, i) => entity.ToString(Cache.GetAsync, i)));
 
-            await context.RespondAsync(entities
-                .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
+            await context.RespondAsync(entities.JoinWithNewlines());
         }
     }
 
@@ -60,8 +60,7 @@ public class CounterService : BaseCommandModule
             var entities = await Task.WhenAll(scores
                 .Select((entity, i) => entity.ToString(Cache.GetAsync, i)));
 
-            await context.RespondAsync(entities
-                .Aggregate((key1, key2) => string.Join("\n", key1, key2)));
+            await context.RespondAsync(entities.JoinWithNewlines());
         }
     }
 

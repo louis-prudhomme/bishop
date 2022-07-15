@@ -28,7 +28,7 @@ public class WeatherController : BaseCommandModule
                 .Select(tuple => WeatherFormatter
                     .CreateFor(tuple.Key, tuple.Value))
                 .Select(formatter => formatter.ToString())
-                .Aggregate((line1, line2) => string.Join("\n", line1, line2));
+                .JoinWithNewlines();
 
             await context.RespondAsync($"__Weather forecast for *{Capital.ToTitleCase(city)}* " +
                                        $"the *{DateHelper.FromDateTimeToStringDate(DateTime.Now)} at {DateHelper.FromDateTimeToStringTime(DateTime.Now)}*__" +

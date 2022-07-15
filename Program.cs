@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
@@ -15,7 +16,7 @@ using log4net.Config;
 
 namespace Bishop;
 
-internal class Program
+internal static class Program
 {
     private static readonly ILog Log = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
@@ -30,29 +31,7 @@ internal class Program
         XmlConfigurator.Configure();
 
         _generator = new DiscordClientGenerator();
-
-        _generator.Register<Randomizer>();
-        _generator.Register<Stalk>();
-        _generator.Register<Tomato>();
-        _generator.Register<Aled>();
-        _generator.Register<Horoscope>();
-        _generator.Register<Quote>();
-        _generator.Register<Vote>();
-        _generator.Register<Deleter>();
-
-        _generator.Register<BdmCounter>();
-        _generator.Register<BeaufCounter>();
-        _generator.Register<SauceCounter>();
-        _generator.Register<SelCounter>();
-        _generator.Register<RassCounter>();
-
-        _generator.Register<CounterService>();
-        _generator.Register<RecordService>();
-        _generator.Register<CardGameService>();
-
-        _generator.Register<WeatherController>();
-
-        _generator.Register<UserNameCacheService>();
+        _generator.RegisterBulk(CommandClasses);
 
         _discord = _generator.Client;
         AdaptUserIdTo.UserNameAsync = async id => (await _discord.GetUserAsync(id)).Username;
@@ -70,4 +49,31 @@ internal class Program
         await _discord.ConnectAsync();
         await Task.Delay(-1);
     }
+    
+    /// <summary>
+    /// Array containing all the classes that must be registered as commands through
+    /// the <see cref="DiscordClientGenerator"/>.BulkRegister method.
+    /// </summary>
+    private static readonly Type[] CommandClasses = new List<Type>
+        {
+            typeof(Randomizer),
+            typeof(Stalk),
+            typeof(Tomato),
+            typeof(Aled),
+            typeof(Horoscope),
+            typeof(Quote),
+            typeof(Vote),
+            typeof(Deleter),
+            typeof(BdmCounter),
+            typeof(BeaufCounter),
+            typeof(SauceCounter),
+            typeof(SelCounter),
+            typeof(RassCounter),
+            typeof(CounterService),
+            typeof(RecordService),
+            typeof(CardGameService),
+            typeof(WeatherController),
+            typeof(UserNameCacheService),
+            typeof(Pigs)
+        }.ToArray();
 }
