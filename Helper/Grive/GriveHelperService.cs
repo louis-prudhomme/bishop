@@ -27,7 +27,7 @@ public class GriveCredentialsService
             Scopes,
             AppName,
             CancellationToken.None,
-            new FileDataStore(CredPath, true)).Result; // TODO search about this
+            new NullDataStore()).Result; // TODO search about this
 
         Drive = new DriveService(new BaseClientService.Initializer
         {

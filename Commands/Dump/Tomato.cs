@@ -20,7 +20,7 @@ public class Tomato : BaseCommandModule
         .Result;
 
     private readonly Random _rand = new();
-    
+
     [Command("tomato")]
     [Aliases("t")]
     [Description("Throw a tomato to @someone")]
@@ -28,13 +28,6 @@ public class Tomato : BaseCommandModule
         [Description("User to throw the tomato at!")]
         DiscordMember member)
     {
-        try
-        {
-            await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
-        }
-        catch(Exception e)
-        {
-            await context.RespondAsync(e.Message);
-        }
+        await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
     }
 }
