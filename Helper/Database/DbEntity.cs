@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.IdGenerators;
 namespace Bishop.Helper.Database;
 
 /// <summary>
-///     Class representing a generic DB entity. It comes with an ID and making its staus explicit.
+///     Class representing a generic DB entity. It comes with an ID and making its status explicit.
 /// </summary>
 public abstract class DbEntity
 {

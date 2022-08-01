@@ -85,7 +85,8 @@ public class DiscordClientGenerator
             .AddSingleton(weatherService)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
-            .AddSingleton<CardGameRepository>();
+            .AddSingleton<CardGameRepository>()
+            .AddSingleton<HoroscopeRepository>();
     }
 
     private CommandsNextConfiguration AssembleCommands(IServiceCollection services)

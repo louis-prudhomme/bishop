@@ -1,4 +1,6 @@
-﻿using DSharpPlus.CommandsNext;
+﻿using Bishop.Commands.Dump;
+using Bishop.Helper;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using System;
 using System.Collections.Generic;
@@ -12,10 +14,11 @@ using static HoroscopeConfigurator;
 /// </summary>
 public class Horoscope : BaseCommandModule
 {
-    public Random Rand { private get; set; } = null!;
+    public HoroscopeRepository Repository { private get; set; } = null!;
+    private readonly Random _rand = new();
     public static List<string> links { get; set; } = null!;
     public static List<HoroscopeSign> signs { get; set; } = null!;
-    public HoroscopeScraper ScraperService = new HoroscopeScraper();
+    private readonly HoroscopeScraper _scraperService = new();
 
     [Command("horoscope")]
     [Aliases("Irma", "ho")]
@@ -23,27 +26,49 @@ public class Horoscope : BaseCommandModule
     public async Task Predicting(CommandContext context,
         [Description("Horoscope sign")][RemainingText] string userSign)
     {
-        Boolean found = false;
+        var horoscopes = await Repository.FindAllAsync();
 
-        foreach (HoroscopeSign sign in signs)
+        var response = "";
+
+        var horoscopeSign = signs.FirstOrDefault(HoroscopeSign => HoroscopeSign.aliases.Contains(userSign, StringComparer.InvariantCultureIgnoreCase));
+
+        if (horoscopeSign == null)
         {
-            foreach (string alias in sign.aliases)
-            {
-                if (alias.Equals(userSign, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    found = true;
-                    string link = links[Rand.Next(links.Count)];
-                    string horoscope = ScraperService.GetHoroscopes(link, sign.sign);
-                    string response = "*" + sign.sign + "*\n" + horoscope;
+            response ="wtf is a " + userSign + "???";
+        }
+        else
+        {
+            var baseHoroscope = horoscopes.FirstOrDefault(horoscopesBase => horoscopeSign.sign.Equals(horoscopesBase.baseSign, StringComparison.CurrentCultureIgnoreCase));
 
-                    await context.RespondAsync(response);
+            if (baseHoroscope == null)
+            {
+                string link = links[_rand.Next(links.Count)];
+                string horoscope = _scraperService.GetHoroscopes(link, horoscopeSign.sign);
+
+                var newHoroscope = new HoroscopeEntity(horoscopeSign.sign, horoscope);
+                response = newHoroscope.horoscope.ToString();
+
+                await Repository.SaveAsync(newHoroscope);
+            }
+            else
+            {
+                if (DateHelper.FromTimestampToDateTime(baseHoroscope.timestamp).Date != DateTime.Now.Date)
+                {
+                    string link = links[_rand.Next(links.Count)];
+                    string horoscope = _scraperService.GetHoroscopes(link, horoscopeSign.sign);
+
+                    baseHoroscope.ReplaceHoroscope(horoscope);
+                    response = baseHoroscope.horoscope.ToString();
+
+                    await Repository.SaveAsync(baseHoroscope);
+                }
+                else
+                {
+                    response = baseHoroscope.horoscope.ToString();
                 }
             }
         }
 
-        if (!found)
-        {
-            await context.RespondAsync("wtf is a " + userSign + "???");
-        }
+        await context.RespondAsync(response);
     }
 }
