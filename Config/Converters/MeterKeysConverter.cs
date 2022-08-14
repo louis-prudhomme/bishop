@@ -16,7 +16,7 @@ internal class MeterKeysConverter : IArgumentConverter<CounterCategory>
     {
         return value.ToLower() switch
         {
-            "add" => Task.FromResult(Optional.FromValue(CounterCategory.Bdm)),
+            "bdm" => Task.FromResult(Optional.FromValue(CounterCategory.Bdm)),
             "beauf" => Task.FromResult(Optional.FromValue(CounterCategory.Beauf)),
             "sauce" => Task.FromResult(Optional.FromValue(CounterCategory.Sauce)),
             "sel" => Task.FromResult(Optional.FromValue(CounterCategory.Sel)),

@@ -25,6 +25,7 @@ public class RecordService : BaseCommandModule
     public RecordRepository Repository { private get; set; } = null!;
 
     [Command("rand")]
+    [Aliases("r")]
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
     {
@@ -95,7 +96,7 @@ public class RecordService : BaseCommandModule
         var trueLimit = limit <= 0 ? records.Count : limit ?? records.Count;
 
         if (records.Any())
-            await FormatRecordList(context, records, trueLimit);
+            await FormatRecordList(context, records, trueLimit, false);
         else
             await context.RespondAsync(
                 $"No history recorded for category user {member.Username} and {counterCategory}");
@@ -112,7 +113,7 @@ public class RecordService : BaseCommandModule
         var records = await Repository.FindByUser(member.Id);
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? DefaultLimit);
+            await FormatRecordList(context, records, limit ?? DefaultLimit, true);
         else
             await context.RespondAsync(
                 $"No history recorded for user {member.Username}");
@@ -129,18 +130,21 @@ public class RecordService : BaseCommandModule
         var records = await Repository.FindByCategory(category);
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? DefaultLimit);
+            await FormatRecordList(context, records, limit ?? DefaultLimit, false);
         else
             await context.RespondAsync(
                 $"No history recorded for category {category}");
     }
 
-    private static async Task FormatRecordList(CommandContext context, IReadOnlyCollection<RecordEntity> records, int limit)
+    private static async Task FormatRecordList(CommandContext context,
+        IReadOnlyCollection<RecordEntity> records,
+        int limit,
+        bool shouldIncludeCategory)
     {
         var trueLimit = limit <= 0 ? records.Count : limit;
 
         var toSend = records
-            .Select(record => record.ToString())
+            .Select(record => record.ToString(shouldIncludeCategory))
             .Take(trueLimit)
             .ToList();
 

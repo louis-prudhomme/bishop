@@ -32,8 +32,10 @@ public class RecordEntity : DbEntity
     public long Timestamp { get; set; }
 
 
-    public override string ToString()
+    public string ToString(bool shouldIncludeCategory = false)
     {
-        return $"*« {Motive} »* – {DateHelper.FromDateTimeToStringDate(RecordedAt)} as {Category}";
+        return shouldIncludeCategory
+            ? $"*« {Motive} »* – {DateHelper.FromDateTimeToStringDate(RecordedAt)} as {Category}"
+            : $"*« {Motive} »* – {DateHelper.FromDateTimeToStringDate(RecordedAt)}";
     }
 }
