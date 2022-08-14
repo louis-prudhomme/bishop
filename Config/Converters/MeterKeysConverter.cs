@@ -23,6 +23,7 @@ internal class MeterKeysConverter : IArgumentConverter<CounterCategory>
             "rass" => Task.FromResult(Optional.FromValue(CounterCategory.Rass)),
             "maufoi" => Task.FromResult(Optional.FromValue(CounterCategory.Maufoi)),
             "maufoy" => Task.FromResult(Optional.FromValue(CounterCategory.Maufoi)),
+            "wind" => Task.FromResult(Optional.FromValue(CounterCategory.Maufoi)),
             _ => Task.FromResult(Optional.FromNoValue<CounterCategory>())
         };
     }

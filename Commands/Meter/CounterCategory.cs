@@ -11,5 +11,6 @@ public enum CounterCategory
     Sel,
     Beauf,
     Rass,
-    Maufoi
+    Maufoi,
+    Wind
 }
