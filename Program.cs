@@ -67,6 +67,7 @@ internal static class Program
             typeof(BdmCounter),
             typeof(BeaufCounter),
             typeof(SauceCounter),
+            typeof(MaufoiCounter),
             typeof(SelCounter),
             typeof(RassCounter),
             typeof(CounterService),

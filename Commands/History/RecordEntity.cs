@@ -34,6 +34,6 @@ public class RecordEntity : DbEntity
 
     public override string ToString()
     {
-        return $"*« {Motive} »* – {DateHelper.FromDateTimeToStringDate(RecordedAt)}";
+        return $"*« {Motive} »* – {DateHelper.FromDateTimeToStringDate(RecordedAt)} as {Category}";
     }
 }
