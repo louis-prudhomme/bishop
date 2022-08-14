@@ -10,5 +10,7 @@ public enum CounterCategory
     Sauce,
     Sel,
     Beauf,
-    Rass
+    Rass,
+    Maufoi,
+    Wind
 }

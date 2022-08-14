@@ -19,11 +19,13 @@ namespace Bishop.Commands.History;
 [Description("History-related commands")]
 public class RecordService : BaseCommandModule
 {
+    private const int DefaultLimit = 10;
     public Random Random { private get; set; } = null!;
     public UserNameCache Cache { private get; set; } = null!;
     public RecordRepository Repository { private get; set; } = null!;
 
     [Command("rand")]
+    [Aliases("r")]
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
     {
@@ -87,14 +89,14 @@ public class RecordService : BaseCommandModule
         [Description("Category to know the history of")]
         CounterCategory counterCategory,
         [Description("Number of records to pull")]
-        int? limit = 10
+        int? limit = DefaultLimit
     )
     {
         var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
         var trueLimit = limit <= 0 ? records.Count : limit ?? records.Count;
 
         if (records.Any())
-            await FormatRecordList(context, records, trueLimit);
+            await FormatRecordList(context, records, trueLimit, false);
         else
             await context.RespondAsync(
                 $"No history recorded for category user {member.Username} and {counterCategory}");
@@ -105,13 +107,13 @@ public class RecordService : BaseCommandModule
         [Description("@User to know the history of")]
         DiscordUser member,
         [Description("Number of records to pull")]
-        int? limit = 10
+        int? limit = DefaultLimit
     )
     {
         var records = await Repository.FindByUser(member.Id);
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? 10);
+            await FormatRecordList(context, records, limit ?? DefaultLimit, true);
         else
             await context.RespondAsync(
                 $"No history recorded for user {member.Username}");
@@ -122,24 +124,27 @@ public class RecordService : BaseCommandModule
         [Description("Category to pull records of")]
         CounterCategory category,
         [Description("Number of records to pull")]
-        int? limit = 10
+        int? limit = DefaultLimit
     )
     {
         var records = await Repository.FindByCategory(category);
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? 10);
+            await FormatRecordList(context, records, limit ?? DefaultLimit, false);
         else
             await context.RespondAsync(
                 $"No history recorded for category {category}");
     }
 
-    private async Task FormatRecordList(CommandContext context, IReadOnlyCollection<RecordEntity> records, int limit)
+    private static async Task FormatRecordList(CommandContext context,
+        IReadOnlyCollection<RecordEntity> records,
+        int limit,
+        bool shouldIncludeCategory)
     {
         var trueLimit = limit <= 0 ? records.Count : limit;
 
         var toSend = records
-            .Select(entity => entity.ToString())
+            .Select(record => record.ToString(shouldIncludeCategory))
             .Take(trueLimit)
             .ToList();
 
