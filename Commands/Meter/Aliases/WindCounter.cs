@@ -35,6 +35,20 @@ public class WindCounter : BaseCommandModule
         await Service.Score(context, CounterCategory.Wind);
     }
 
+    [Command("rot")]
+    [Description("Returns all wind scores")]
+    public async Task ScoreRot(CommandContext context)
+    {
+        await ScoreWind(context);
+    }
+
+    [Command("pet")]
+    [Description("Returns all wind scores")]
+    public async Task ScorePet(CommandContext context)
+    {
+        await ScoreWind(context);
+    }
+
     [Command("wind")]
     [Description("Adds a record to @someone’s wind history and increments their score")]
     public async Task ScoreWind(CommandContext context,
