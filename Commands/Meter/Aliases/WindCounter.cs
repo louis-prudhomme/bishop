@@ -19,6 +19,26 @@ public class WindCounter : BaseCommandModule
         await Service.Score(context, member, CounterCategory.Wind, nb);
     }
 
+    [Command("rot")]
+    [Description("Adds a provided value to @someone’s rot score")]
+    public async Task ScoreRot(CommandContext context,
+        [Description("User to increment the rot score of")]
+        DiscordMember member,
+        [Description("To increment by")] long nb)
+    {
+        await Service.Score(context, member, CounterCategory.Wind, nb);
+    }
+
+    [Command("pet")]
+    [Description("Adds a provided value to @someone’s pet score")]
+    public async Task ScorePetWind(CommandContext context,
+        [Description("User to increment the pet score of")]
+        DiscordMember member,
+        [Description("To increment by")] long nb)
+    {
+        await Service.Score(context, member, CounterCategory.Wind, nb);
+    }
+
     [Command("wind")]
     [Description("Returns the value of @someone’s wind score")]
     public async Task ScoreWind(CommandContext context,
@@ -33,6 +53,20 @@ public class WindCounter : BaseCommandModule
     public async Task ScoreWind(CommandContext context)
     {
         await Service.Score(context, CounterCategory.Wind);
+    }
+
+    [Command("rot")]
+    [Description("Returns all wind scores")]
+    public async Task ScoreRot(CommandContext context)
+    {
+        await ScoreWind(context);
+    }
+
+    [Command("pet")]
+    [Description("Returns all wind scores")]
+    public async Task ScorePet(CommandContext context)
+    {
+        await ScoreWind(context);
     }
 
     [Command("wind")]

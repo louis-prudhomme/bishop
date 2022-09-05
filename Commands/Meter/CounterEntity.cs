@@ -9,9 +9,7 @@ namespace Bishop.Commands.Meter;
 /// </summary>
 public class CounterEntity : DbEntity
 {
-    public CounterEntity()
-    {
-    }
+    public CounterEntity() { }
 
     public CounterEntity(ulong user, CounterCategory category)
     {
