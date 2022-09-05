@@ -87,7 +87,8 @@ public class DiscordClientGenerator
             .AddSingleton(grive)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
-            .AddSingleton<CardGameRepository>();
+            .AddSingleton<CardGameRepository>()
+            .AddSingleton<HoroscopeRepository>();
     }
 
     private CommandsNextConfiguration AssembleCommands(IServiceCollection services)

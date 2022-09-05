@@ -13,6 +13,8 @@ namespace Bishop.Commands.Dump;
 /// </summary>
 public class Horoscope : BaseCommandModule
 {
+    public HoroscopeRepository Repository { private get; set; } = null!;
+
     private const string HoroscopeFilePath = "horoscopes.json";
 
     private static readonly HoroscopeDb Db = new JsonDeserializer<HoroscopeDb>(HoroscopeFilePath)
@@ -30,19 +32,51 @@ public class Horoscope : BaseCommandModule
         [Description("Horoscope sign")] [RemainingText]
         string userSign)
     {
-        var sign = Signs.FirstOrDefault(horoscopeSign => horoscopeSign
-            .Aliases.Contains(userSign, StringComparer.InvariantCultureIgnoreCase)); 
-        
-        if (sign == null)
+        var horoscopes = await Repository.FindAllAsync();
+
+        var response = "";
+
+        var horoscopeSign = Signs.FirstOrDefault(HoroscopeSign => HoroscopeSign.Aliases.Contains(userSign, StringComparer.InvariantCultureIgnoreCase));
+
+        if (horoscopeSign == null)
         {
-            await context.RespondAsync("wtf is a " + userSign + "???");
-            return;
+            response = "wtf is a " + userSign + "???";
+        }
+        else
+        {
+            response = "*" + horoscopeSign.Name + "*\n";
+
+            var baseHoroscope = horoscopes.FirstOrDefault(horoscopesBase => horoscopeSign.Name.Equals(horoscopesBase.baseSign, StringComparison.CurrentCultureIgnoreCase));
+
+            if (baseHoroscope == null)
+            {
+                string link = Links[_rand.Next(Links.Count)];
+                string horoscope = _scraperService.GetHoroscopes(link, horoscopeSign.Name).Result;
+
+                var newHoroscope = new HoroscopeEntity(horoscopeSign.Name, horoscope);
+                response += newHoroscope.horoscope.ToString();
+
+                await Repository.SaveAsync(newHoroscope);
+            }
+            else
+            {
+                if (DateHelper.FromTimestampToDateTime(baseHoroscope.timestamp).Date != DateTime.Now.Date)
+                {
+                    string link = Links[_rand.Next(Links.Count)];
+                    string horoscope = _scraperService.GetHoroscopes(link, horoscopeSign.Name).Result;
+
+                    baseHoroscope.ReplaceHoroscope(horoscope);
+                    response += baseHoroscope.horoscope.ToString();
+
+                    await Repository.SaveAsync(baseHoroscope);
+                }
+                else
+                {
+                    response += baseHoroscope.horoscope.ToString();
+                }
+            }
         }
 
-        var link = Links[_rand.Next(Links.Count)];
-        // TODO: add caching
-        var horoscope = await _scraperService.GetHoroscopes(link, sign.Name);
-        var response = "*" + sign.Name + "*\n" + horoscope;
         await context.RespondAsync(response);
     }
 
