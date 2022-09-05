@@ -175,6 +175,17 @@ public class RecordService : BaseCommandModule
                 $"No history recorded for category {category}");
     }
 
+    public async Task AddGhostRecords(SnowflakeObject member, CounterCategory category, long nb)
+    {
+        var recordsToInsert = new List<RecordEntity>();
+        for (var i = 0; i < nb; i++)
+        {
+            recordsToInsert.Add(new RecordEntity(member.Id, category, "For reasons unknown to History."));
+        }
+
+        await Repository.InsertManyAsync(recordsToInsert);
+    }
+
     private static async Task FormatRecordList(CommandContext context,
         IReadOnlyCollection<RecordEntity> records,
         int limit,

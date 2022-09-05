@@ -93,6 +93,8 @@ public class CounterService : BaseCommandModule
         record.Score += nb;
 
         await CounterRepository.SaveAsync(record);
+        await HistoryService.AddGhostRecords(member, counterCategory, nb);
+        
         var formatted = await record.ToString(Cache.GetAsync);
         await context.RespondAsync($"{formatted} (from {previous})");
 
