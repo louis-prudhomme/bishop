@@ -103,6 +103,45 @@ public class RecordService : BaseCommandModule
     }
 
     [Command("consult")]
+    [Aliases("s")]
+    [Description("To see the history of a @member")]
+    private async Task Since(CommandContext context,
+        [Description("@User to know the progression of")]
+        DiscordUser member,
+        [Description("Category to know the history of")]
+        CounterCategory counterCategory,
+        [Description("Date from which compute progression")]
+        DateTime since
+    )
+    {
+        var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
+        var total = Convert.ToDouble(records.Count);
+        var recordsSince = Convert.ToDouble(records.Select(record => record.RecordedAt >= since).Count());
+        
+        if (total == 0)
+        { 
+            await context.RespondAsync($"No progression to measure on nothing, cunt.");
+            return;
+        }
+
+        var ratio = recordsSince / total;
+        switch (ratio)  
+        {
+            case 0:
+                await context.RespondAsync($"There's no progression for you in {counterCategory.ToString().ToLower()} since {DateHelper.FromDateTimeToStringDate(since)}. How sad...");
+                return;
+            case > 0.1:
+                await context.RespondAsync(
+                    $"You're on fire, {member.Mention}'s ! {recordsSince} points in {counterCategory.ToString().ToLower()} since {DateHelper.FromDateTimeToStringDate(since)}");
+                return;
+            default:
+                await context.RespondAsync(
+                    $"{member.Mention} gained {recordsSince} in {counterCategory.ToString().ToLower()} points since {DateHelper.FromDateTimeToStringDate(since)}");
+                return;
+        }
+    }
+
+    [Command("consult")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordUser member,
