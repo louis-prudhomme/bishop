@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter.Aliases;
@@ -46,7 +47,7 @@ public class CounterService : BaseCommandModule
 
     [Command("score")]
     public async Task Score(CommandContext context,
-        [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
+        [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
         CounterCategory counterCategory)
     {
         var scores = await CounterRepository.FindByCategory(counterCategory);
@@ -67,7 +68,7 @@ public class CounterService : BaseCommandModule
     [Command("score")]
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member,
-        [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
+        [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
         CounterCategory counterCategory)
     {
         var score = await CounterRepository.FindOneByUserAndCategory(member.Id, counterCategory)
@@ -80,7 +81,7 @@ public class CounterService : BaseCommandModule
     public async Task Score(CommandContext context,
         [Description("User to add some score to")]
         DiscordMember member,
-        [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
+        [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
         CounterCategory counterCategory,
         [Description("To increment by")] long nb)
     {
@@ -94,6 +95,10 @@ public class CounterService : BaseCommandModule
         await CounterRepository.SaveAsync(record);
         var formatted = await record.ToString(Cache.GetAsync);
         await context.RespondAsync($"{formatted} (from {previous})");
+
+        var milestone = GetNextMilestone(previous);
+        if (record.Score >= milestone)
+            await context.RespondAsync($"A new milestone has been broken through: {milestone}! 🎉");
     }
 
     [Command("score")]
@@ -108,5 +113,16 @@ public class CounterService : BaseCommandModule
         await Task.WhenAll(
             Score(context, member, counterCategory, 1),
             HistoryService.Add(context, member, counterCategory, motive));
+    }
+
+    private static long GetNextMilestone(long current)
+    {
+        return current switch
+        {
+            < 10 => 10,
+            < 50 => 50,
+            < 100 => 100,
+            _ => (current / 100 + 1) * 100
+        };
     }
 }
