@@ -1,14 +1,12 @@
-name: .NET
+name: Bishop Deploy
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  merge:
+    branches:
+    - 'main'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -23,3 +21,5 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Decrypt
+      run ./transcrypt -c aes-256-cbc -p '${{ secrets.TranscryptKey }}'
