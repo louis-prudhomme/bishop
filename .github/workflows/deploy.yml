@@ -22,4 +22,4 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Decrypt
-      run ./transcrypt -c aes-256-cbc -p '${{ secrets.TranscryptKey }}'
+      run: ./transcrypt -c aes-256-cbc -p '${{ secrets.TranscryptKey }}'
