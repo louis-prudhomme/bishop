@@ -5,8 +5,8 @@ WORKDIR /app
 # Copy csproj and restore as distinct layers
 COPY . ./
 RUN dotnet restore "Bishop.csproj"
-RUN dotnet publish -c Release -o out --runtime linux-x64 --self-contained
-    
+RUN dotnet publish -c Release -o out --runtime linux-x64 --self-contained true
+   
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
