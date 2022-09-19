@@ -1,15 +1,27 @@
-name: Bishop Deploy
+name: Midnight
+
+concurrency:
+  group: bishop-production
+  cancel-in-progress: true
 
 on:
-  merge:
-    branches:
-    - 'main'
+  pull_request:
+    branches: 
+      - main
+    types: [closed]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged }}
+    runs-on: self-hosted
 
     steps:
+    - name: Shlag's Clean
+      run: |
+        ls -la ./
+        rm -rf ./* || true
+        rm -rf ./.??* || true
+        ls -la ./
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
@@ -22,4 +34,8 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Decrypt
-      run: ./transcrypt -c aes-256-cbc -p '${{ secrets.TranscryptKey }}'
+      run: ./.transcrypt/transcrypt -c aes-256-cbc -p '${{ secrets.TranscryptKey }}' -y
+    - name: Build Image
+      run: docker-compose build
+    - name: Mount Image
+      run: docker-compose up -d
