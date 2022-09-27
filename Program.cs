@@ -71,6 +71,7 @@ internal static class Program
             typeof(SelCounter),
             typeof(WindCounter),
             typeof(RassCounter),
+            typeof(RacletteCounter),
             typeof(CounterService),
             typeof(RecordService),
             typeof(CardGameService),
