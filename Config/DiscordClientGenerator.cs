@@ -1,16 +1,13 @@
 using System;
-using System.Reflection;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
 using Bishop.Commands.History;
 using Bishop.Commands.Meter;
 using Bishop.Commands.Weather;
 using Bishop.Config.Converters;
-using Bishop.Helper.Grive;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
-using log4net;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bishop.Config;
@@ -44,7 +41,6 @@ public class DiscordClientGenerator
         _commands.RegisterConverter(new MeterKeysConverter());
         _commands.RegisterConverter(new WeatherMetricConverter());
     }
-
 
     public DiscordClient Client { get; }
     public string Sigil => string.Join(" ", _sigil);
