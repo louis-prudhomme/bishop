@@ -15,7 +15,7 @@ public class RecordEntity : DbEntity
         Motive = null!;
     }
 
-    public RecordEntity(ulong discordMemberId, CounterCategory category, string motive)
+    public RecordEntity(ulong discordMemberId, CounterCategory category, string? motive)
     {
         RecordedAt = DateTime.Now;
         Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
@@ -28,14 +28,17 @@ public class RecordEntity : DbEntity
     public ulong UserId { get; set; }
     public CounterCategory Category { get; set; }
     public DateTime RecordedAt { get; set; }
-    public string Motive { get; set; }
+    public string? Motive { get; set; }
     public long Timestamp { get; set; }
 
-
+    // TODO: better decoupling of formatting
     public string ToString(bool shouldIncludeCategory = false)
     {
+        var reason = Motive == null
+            ? "*For reasons unknown to History*"
+            : $"*« {Motive} »*";
         return shouldIncludeCategory
-            ? $"*« {Motive} »* – {DateHelper.FromDateTimeToStringDate(RecordedAt)} as {Category}"
-            : $"*« {Motive} »* – {DateHelper.FromDateTimeToStringDate(RecordedAt)}";
+            ? $"{reason} – {DateHelper.FromDateTimeToStringDate(RecordedAt)} in **{Category}**"
+            : $"{reason} – {DateHelper.FromDateTimeToStringDate(RecordedAt)}";
     }
 }

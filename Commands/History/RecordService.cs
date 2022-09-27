@@ -29,7 +29,9 @@ public class RecordService : BaseCommandModule
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
     {
-        var records = (await Repository.FindAllAsync()).ToList();
+        var records = (await Repository.FindAllAsync())
+            .Where(record => record.Motive != null)
+            .ToList();
 
         if (!records.Any())
         {
@@ -48,7 +50,10 @@ public class RecordService : BaseCommandModule
     [Description("Returns a @member's random record")]
     public async Task ConsultShort(CommandContext context, DiscordMember member)
     {
-        var records = await Repository.FindByUser(member.Id);
+        var records = (await Repository.FindByUser(member.Id))
+            .Where(record => record.Motive != null)
+            .ToList();
+        
         if (!records.Any())
         {
             await context.RespondAsync("No history recorded.");
@@ -120,7 +125,7 @@ public class RecordService : BaseCommandModule
         
         if (total == 0)
         { 
-            await context.RespondAsync($"No progression to measure on nothing, cunt.");
+            await context.RespondAsync("No progression to measure on nothing, cunt.");
             return;
         }
 
@@ -180,7 +185,7 @@ public class RecordService : BaseCommandModule
         var recordsToInsert = new List<RecordEntity>();
         for (var i = 0; i < nb; i++)
         {
-            recordsToInsert.Add(new RecordEntity(member.Id, category, "For reasons unknown to History."));
+            recordsToInsert.Add(new RecordEntity(member.Id, category, null));
         }
 
         await Repository.InsertManyAsync(recordsToInsert);
