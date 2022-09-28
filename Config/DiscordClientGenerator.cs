@@ -71,10 +71,6 @@ public class DiscordClientGenerator
         {
             Cache = nestedCache
         };
-        var grive = new Grive
-        {
-            Service = null!
-        };
 
         return new ServiceCollection()
             .AddSingleton(nestedRecordsService)
@@ -82,7 +78,6 @@ public class DiscordClientGenerator
             .AddSingleton(nestedCache)
             .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(weatherService)
-            .AddSingleton(grive)
             .AddSingleton(scoreFormatter)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
