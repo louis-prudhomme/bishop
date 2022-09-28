@@ -37,10 +37,11 @@ public class CounterService : BaseCommandModule
             await context.RespondAsync($"No scores for user {member.Username}");
         else
         {
-            var entities = await Task.WhenAll(scores
-                .Select(group => ScoreFormatter.Format(member.Id, group.Key, group.Value)));
+            var lines = scores
+                .Select(group => ScoreFormatter.Format(member, group.Key, group.Value))
+                .JoinWithNewlines();
 
-            await context.RespondAsync(entities.JoinWithNewlines());
+            await context.RespondAsync(lines);
         }
     }
 
@@ -73,7 +74,7 @@ public class CounterService : BaseCommandModule
     {
         var score = await RecordRepository.CountByUserAndCategory(member.Id, counterCategory);
 
-        await context.RespondAsync(await ScoreFormatter.Format(member.Id, counterCategory, score));
+        await context.RespondAsync(ScoreFormatter.Format(member, counterCategory, score));
     }
 
     [Command("score")]
@@ -89,7 +90,7 @@ public class CounterService : BaseCommandModule
 
         await HistoryService.AddGhostRecords(member, counterCategory, nb);
 
-        var formatted = await ScoreFormatter.Format(member.Id, counterCategory, previous + nb);
+        var formatted = ScoreFormatter.Format(member, counterCategory, previous + nb);
         await context.RespondAsync($"{formatted} (from {previous})");
 
         var milestone = GetNextMilestone(previous);
@@ -106,9 +107,7 @@ public class CounterService : BaseCommandModule
         [RemainingText] [Description("Context for the point(s) addition")]
         string motive)
     {
-        await Task.WhenAll(
-            Score(context, member, counterCategory, 1),
-            HistoryService.Add(context, member, counterCategory, motive));
+        await HistoryService.Add(context, member, counterCategory, motive);
     }
 
     private static long GetNextMilestone(long current)

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Bishop.Config;
+using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Meter;
 
@@ -11,7 +12,13 @@ public class ScoreFormatter
     public async Task<string> Format(CounterEntity entity, int? rank = null) =>
         await Format(entity.UserId, entity.Category, entity.Score, rank);
 
-    public async Task<string> Format(ulong userId, CounterCategory category, long score, int? rank = null)
+    public async Task<string> Format(ulong userId, CounterCategory category, long score, int? rank = null) =>
+        Format(await Cache.GetAsync(userId), category, score, rank);
+
+    public string Format(DiscordMember member, CounterCategory category, long score, int? rank = null) =>
+         Format(member.Username, category, score, rank);
+
+    public string Format(string username, CounterCategory category, long score, int? rank = null)
     {
         var displayedRank = rank switch
         {
@@ -21,8 +28,7 @@ public class ScoreFormatter
             null => string.Empty,
             _ => "⠀ ⠀"
         };
-
-        var username = await Cache.GetAsync(userId);
+        
         return $"{displayedRank}{username}’s {category} ⇒ {score}";
     }
 }

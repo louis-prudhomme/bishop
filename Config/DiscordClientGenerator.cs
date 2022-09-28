@@ -48,6 +48,10 @@ public class DiscordClientGenerator
     private IServiceCollection AssembleServiceCollection()
     {
         var nestedCache = new UserNameCache();
+        var nestedScoreFormatter = new ScoreFormatter
+        {
+            Cache = nestedCache
+        };
         var nestedRecordsService = new RecordService
         {
             Cache = nestedCache,
@@ -57,19 +61,16 @@ public class DiscordClientGenerator
         var nestedCounterService = new CounterService
         {
             RecordRepository = new RecordRepository(),
+            ScoreFormatter = nestedScoreFormatter,
             HistoryService = nestedRecordsService
         };
         var nestedUserNameCacheService = new UserNameCacheService
         {
             Cache = nestedCache
         };
-        var weatherService = new WeatherService
+        var nestedWeatherService = new WeatherService
         {
             Accessor = new WeatherAccessor()
-        };
-        var scoreFormatter = new ScoreFormatter
-        {
-            Cache = nestedCache
         };
 
         return new ServiceCollection()
@@ -77,8 +78,8 @@ public class DiscordClientGenerator
             .AddSingleton(nestedCounterService)
             .AddSingleton(nestedCache)
             .AddSingleton(nestedUserNameCacheService)
-            .AddSingleton(weatherService)
-            .AddSingleton(scoreFormatter)
+            .AddSingleton(nestedWeatherService)
+            .AddSingleton(nestedScoreFormatter)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>()
