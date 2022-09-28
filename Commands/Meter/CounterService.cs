@@ -19,9 +19,10 @@ namespace Bishop.Commands.Meter;
 public class CounterService : BaseCommandModule
 {
     public ScoreFormatter ScoreFormatter { private get; set; } = new();
-    public CounterRepository CounterRepository { private get; set; } = new();
+    public RecordRepository RecordRepository { private get; set; } = new();
     public RecordService HistoryService { private get; set; } = null!;
 
+    // TODO give rank of user for each metric
     [Command("score")]
     [Description(
         "Allows interaction with @users’ scores. The scores can be seen by key or by @user, " +
@@ -30,14 +31,14 @@ public class CounterService : BaseCommandModule
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member)
     {
-        var scores = await CounterRepository.FindByUser(member.Id);
+        var scores = await RecordRepository.CountByUserGroupByCategory(member.Id);
 
         if (!scores.Any())
             await context.RespondAsync($"No scores for user {member.Username}");
         else
         {
             var entities = await Task.WhenAll(scores
-                .Select((entity, i) => ScoreFormatter.Format(entity, i)));
+                .Select(group => ScoreFormatter.Format(member.Id, group.Key, group.Value)));
 
             await context.RespondAsync(entities.JoinWithNewlines());
         }
@@ -48,16 +49,17 @@ public class CounterService : BaseCommandModule
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
         CounterCategory counterCategory)
     {
-        var scores = await CounterRepository.FindByCategory(counterCategory);
+        var scores = await RecordRepository
+            .CountByCategoryGroupByUser(counterCategory);
 
         if (!scores.Any())
-        {
             await context.RespondAsync($"No scores for category {counterCategory}");
-        }
         else
         {
             var entities = await Task.WhenAll(scores
-                .Select((entity, i) => ScoreFormatter.Format(entity, i)));
+                .Select(pair => pair)
+                .OrderBy(pair => pair.Value)
+                .Select((pair, i) => ScoreFormatter.Format(pair.Key, counterCategory, pair.Value, i)));
 
             await context.RespondAsync(entities.JoinWithNewlines());
         }
@@ -69,8 +71,7 @@ public class CounterService : BaseCommandModule
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
         CounterCategory counterCategory)
     {
-        var score = await CounterRepository.FindOneByUserAndCategory(member.Id, counterCategory)
-                    ?? new CounterEntity(member.Id, counterCategory);
+        var score = await RecordRepository.CountByUserAndCategory(member.Id, counterCategory);
 
         await context.RespondAsync(await ScoreFormatter.Format(member.Id, counterCategory, score));
     }
@@ -83,21 +84,16 @@ public class CounterService : BaseCommandModule
         CounterCategory counterCategory,
         [Description("To increment by")] long nb)
     {
-        var record = await CounterRepository
-                         .FindOneByUserAndCategory(member.Id, counterCategory)
-                     ?? new CounterEntity(member.Id, counterCategory);
+        var previous = await RecordRepository
+            .CountByUserAndCategory(member.Id, counterCategory);
 
-        var previous = record.Score;
-        record.Score += nb;
-
-        await CounterRepository.SaveAsync(record);
         await HistoryService.AddGhostRecords(member, counterCategory, nb);
 
-        var formatted = await ScoreFormatter.Format(record);
+        var formatted = await ScoreFormatter.Format(member.Id, counterCategory, previous + nb);
         await context.RespondAsync($"{formatted} (from {previous})");
 
         var milestone = GetNextMilestone(previous);
-        if (record.Score >= milestone)
+        if (previous + nb >= milestone)
             await context.RespondAsync($"A new milestone has been broken through: {milestone}! 🎉");
     }
 

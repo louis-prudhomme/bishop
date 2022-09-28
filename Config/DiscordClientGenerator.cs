@@ -56,7 +56,7 @@ public class DiscordClientGenerator
         };
         var nestedCounterService = new CounterService
         {
-            CounterRepository = new CounterRepository(),
+            RecordRepository = new RecordRepository(),
             HistoryService = nestedRecordsService
         };
         var nestedUserNameCacheService = new UserNameCacheService
@@ -67,7 +67,7 @@ public class DiscordClientGenerator
         {
             Accessor = new WeatherAccessor()
         };
-        var scoreFormatter = new ScoreFormatter()
+        var scoreFormatter = new ScoreFormatter
         {
             Cache = nestedCache
         };

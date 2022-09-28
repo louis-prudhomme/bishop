@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Meter;
 using Bishop.Helper.Database;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace Bishop.Commands.History;
 
@@ -12,6 +14,30 @@ public class RecordRepository : Repository<RecordEntity>
 
     public RecordRepository() : base(CollectionName)
     {
+    }
+
+    public async Task<long> CountByUserAndCategory(ulong userId, CounterCategory category)
+    {
+        return await Collection.CountDocumentsAsync(
+            GetFilterByUserAndCategory(userId, category));
+    }
+
+    public async Task<Dictionary<ulong, long>> CountByCategoryGroupByUser(CounterCategory category)
+    {
+        return Collection.AsQueryable()
+            .Where(entity => entity.Category == category)
+            .GroupBy(entity => entity.UserId)
+            .ToDictionary(group => group.Key,
+                group => group.LongCount());
+    }
+
+    public async Task<Dictionary<CounterCategory, long>> CountByUserGroupByCategory(ulong userId)
+    {
+        return Collection.AsQueryable()
+            .Where(entity => entity.UserId == userId)
+            .GroupBy(entity => entity.Category)
+            .ToDictionary(group => group.Key,
+                group => group.LongCount());
     }
 
     public async Task<List<RecordEntity>> FindByUserAndCategory(ulong userId, CounterCategory category)
@@ -47,7 +73,8 @@ public class RecordRepository : Repository<RecordEntity>
     /// <param name="userId">Username to look for.</param>
     /// <param name="counterCategory">Category to look for.</param>
     /// <returns>A Mongo filter.</returns>
-    private FilterDefinition<RecordEntity> GetFilterByUserAndCategory(ulong userId, CounterCategory counterCategory)
+    private static FilterDefinition<RecordEntity> GetFilterByUserAndCategory(ulong userId,
+        CounterCategory counterCategory)
     {
         return Builders<RecordEntity>
             .Filter.And(
@@ -60,7 +87,7 @@ public class RecordRepository : Repository<RecordEntity>
     /// </summary>
     /// <param name="userId">Username to look for.</param>
     /// <returns>A Mongo filter.</returns>
-    private FilterDefinition<RecordEntity> GetFilterByUser(ulong userId)
+    private static FilterDefinition<RecordEntity> GetFilterByUser(ulong userId)
     {
         return Builders<RecordEntity>.Filter.Eq("UserId", userId);
     }
@@ -70,7 +97,7 @@ public class RecordRepository : Repository<RecordEntity>
     /// </summary>
     /// <param name="category">Category to look for.</param>
     /// <returns>A Mongo filter.</returns>
-    private FilterDefinition<RecordEntity> GetFilterByCategory(CounterCategory category)
+    private static FilterDefinition<RecordEntity> GetFilterByCategory(CounterCategory category)
     {
         return Builders<RecordEntity>.Filter.Eq("Category", category);
     }
@@ -80,7 +107,7 @@ public class RecordRepository : Repository<RecordEntity>
     ///     Creates and returns a Mongo sorting option (by timestamp, ascending)
     /// </summary>
     /// <returns>A Mongo sorting option.</returns>
-    private FindOptions<RecordEntity, RecordEntity> GetOrderByTimestamp()
+    private static FindOptions<RecordEntity, RecordEntity> GetOrderByTimestamp()
     {
         return new FindOptions<RecordEntity, RecordEntity>
         {
