@@ -26,23 +26,4 @@ public class CounterEntity : DbEntity
     public CounterCategory Category { get; set; }
     public long Score { get; set; }
 
-    public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper)
-    {
-        return await ToString(idToNameMapper, null);
-    }
-
-    public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper, int? rank)
-    {
-        var displayedRank = rank switch
-        {
-            0 => "🥇 ",
-            1 => "🥈 ",
-            2 => "🥉 ",
-            null => "",
-            _ => "⠀ ⠀"
-        };
-
-        var username = await idToNameMapper(UserId);
-        return $"{displayedRank}{username}’s {Category} ⇒ {Score}";
-    }
 }

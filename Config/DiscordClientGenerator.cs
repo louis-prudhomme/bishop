@@ -57,7 +57,6 @@ public class DiscordClientGenerator
         var nestedCounterService = new CounterService
         {
             CounterRepository = new CounterRepository(),
-            Cache = nestedCache,
             HistoryService = nestedRecordsService
         };
         var nestedUserNameCacheService = new UserNameCacheService
@@ -68,7 +67,10 @@ public class DiscordClientGenerator
         {
             Accessor = new WeatherAccessor()
         };
-        //var credentialsService = new GriveCredentialsService();
+        var scoreFormatter = new ScoreFormatter()
+        {
+            Cache = nestedCache
+        };
         var grive = new Grive
         {
             Service = null!
@@ -81,6 +83,7 @@ public class DiscordClientGenerator
             .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(weatherService)
             .AddSingleton(grive)
+            .AddSingleton(scoreFormatter)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>()

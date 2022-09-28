@@ -18,8 +18,8 @@ namespace Bishop.Commands.Meter;
 /// </summary>
 public class CounterService : BaseCommandModule
 {
+    public ScoreFormatter ScoreFormatter { private get; set; } = new();
     public CounterRepository CounterRepository { private get; set; } = new();
-    public UserNameCache Cache { private get; set; } = null!;
     public RecordService HistoryService { private get; set; } = null!;
 
     [Command("score")]
@@ -33,13 +33,11 @@ public class CounterService : BaseCommandModule
         var scores = await CounterRepository.FindByUser(member.Id);
 
         if (!scores.Any())
-        {
             await context.RespondAsync($"No scores for user {member.Username}");
-        }
         else
         {
             var entities = await Task.WhenAll(scores
-                .Select((entity, i) => entity.ToString(Cache.GetAsync, i)));
+                .Select((entity, i) => ScoreFormatter.Format(entity, i)));
 
             await context.RespondAsync(entities.JoinWithNewlines());
         }
@@ -59,7 +57,7 @@ public class CounterService : BaseCommandModule
         else
         {
             var entities = await Task.WhenAll(scores
-                .Select((entity, i) => entity.ToString(Cache.GetAsync, i)));
+                .Select((entity, i) => ScoreFormatter.Format(entity, i)));
 
             await context.RespondAsync(entities.JoinWithNewlines());
         }
@@ -74,7 +72,7 @@ public class CounterService : BaseCommandModule
         var score = await CounterRepository.FindOneByUserAndCategory(member.Id, counterCategory)
                     ?? new CounterEntity(member.Id, counterCategory);
 
-        await context.RespondAsync(await score.ToString(Cache.GetAsync));
+        await context.RespondAsync(await ScoreFormatter.Format(member.Id, counterCategory, score));
     }
 
     [Command("score")]
@@ -94,8 +92,8 @@ public class CounterService : BaseCommandModule
 
         await CounterRepository.SaveAsync(record);
         await HistoryService.AddGhostRecords(member, counterCategory, nb);
-        
-        var formatted = await record.ToString(Cache.GetAsync);
+
+        var formatted = await ScoreFormatter.Format(record);
         await context.RespondAsync($"{formatted} (from {previous})");
 
         var milestone = GetNextMilestone(previous);
