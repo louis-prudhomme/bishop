@@ -81,7 +81,6 @@ public class DiscordClientGenerator
             .AddSingleton(nestedWeatherService)
             .AddSingleton(nestedScoreFormatter)
             .AddSingleton<RecordRepository>()
-            .AddSingleton<CounterRepository>()
             .AddSingleton<CardGameRepository>()
             .AddSingleton<HoroscopeRepository>();
     }
