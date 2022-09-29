@@ -4,6 +4,7 @@ using Bishop.Commands.Dump;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Presenter;
 using Bishop.Commands.Weather;
+using Bishop.Commands.Weather.Service;
 using Bishop.Config.Converters;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;

@@ -1,4 +1,6 @@
-﻿namespace Bishop.Commands.Weather;
+﻿using Bishop.Commands.Weather.Domain;
+
+namespace Bishop.Commands.Weather.Service;
 
 public class WeatherAdapter
 {

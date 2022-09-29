@@ -1,4 +1,4 @@
-﻿namespace Bishop.Commands.Weather;
+﻿namespace Bishop.Commands.Weather.Domain;
 
 public enum WeatherMetric
 {

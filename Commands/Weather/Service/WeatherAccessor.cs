@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bishop.Commands.Weather.Domain;
 using RestSharp;
 
-namespace Bishop.Commands.Weather;
+namespace Bishop.Commands.Weather.Service;
 
 public class WeatherAccessor
 {

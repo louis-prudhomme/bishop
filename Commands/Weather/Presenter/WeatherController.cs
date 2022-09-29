@@ -4,11 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Bishop.Commands.Weather.Domain;
+using Bishop.Commands.Weather.Service;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 
-namespace Bishop.Commands.Weather;
+namespace Bishop.Commands.Weather.Presenter;
 
 public class WeatherController : BaseCommandModule
 {

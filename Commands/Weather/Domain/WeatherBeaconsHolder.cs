@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bishop.Helper;
 
-namespace Bishop.Commands.Weather;
+namespace Bishop.Commands.Weather.Domain;
 
 public class WeatherBeaconsHolder
 {

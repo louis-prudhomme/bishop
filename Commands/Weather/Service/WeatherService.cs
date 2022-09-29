@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bishop.Commands.Weather.Domain;
 using Bishop.Helper;
 
-namespace Bishop.Commands.Weather;
+namespace Bishop.Commands.Weather.Service;
 
 public class WeatherService
 {
