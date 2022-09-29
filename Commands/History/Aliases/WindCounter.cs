@@ -7,7 +7,7 @@ namespace Bishop.Commands.History.Aliases;
 
 public class WindCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; } = null!;
+    public RecordService Service { private get; set; } = null!;
 
     [Command("wind")]
     [Description("Adds a provided value to @someone’s wind score")]

@@ -9,15 +9,14 @@ using DSharpPlus.Entities;
 namespace Bishop.Commands.History;
 
 /// <summary>
-///     The <c>Counter</c> class provides a set of commands to keep trace of user's deeds.
+///     The <c>Counter</c>-part of the <c>RecordService</c> class provides a set of commands to keep trace of user's deeds.
 ///     This file contains all the general and generic commands.
 ///     Classes specific to each category exist (ex: <see cref="SelCounter" />).
 /// </summary>
-public class CounterService : BaseCommandModule
+public partial class RecordService : BaseCommandModule
 {
     public ScoreFormatter ScoreFormatter { private get; set; } = new();
     public RecordRepository RecordRepository { private get; set; } = new();
-    public RecordService HistoryService { private get; set; } = null!;
 
     // TODO give rank of user for each metric
     [Command("score")]
@@ -90,7 +89,7 @@ public class CounterService : BaseCommandModule
         var previous = await RecordRepository
             .CountByUserAndCategory(member.Id, counterCategory);
 
-        await HistoryService.AddGhostRecords(member, counterCategory, nb);
+        await AddGhostRecords(member, counterCategory, nb);
 
         var formatted = ScoreFormatter.Format(member, counterCategory, previous + nb);
         await context.RespondAsync($"{formatted} (from {previous})");
@@ -109,7 +108,7 @@ public class CounterService : BaseCommandModule
         [RemainingText] [Description("Context for the point(s) addition")]
         string motive)
     {
-        await HistoryService.Add(context, member, counterCategory, motive);
+        await Add(context, member, counterCategory, motive);
     }
 
     private static long GetNextMilestone(long current)

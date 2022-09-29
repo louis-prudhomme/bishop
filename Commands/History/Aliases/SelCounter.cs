@@ -7,7 +7,7 @@ namespace Bishop.Commands.History.Aliases;
 
 public class SelCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; } = null!;
+    public RecordService Service { private get; set; } = null!;
 
     [Command("sel")]
     [Description("Adds a provided value to @someone’s sel score")]

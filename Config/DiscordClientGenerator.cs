@@ -55,13 +55,8 @@ public class DiscordClientGenerator
         {
             Cache = nestedCache,
             Random = new Random(),
-            Repository = new RecordRepository()
-        };
-        var nestedCounterService = new CounterService
-        {
-            RecordRepository = new RecordRepository(),
+            Repository = new RecordRepository(),
             ScoreFormatter = nestedScoreFormatter,
-            HistoryService = nestedRecordsService
         };
         var nestedUserNameCacheService = new UserNameCacheService
         {
@@ -74,7 +69,6 @@ public class DiscordClientGenerator
 
         return new ServiceCollection()
             .AddSingleton(nestedRecordsService)
-            .AddSingleton(nestedCounterService)
             .AddSingleton(nestedCache)
             .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(nestedWeatherService)

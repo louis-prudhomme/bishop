@@ -16,7 +16,7 @@ namespace Bishop.Commands.History;
 [Group("history")]
 [Aliases("hy")]
 [Description("History-related commands")]
-public class RecordService : BaseCommandModule
+public partial class RecordService : BaseCommandModule
 {
     private const int DefaultLimit = 10;
     public Random Random { private get; set; } = null!;

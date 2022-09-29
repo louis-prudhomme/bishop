@@ -7,7 +7,7 @@ namespace Bishop.Commands.History.Aliases;
 
 public class BeaufCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; } = null!;
+    public RecordService Service { private get; set; } = null!;
 
     [Command("beauf")]
     [Description("Adds a provided value to @someone’s beauf score")]

@@ -7,7 +7,7 @@ namespace Bishop.Commands.History.Aliases;
 
 public class BdmCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; } = null!;
+    public RecordService Service { private get; set; } = null!;
 
     [Command("bdm")]
     [Description("Adds a provided value to @someone’s bdm score")]

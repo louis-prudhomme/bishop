@@ -7,7 +7,7 @@ namespace Bishop.Commands.History.Aliases;
 
 public class MalfoyCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; } = null!;
+    public RecordService Service { private get; set; } = null!;
 
     [Command("malfoy")]
     [Description("Adds a provided value to @someone’s malfoy score")]

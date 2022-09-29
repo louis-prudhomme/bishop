@@ -7,7 +7,7 @@ namespace Bishop.Commands.History.Aliases;
 
 public class SauceCounter : BaseCommandModule
 {
-    public CounterService Service { private get; set; } = null!;
+    public RecordService Service { private get; set; } = null!;
 
     [Command("sauce")]
     [Description("Adds a provided value to @someone’s sauce score")]
