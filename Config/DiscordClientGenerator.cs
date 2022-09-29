@@ -2,7 +2,6 @@ using System;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
 using Bishop.Commands.History;
-using Bishop.Commands.Meter;
 using Bishop.Commands.Weather;
 using Bishop.Config.Converters;
 using DSharpPlus;

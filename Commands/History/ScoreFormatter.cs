@@ -1,9 +1,8 @@
-using System;
 using System.Threading.Tasks;
 using Bishop.Config;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Meter;
+namespace Bishop.Commands.History;
 
 public class ScoreFormatter
 {

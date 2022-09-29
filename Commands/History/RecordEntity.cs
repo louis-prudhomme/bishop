@@ -1,5 +1,4 @@
 ﻿using System;
-using Bishop.Commands.Meter;
 using Bishop.Helper;
 using Bishop.Helper.Database;
 

@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Bishop.Commands.History;
-using Bishop.Commands.Meter.Aliases;
-using Bishop.Config;
+using Bishop.Commands.History.Aliases;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Meter;
+namespace Bishop.Commands.History;
 
 /// <summary>
 ///     The <c>Counter</c> class provides a set of commands to keep trace of user's deeds.

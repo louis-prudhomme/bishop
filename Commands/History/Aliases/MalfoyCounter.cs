@@ -3,7 +3,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Meter.Aliases;
+namespace Bishop.Commands.History.Aliases;
 
 public class MalfoyCounter : BaseCommandModule
 {

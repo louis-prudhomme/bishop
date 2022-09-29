@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bishop.Commands.Meter;
 using Bishop.Config;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
