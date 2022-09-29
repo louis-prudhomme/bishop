@@ -59,7 +59,7 @@ public class CounterService : BaseCommandModule
         {
             var entities = await Task.WhenAll(scores
                 .Select(pair => pair)
-                .OrderBy(pair => pair.Value)
+                .OrderByDescending(pair => pair.Value)
                 .Select((pair, i) => ScoreFormatter.Format(pair.Key, counterCategory, pair.Value, i)));
 
             await context.RespondAsync(entities.JoinWithNewlines());

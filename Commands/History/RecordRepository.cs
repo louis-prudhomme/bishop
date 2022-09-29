@@ -24,8 +24,8 @@ public class RecordRepository : Repository<RecordEntity>
 
     public async Task<Dictionary<ulong, long>> CountByCategoryGroupByUser(CounterCategory category)
     {
-        return Collection.AsQueryable()
-            .Where(entity => entity.Category == category)
+        return (await Collection.FindAsync(GetFilterByCategory(category)))
+            .ToList()
             .GroupBy(entity => entity.UserId)
             .ToDictionary(group => group.Key,
                 group => group.LongCount());
@@ -33,8 +33,8 @@ public class RecordRepository : Repository<RecordEntity>
 
     public async Task<Dictionary<CounterCategory, long>> CountByUserGroupByCategory(ulong userId)
     {
-        return Collection.AsQueryable()
-            .Where(entity => entity.UserId == userId)
+        return (await Collection.FindAsync(GetFilterByUser(userId)))
+            .ToList()
             .GroupBy(entity => entity.Category)
             .ToDictionary(group => group.Key,
                 group => group.LongCount());
