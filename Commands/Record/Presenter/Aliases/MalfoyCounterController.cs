@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History.Aliases;
+namespace Bishop.Commands.Record.Presenter.Aliases;
 
-public class MalfoyCounter : BaseCommandModule
+public class MalfoyCounterController : BaseCommandModule
 {
-    public RecordService Service { private get; set; } = null!;
+    public Record.Presenter.RecordController Controller { private get; set; } = null!;
 
     [Command("malfoy")]
     [Description("Adds a provided value to @someone’s malfoy score")]
@@ -16,7 +17,7 @@ public class MalfoyCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Malfoy, nb);
+        await Controller.Score(context, member, CounterCategory.Malfoy, nb);
     }
 
     [Command("malfoy")]
@@ -25,14 +26,14 @@ public class MalfoyCounter : BaseCommandModule
         [Description("User to know the malfoy score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CounterCategory.Malfoy);
+        await Controller.Score(context, member, CounterCategory.Malfoy);
     }
 
     [Command("malfoy")]
     [Description("Returns all malfoy scores")]
     public async Task ScoreMalfoy(CommandContext context)
     {
-        await Service.Score(context, CounterCategory.Malfoy);
+        await Controller.Score(context, CounterCategory.Malfoy);
     }
 
     [Command("malfoy")]
@@ -43,6 +44,6 @@ public class MalfoyCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Malfoy, reason);
+        await Controller.Score(context, member, CounterCategory.Malfoy, reason);
     }
 }

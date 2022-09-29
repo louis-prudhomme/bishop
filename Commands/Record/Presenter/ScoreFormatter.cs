@@ -1,8 +1,9 @@
 using System.Threading.Tasks;
+using Bishop.Commands.Record.Model;
 using Bishop.Config;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History;
+namespace Bishop.Commands.Record.Presenter;
 
 public class ScoreFormatter
 {

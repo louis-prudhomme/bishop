@@ -4,8 +4,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
-using Bishop.Commands.History;
-using Bishop.Commands.History.Aliases;
+using Bishop.Commands.Record.Presenter;
+using Bishop.Commands.Record.Presenter.Aliases;
 using Bishop.Commands.Weather;
 using Bishop.Config;
 using Bishop.Helper;
@@ -63,14 +63,14 @@ internal static class Program
             typeof(Quote),
             typeof(Vote),
             typeof(Deleter),
-            typeof(BdmCounter),
-            typeof(BeaufCounter),
-            typeof(SauceCounter),
-            typeof(MalfoyCounter),
-            typeof(SelCounter),
-            typeof(WindCounter),
-            typeof(RassCounter),
-            typeof(RecordService),
+            typeof(BdmCounterController),
+            typeof(BeaufCounterController),
+            typeof(SauceCounterController),
+            typeof(MalfoyCounterController),
+            typeof(SelCounterController),
+            typeof(WindCounterController),
+            typeof(RassCounterController),
+            typeof(RecordController),
             typeof(CardGameService),
             typeof(WeatherController),
             typeof(UserNameCacheService),

@@ -1,7 +1,8 @@
 using System;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
-using Bishop.Commands.History;
+using Bishop.Commands.Record.Domain;
+using Bishop.Commands.Record.Presenter;
 using Bishop.Commands.Weather;
 using Bishop.Config.Converters;
 using DSharpPlus;
@@ -51,7 +52,7 @@ public class DiscordClientGenerator
         {
             Cache = nestedCache
         };
-        var nestedRecordsService = new RecordService
+        var nestedRecordsService = new RecordController
         {
             Cache = nestedCache,
             Random = new Random(),

@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History.Aliases;
+namespace Bishop.Commands.Record.Presenter.Aliases;
 
-public class WindCounter : BaseCommandModule
+public class WindCounterController : BaseCommandModule
 {
-    public RecordService Service { private get; set; } = null!;
+    public Record.Presenter.RecordController Controller { private get; set; } = null!;
 
     [Command("wind")]
     [Description("Adds a provided value to @someone’s wind score")]
@@ -16,7 +17,7 @@ public class WindCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Wind, nb);
+        await Controller.Score(context, member, CounterCategory.Wind, nb);
     }
 
     [Command("rot")]
@@ -26,7 +27,7 @@ public class WindCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Wind, nb);
+        await Controller.Score(context, member, CounterCategory.Wind, nb);
     }
 
     [Command("pet")]
@@ -36,7 +37,7 @@ public class WindCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Wind, nb);
+        await Controller.Score(context, member, CounterCategory.Wind, nb);
     }
 
     [Command("wind")]
@@ -45,14 +46,14 @@ public class WindCounter : BaseCommandModule
         [Description("User to know the wind score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CounterCategory.Wind);
+        await Controller.Score(context, member, CounterCategory.Wind);
     }
 
     [Command("wind")]
     [Description("Returns all wind scores")]
     public async Task ScoreWind(CommandContext context)
     {
-        await Service.Score(context, CounterCategory.Wind);
+        await Controller.Score(context, CounterCategory.Wind);
     }
 
     [Command("rot")]
@@ -77,7 +78,7 @@ public class WindCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Wind, reason);
+        await Controller.Score(context, member, CounterCategory.Wind, reason);
     }
 
     [Command("rot")]
@@ -88,7 +89,7 @@ public class WindCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Wind, "(rot) " + reason);
+        await Controller.Score(context, member, CounterCategory.Wind, "(rot) " + reason);
     }
 
     [Command("pet")]
@@ -99,6 +100,6 @@ public class WindCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Wind, "(pet) " + reason);
+        await Controller.Score(context, member, CounterCategory.Wind, "(pet) " + reason);
     }
 }

@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History.Aliases;
+namespace Bishop.Commands.Record.Presenter.Aliases;
 
-public class SauceCounter : BaseCommandModule
+public class SauceCounterController : BaseCommandModule
 {
-    public RecordService Service { private get; set; } = null!;
+    public Record.Presenter.RecordController Controller { private get; set; } = null!;
 
     [Command("sauce")]
     [Description("Adds a provided value to @someone’s sauce score")]
@@ -16,7 +17,7 @@ public class SauceCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Sauce, nb);
+        await Controller.Score(context, member, CounterCategory.Sauce, nb);
     }
 
     [Command("sauce")]
@@ -25,14 +26,14 @@ public class SauceCounter : BaseCommandModule
         [Description("User to know the sauce score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CounterCategory.Sauce);
+        await Controller.Score(context, member, CounterCategory.Sauce);
     }
 
     [Command("sauce")]
     [Description("Returns all sauce scores")]
     public async Task ScoreSauce(CommandContext context)
     {
-        await Service.Score(context, CounterCategory.Sauce);
+        await Controller.Score(context, CounterCategory.Sauce);
     }
 
     [Command("sauce")]
@@ -43,6 +44,6 @@ public class SauceCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Sauce, reason);
+        await Controller.Score(context, member, CounterCategory.Sauce, reason);
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace Bishop.Commands.History;
+﻿
+namespace Bishop.Commands.Record.Model;
 
 /// <summary>
 ///     Represent every possible category for <see cref="RecordEntity" />.

@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bishop.Commands.Record.Domain;
+using Bishop.Commands.Record.Model;
 using Bishop.Config;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History;
+namespace Bishop.Commands.Record.Presenter;
 
 /// <summary>
 ///     The <c>History</c> class provides a set of commands to keep trace of user's deeds.
@@ -16,7 +18,7 @@ namespace Bishop.Commands.History;
 [Group("history")]
 [Aliases("hy")]
 [Description("History-related commands")]
-public partial class RecordService : BaseCommandModule
+public partial class RecordController : BaseCommandModule
 {
     private const int DefaultLimit = 10;
     public Random Random { private get; set; } = null!;

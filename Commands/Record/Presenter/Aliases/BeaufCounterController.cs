@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History.Aliases;
+namespace Bishop.Commands.Record.Presenter.Aliases;
 
-public class BeaufCounter : BaseCommandModule
+public class BeaufCounterController : BaseCommandModule
 {
-    public RecordService Service { private get; set; } = null!;
+    public Record.Presenter.RecordController Controller { private get; set; } = null!;
 
     [Command("beauf")]
     [Description("Adds a provided value to @someone’s beauf score")]
@@ -16,7 +17,7 @@ public class BeaufCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Beauf, nb);
+        await Controller.Score(context, member, CounterCategory.Beauf, nb);
     }
 
     [Command("beauf")]
@@ -25,14 +26,14 @@ public class BeaufCounter : BaseCommandModule
         [Description("User to know the beauf score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CounterCategory.Beauf);
+        await Controller.Score(context, member, CounterCategory.Beauf);
     }
 
     [Command("beauf")]
     [Description("Returns all beauf scores")]
     public async Task ScoreBeauf(CommandContext context)
     {
-        await Service.Score(context, CounterCategory.Beauf);
+        await Controller.Score(context, CounterCategory.Beauf);
     }
 
     [Command("beauf")]
@@ -43,6 +44,6 @@ public class BeaufCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Beauf, reason);
+        await Controller.Score(context, member, CounterCategory.Beauf, reason);
     }
 }

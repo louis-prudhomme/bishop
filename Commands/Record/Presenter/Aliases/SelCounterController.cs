@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History.Aliases;
+namespace Bishop.Commands.Record.Presenter.Aliases;
 
-public class SelCounter : BaseCommandModule
+public class SelCounterController : BaseCommandModule
 {
-    public RecordService Service { private get; set; } = null!;
+    public Record.Presenter.RecordController Controller { private get; set; } = null!;
 
     [Command("sel")]
     [Description("Adds a provided value to @someone’s sel score")]
@@ -16,7 +17,7 @@ public class SelCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Sel, nb);
+        await Controller.Score(context, member, CounterCategory.Sel, nb);
     }
 
     [Command("sel")]
@@ -25,14 +26,14 @@ public class SelCounter : BaseCommandModule
         [Description("User to know the sel score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CounterCategory.Sel);
+        await Controller.Score(context, member, CounterCategory.Sel);
     }
 
     [Command("sel")]
     [Description("Returns all sel scores")]
     public async Task ScoreSel(CommandContext context)
     {
-        await Service.Score(context, CounterCategory.Sel);
+        await Controller.Score(context, CounterCategory.Sel);
     }
 
     [Command("sel")]
@@ -43,6 +44,6 @@ public class SelCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Sel, reason);
+        await Controller.Score(context, member, CounterCategory.Sel, reason);
     }
 }

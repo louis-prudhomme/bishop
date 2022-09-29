@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History.Aliases;
+namespace Bishop.Commands.Record.Presenter.Aliases;
 
-public class BdmCounter : BaseCommandModule
+public class BdmCounterController : BaseCommandModule
 {
-    public RecordService Service { private get; set; } = null!;
+    public Record.Presenter.RecordController Controller { private get; set; } = null!;
 
     [Command("bdm")]
     [Description("Adds a provided value to @someone’s bdm score")]
@@ -16,7 +17,7 @@ public class BdmCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Bdm, nb);
+        await Controller.Score(context, member, CounterCategory.Bdm, nb);
     }
 
     [Command("bdm")]
@@ -25,14 +26,14 @@ public class BdmCounter : BaseCommandModule
         [Description("User to know the bdm score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CounterCategory.Bdm);
+        await Controller.Score(context, member, CounterCategory.Bdm);
     }
 
     [Command("bdm")]
     [Description("Returns all bdm scores")]
     public async Task ScoreBdm(CommandContext context)
     {
-        await Service.Score(context, CounterCategory.Bdm);
+        await Controller.Score(context, CounterCategory.Bdm);
     }
 
     [Command("bdm")]
@@ -43,6 +44,6 @@ public class BdmCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Bdm, reason);
+        await Controller.Score(context, member, CounterCategory.Bdm, reason);
     }
 }

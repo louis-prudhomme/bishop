@@ -1,19 +1,21 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Bishop.Commands.History.Aliases;
+using Bishop.Commands.Record.Domain;
+using Bishop.Commands.Record.Model;
+using Bishop.Commands.Record.Presenter.Aliases;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History;
+namespace Bishop.Commands.Record.Presenter;
 
 /// <summary>
 ///     The <c>Counter</c>-part of the <c>RecordService</c> class provides a set of commands to keep trace of user's deeds.
 ///     This file contains all the general and generic commands.
-///     Classes specific to each category exist (ex: <see cref="SelCounter" />).
+///     Classes specific to each category exist (ex: <see cref="SelCounterController" />).
 /// </summary>
-public partial class RecordService : BaseCommandModule
+public partial class RecordController : BaseCommandModule
 {
     public ScoreFormatter ScoreFormatter { private get; set; } = new();
     public RecordRepository RecordRepository { private get; set; } = new();

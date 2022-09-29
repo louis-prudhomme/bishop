@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History.Aliases;
+namespace Bishop.Commands.Record.Presenter.Aliases;
 
-public class RassCounter : BaseCommandModule
+public class RassCounterController : BaseCommandModule
 {
-    public RecordService Service { private get; set; } = null!;
+    public Record.Presenter.RecordController Controller { private get; set; } = null!;
 
     [Command("rass")]
     [Description("Adds a provided value to @someone’s rass score")]
@@ -16,7 +17,7 @@ public class RassCounter : BaseCommandModule
         DiscordMember member,
         [Description("To increment by")] long nb)
     {
-        await Service.Score(context, member, CounterCategory.Rass, nb);
+        await Controller.Score(context, member, CounterCategory.Rass, nb);
     }
 
     [Command("rass")]
@@ -25,14 +26,14 @@ public class RassCounter : BaseCommandModule
         [Description("User to know the rass score of")]
         DiscordMember member)
     {
-        await Service.Score(context, member, CounterCategory.Rass);
+        await Controller.Score(context, member, CounterCategory.Rass);
     }
 
     [Command("rass")]
     [Description("Returns all rass scores")]
     public async Task ScoreRass(CommandContext context)
     {
-        await Service.Score(context, CounterCategory.Rass);
+        await Controller.Score(context, CounterCategory.Rass);
     }
 
     [Command("rass")]
@@ -43,6 +44,6 @@ public class RassCounter : BaseCommandModule
         [RemainingText] [Description("Reason for the increment")]
         string reason)
     {
-        await Service.Score(context, member, CounterCategory.Rass, reason);
+        await Controller.Score(context, member, CounterCategory.Rass, reason);
     }
 }
