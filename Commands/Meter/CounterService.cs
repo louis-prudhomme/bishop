@@ -85,6 +85,11 @@ public class CounterService : BaseCommandModule
         CounterCategory counterCategory,
         [Description("To increment by")] long nb)
     {
+        if (nb <= 0)
+        { 
+            await context.RespondAsync("Negative & null increments are not handled yet.");
+            return;
+        }
         var previous = await RecordRepository
             .CountByUserAndCategory(member.Id, counterCategory);
 
