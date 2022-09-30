@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Bishop.Commands.Meter;
+using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
 using DSharpPlus.Entities;

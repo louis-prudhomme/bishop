@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bishop.Commands.Weather;
+namespace Bishop.Commands.Weather.Domain;
 
 public record WeatherDescription(float Level, string Description);
 

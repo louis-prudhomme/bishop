@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bishop.Commands.Meter;
+using Bishop.Commands.Record.Domain;
+using Bishop.Commands.Record.Model;
 using Bishop.Config;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.History;
+namespace Bishop.Commands.Record.Presenter;
 
 /// <summary>
 ///     The <c>History</c> class provides a set of commands to keep trace of user's deeds.
@@ -17,7 +18,7 @@ namespace Bishop.Commands.History;
 [Group("history")]
 [Aliases("hy")]
 [Description("History-related commands")]
-public class RecordService : BaseCommandModule
+public partial class RecordController : BaseCommandModule
 {
     private const int DefaultLimit = 10;
     public Random Random { private get; set; } = null!;
@@ -29,7 +30,9 @@ public class RecordService : BaseCommandModule
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
     {
-        var records = (await Repository.FindAllAsync()).ToList();
+        var records = (await Repository.FindAllAsync())
+            .Where(record => record.Motive != null)
+            .ToList();
 
         if (!records.Any())
         {
@@ -48,7 +51,10 @@ public class RecordService : BaseCommandModule
     [Description("Returns a @member's random record")]
     public async Task ConsultShort(CommandContext context, DiscordMember member)
     {
-        var records = await Repository.FindByUser(member.Id);
+        var records = (await Repository.FindByUser(member.Id))
+            .Where(record => record.Motive != null)
+            .ToList();
+        
         if (!records.Any())
         {
             await context.RespondAsync("No history recorded.");
@@ -120,7 +126,7 @@ public class RecordService : BaseCommandModule
         
         if (total == 0)
         { 
-            await context.RespondAsync($"No progression to measure on nothing, cunt.");
+            await context.RespondAsync("No progression to measure on nothing, cunt.");
             return;
         }
 
@@ -180,7 +186,7 @@ public class RecordService : BaseCommandModule
         var recordsToInsert = new List<RecordEntity>();
         for (var i = 0; i < nb; i++)
         {
-            recordsToInsert.Add(new RecordEntity(member.Id, category, "For reasons unknown to History."));
+            recordsToInsert.Add(new RecordEntity(member.Id, category, null));
         }
 
         await Repository.InsertManyAsync(recordsToInsert);

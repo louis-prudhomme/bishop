@@ -1,7 +1,7 @@
 ﻿using System;
 using Bishop.Helper;
 
-namespace Bishop.Commands.Weather;
+namespace Bishop.Commands.Weather.Domain;
 
 public class WeatherEntity
 {

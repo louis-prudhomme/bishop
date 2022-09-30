@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bishop.Config;
-using Bishop.Helper.Grive;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 
@@ -41,8 +40,10 @@ public class Pigs : BaseCommandModule
 
     private async Task RebuildCache()
     {
+        /*
         _pigtures = await Grive.FetchAllFiles(GriveFolderRegistry.Pigture,
             MimeTypes.Jpeg, MimeTypes.Png);
         _updateAfter = DateTime.Now.Add(CacheLifeExpectancy);
+        */
     }
 }
