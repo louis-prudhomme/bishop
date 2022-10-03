@@ -21,6 +21,15 @@
         <EmbeddedResource Include="Resources\aleds.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
+        <EmbeddedResource Include="Resources\grive\pigtures\pink.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Resources\grive\helluvazbin\red.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Resources\grive\music\sample.ogg">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
         <EmbeddedResource Include="Resources\horoscopes.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
@@ -57,6 +66,9 @@
         <Resource Include="Resources\Slenders.png" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Helper\Grive" />
+      <Folder Include="Resources\grive" />
+        <Content Include="Resources\grive\pigtures\pink.png" />
+        <Content Include="Resources\grive\helluvazbin\red.png" />
+        <Content Include="Resources\grive\music\sample.ogg" />
     </ItemGroup>
 </Project>

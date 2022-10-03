@@ -9,6 +9,7 @@ using Bishop.Commands.Record.Presenter.Aliases;
 using Bishop.Commands.Weather.Presenter;
 using Bishop.Config;
 using Bishop.Helper;
+using Bishop.Helper.Grive;
 using DSharpPlus;
 using log4net;
 using log4net.Config;
@@ -37,6 +38,8 @@ internal static class Program
 
         Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");
+
+        FileWalker.DisplayGriveContent();
 
         MainAsync()
             .GetAwaiter()
