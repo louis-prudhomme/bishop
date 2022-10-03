@@ -75,6 +75,5 @@ internal static class Program
             typeof(CardGameService),
             typeof(WeatherController),
             typeof(UserNameCacheService),
-            typeof(Pigs)
         }.ToArray();
 }
