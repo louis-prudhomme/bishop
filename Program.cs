@@ -39,7 +39,7 @@ internal static class Program
         Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");
 
-        FileWalker.DisplayGriveContent();
+        new GriveWalker().BuildGriveCache();
 
         MainAsync()
             .GetAwaiter()

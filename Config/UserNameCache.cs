@@ -12,7 +12,9 @@ public class UserNameCache
 
     public List<ulong> Keys => new(_idToName.Keys);
 
-    public List<(ulong, string)> Stored => _idToName.Select(pair => (pair.Key, pair.Value)).ToList();
+    public List<(ulong, string)> Stored => _idToName
+        .Select(pair => (pair.Key, pair.Value))
+        .ToList();
 
     public async Task<string> GetAsync(ulong id)
     {
