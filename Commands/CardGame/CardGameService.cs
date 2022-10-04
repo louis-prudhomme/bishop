@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Bishop.Helper;
+using Bishop.Helper.Extensions;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -34,11 +34,13 @@ internal class CardGameService : BaseCommandModule
         }
 
         var formattedCardGames = await Task.WhenAll(cardGames
-            .Take(trueLimit)
-            .Select(Formatter.Format));
+                .Take(trueLimit)
+                .Select(Formatter.Format));
+        var answer = formattedCardGames
+            .Prepend($"The collection currently counts *{cardGames.Count}* card games :")
+            .ToList();
 
-        await DiscordMessageCutter.PaginateAnswer(formattedCardGames.ToList(), context.RespondAsync,
-            $"The collection currently counts *{cardGames.Count}* card games :");
+        await context.RespondAsync(answer);
     }
 
     [Command("add")]
