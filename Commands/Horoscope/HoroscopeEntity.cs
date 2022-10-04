@@ -8,30 +8,30 @@ namespace Bishop.Commands.Horoscope
     {
         public HoroscopeEntity(string baseSign, string horoscope)
         {
-            this.baseSign = baseSign;
-            this.horoscope = horoscope;
-            this.timestamp = DateHelper.FromDateTimeToTimestamp(DateTime.Now);
+            BaseSign = baseSign;
+            Horoscope = horoscope;
+            Timestamp = DateHelper.CurrentEpoch;
         }
 
-        public string baseSign { get; set; }
+        public string BaseSign { get; set; }
 
-        public string horoscope { get; set; }
-        public long timestamp { get; set; }
+        public string? Horoscope { get; set; }
+        public long Timestamp { get; set; }
 
         override
         public string ToString()
         {
-            if (this.horoscope != null)
+            if (Horoscope != null)
             {
-                return "*" + this.baseSign + "*\n" + this.horoscope;
+                return "*" + BaseSign + "*\n" + Horoscope;
             }
             return "shit's empty yo";
         }
 
         public void ReplaceHoroscope(string newHoroscope)
         {
-            this.horoscope = newHoroscope;
-            this.timestamp = DateHelper.FromDateTimeToTimestamp(DateTime.Now);
+            Horoscope = newHoroscope;
+            Timestamp = DateHelper.FromDateTimeToTimestamp(DateTime.Now);
         }
     }
 }
