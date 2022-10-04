@@ -54,7 +54,7 @@ public class DiscordClientGenerator
         UserNameAccessor.FetchUserName = async id => (await Client.GetUserAsync(id)).Username;
         // CACHES
         var nestedGriveCache =
-            new AutoUpdatingKeyBasedCache<GriveDirectory, ImmutableList<string>>(GriveWalker.CacheFor,
+            new AutoUpdatingKeyBasedCache<GriveDirectory, ImmutableList<string>>(GriveWalker.CacheForSeconds,
                 GriveWalker.FetchFilesAsync);
         var nestedWeatherCache =
             new AutoUpdatingKeyBasedCache<string, WeatherEntity>(WeatherAccessor.CacheForSeconds,

@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Bishop.Helper.Grive;
 
-public record GriveCache(ImmutableList<string> Files, long LastFetched);
 
-public class GriveWalker
+public static class GriveWalker
 {
-    //TODO check duration
-    public const long CacheFor = 14400;
-    public IKeyBasedCache<GriveDirectory, ImmutableList<string>> FilesCache { private get; set; } = null!;
+    public const long CacheForSeconds = 14400;
 
     private static readonly string GrivePath = Environment
         .GetEnvironmentVariable("GRIVE_PATH")!;
@@ -27,15 +24,9 @@ public class GriveWalker
         return files.ToImmutableList();
     }
 
-    public static ImmutableList<string> FetchFiles(GriveDirectory directory) =>
+    private static ImmutableList<string> FetchFiles(GriveDirectory directory) =>
         FetchFiles(GriveDirectoryFormatter.FormatToRelative(GrivePath, directory));
 
     public static Task<ImmutableList<string>> FetchFilesAsync(GriveDirectory directory) =>
         Task.FromResult(FetchFiles(directory));
-
-    public void BuildGriveCache()
-    {
-        foreach (var directory in Enum.GetValues<GriveDirectory>())
-            FilesCache.Get(directory);
-    }
 }
