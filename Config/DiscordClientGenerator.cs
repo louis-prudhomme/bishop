@@ -4,6 +4,7 @@ using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Presenter;
+using Bishop.Commands.Weather.Domain;
 using Bishop.Commands.Weather.Service;
 using Bishop.Config.Converters;
 using Bishop.Helper;
@@ -58,6 +59,9 @@ public class DiscordClientGenerator
         var nestedGriveCache =
             new AutoUpdatingKeyBasedCache<GriveDirectory, ImmutableList<string>>(GriveWalker.CacheFor,
                 GriveWalker.FetchFiles);
+        var nestedWeatherCache =
+            new AutoUpdatingKeyBasedCache<string, WeatherEntity>(WeatherAccessor.CacheForSeconds,
+                WeatherAccessor.CurrentSync);
         var nestedRecordsService = new RecordController
         {
             Cache = nestedCache,
@@ -71,13 +75,14 @@ public class DiscordClientGenerator
         };
         var nestedWeatherService = new WeatherService
         {
-            Accessor = new WeatherAccessor()
+            Cache = nestedWeatherCache
         };
 
         return new ServiceCollection()
             .AddSingleton(nestedRecordsService)
             .AddSingleton(nestedCache)
             .AddSingleton<IKeyBasedCache<GriveDirectory, ImmutableList<string>>>(nestedGriveCache)
+            .AddSingleton<IKeyBasedCache<string, WeatherEntity>>(nestedWeatherCache)
             .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(nestedWeatherService)
             .AddSingleton(nestedScoreFormatter)

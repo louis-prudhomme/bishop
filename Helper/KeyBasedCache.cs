@@ -23,7 +23,7 @@ public class ConcurrentKeyBasedCache<TKey, TValue>: IKeyBasedCache<TKey, TValue>
         var cached = new IKeyBasedCache<TKey, TValue>.Cache(value, DateHelper.CurrentEpoch);
         _underlying.AddOrUpdate(key,
             k => cached,
-            (_, cache) => cache);
+            (_, _) => cached);
         return cached;
     }
 }

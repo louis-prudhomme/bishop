@@ -25,7 +25,7 @@ public class WeatherController : BaseCommandModule
         if (string.IsNullOrEmpty(city)) return;
         try
         {
-            var current = await Service.CurrentRatiosByMetrics(city);
+            var current = Service.CurrentRatiosByMetrics(city);
             var weatherForecast = current
                 .Select(tuple => WeatherFormatter
                     .CreateFor(tuple.Key, tuple.Value))
@@ -51,7 +51,7 @@ public class WeatherController : BaseCommandModule
         if (string.IsNullOrEmpty(city)) return;
         try
         {
-            var current = await Service.CurrentRatiosByMetrics(city);
+            var current = Service.CurrentRatiosByMetrics(city);
             await context.RespondAsync(
                 $"__Currently in *{Capital.ToTitleCase(city)}*__ {WeatherFormatter.CreateFor(metric, current[metric]).ToString(true)}");
         }
