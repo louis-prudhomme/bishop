@@ -11,18 +11,19 @@ public class WeatherService
 {
 
     public IKeyBasedCache<string, WeatherEntity> Cache { private get; set; } = null!;
-    
-    public async Task<WeatherEntity> CurrentFor(string city)
+
+    private async Task<WeatherEntity?> CurrentFor(string city)
     {
         var cityKey = city.Trim().ToLower();
 
-        // TODO fix me default!
-        return await Cache.GetValue(cityKey) ?? default!;
+        return await Cache.GetValue(cityKey);
     }
 
     public async Task<Dictionary<WeatherMetric, string>> CurrentRatiosByMetrics(string city)
     {
         var currentWeather = await CurrentFor(city);
+        if (currentWeather == null) return new Dictionary<WeatherMetric, string>();
+        
         return WeatherBeaconsHolder.Types
             .Select(type => (type, WeatherBeaconsHolder.GetTypeBeacon(type)
                 .Ratio(currentWeather.Get(type)) * 100))

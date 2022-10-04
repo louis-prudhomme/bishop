@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Bishop.Helper.Extensions;
 
 namespace Bishop.Helper;
 
@@ -18,17 +19,14 @@ internal class ConcurrentKeyBasedCache<TKey, TValue>: IKeyBasedCache<TKey, TValu
 
     public Task<IKeyBasedCache<TKey, TValue>.Cache> Get(TKey key)
     {
-        // TODO fix default!
         return Task.FromResult(_underlying.GetOrAdd(key, _ =>
-            new IKeyBasedCache<TKey, TValue>.Cache(default!, 0)));
+            new IKeyBasedCache<TKey, TValue>.Cache(default, 0)));
     }
 
     public IKeyBasedCache<TKey, TValue>.Cache Set(TKey key, TValue value)
     {
         var cached = new IKeyBasedCache<TKey, TValue>.Cache(value, DateHelper.CurrentEpoch);
-        _underlying.AddOrUpdate(key,
-            k => cached,
-            (_, _) => cached);
+        _underlying.AddOrUpdate(key, cached);
         return cached;
     }
 }
