@@ -3,9 +3,9 @@ using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Presenter;
-using Bishop.Commands.Weather;
 using Bishop.Commands.Weather.Service;
 using Bishop.Config.Converters;
+using Bishop.Helper.Grive;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
@@ -53,6 +53,7 @@ public class DiscordClientGenerator
         {
             Cache = nestedCache
         };
+        var nestedGriveWalker = new GriveWalker();
         var nestedRecordsService = new RecordController
         {
             Cache = nestedCache,
@@ -72,6 +73,7 @@ public class DiscordClientGenerator
         return new ServiceCollection()
             .AddSingleton(nestedRecordsService)
             .AddSingleton(nestedCache)
+            .AddSingleton(nestedGriveWalker)
             .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(nestedWeatherService)
             .AddSingleton(nestedScoreFormatter)

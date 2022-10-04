@@ -65,6 +65,7 @@ internal static class Program
             typeof(Horoscope),
             typeof(Quote),
             typeof(Vote),
+            typeof(Piggies),
             typeof(Deleter),
             typeof(BdmCounterController),
             typeof(BeaufCounterController),

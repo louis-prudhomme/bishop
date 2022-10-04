@@ -23,6 +23,8 @@ public class DateHelper
         return DateTimeOffset
             .FromUnixTimeSeconds(timestamp).LocalDateTime;
     }
+    
+    public static long CurrentEpoch => FromDateTimeToTimestamp(DateTime.Now);
 
     /// <summary>
     ///     Converts a <see cref="DateTime" /> to the corresponding unix timestamp.
