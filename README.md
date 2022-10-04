@@ -1,23 +1,24 @@
 ﻿# Bishop
 
+This is bot for a group of friends. It holds no pretention other than being fun and serve as a lab to experiment with dotnet, C#, Discord API, Github Actions and everything we do or use to build this little piece of software.
+
+## Transcrypt
+
+[Transcrypt](https://github.com/elasticdog/transcrypt) is used to encrypt several sensitive files across the project.
+
+Its password can be found somewhere.
+
 ## Environment variables
 
-Some environment variables are necessary to successfully run the program. They can be set in Visual Studio (Project →
-Properties → Debug → Add).
+Some environment variables are necessary to successfully run the program. 
 
-ENV VAR | VALUE
---- | ---
-COMMAND_SIGIL | `<any character, except «/»>`
-DISCORD_TOKEN | `<discord token>`
-MONGO_TOKEN | `<mongo token>`
-MONGO_DB | `bishop_test`
-WEATHER_API_KEY | `<weather api key>`
-GOOGLE_CREDS | `<google credentials as json>`
+They can be set in Visual Studio (`Project → Properties → Debug → Add`) as well as in Jetbrains Ryder (`Edit configuration → Environment variables`).
 
-## TODO
-
-
-    // TODO use new count methods to replace use of CounterEntity objects in DB
-    // TODO fallback on history counts instead of ConuterEntities
-    // TODO merge history & counter by registering counters as ghost records
-    // TODO old ghost records to new (with null instead of placeholder)
+| ENV VAR         | VALUE                         |
+|-----------------|-------------------------------|
+| COMMAND_SIGIL   | `<any character, except «/»>` |
+| DISCORD_TOKEN   | `<discord token>`             |
+| MONGO_TOKEN     | `<mongo token>`               |
+| MONGO_DB        | `bishop_test`                 |
+| WEATHER_API_KEY | `<weather api key>`           |
+| GRIVE_PATH      | `<./Resources/grive>`         |
