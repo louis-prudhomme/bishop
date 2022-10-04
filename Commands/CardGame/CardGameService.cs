@@ -16,7 +16,7 @@ namespace Bishop.Commands.CardGame;
 internal class CardGameService : BaseCommandModule
 {
     public CardGameRepository Repository { private get; set; } = null!;
-    public IKeyBasedCache<ulong, string> Cache { private get; set; } = null!;
+    public CardGameFormatter Formatter { private get; set; } = null!;
 
     [GroupCommand]
     [Description("Prompts all card games owned by Vayames.")]
@@ -33,10 +33,9 @@ internal class CardGameService : BaseCommandModule
             return;
         }
 
-        // TODO fix nullability
         var formattedCardGames = await Task.WhenAll(cardGames
             .Take(trueLimit)
-            .Select(game => game.ToString(Cache.GetValue)));
+            .Select(Formatter.Format));
 
         await DiscordMessageCutter.PaginateAnswer(formattedCardGames.ToList(), context.RespondAsync,
             $"The collection currently counts *{cardGames.Count}* card games :");

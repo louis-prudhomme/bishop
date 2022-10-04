@@ -78,6 +78,10 @@ public class DiscordClientGenerator
         {
             Cache = nestedWeatherCache
         };
+        var nestedCardGameFormatter = new CardGameFormatter
+        {
+            Cache = nestedUserNameCacheService
+        };
 
         return new ServiceCollection()
             .AddSingleton(nestedRecordsService)
@@ -86,6 +90,7 @@ public class DiscordClientGenerator
             .AddSingleton<IKeyBasedCache<ulong, string>>(nestedUserNameCacheService)
             .AddSingleton(nestedWeatherService)
             .AddSingleton(nestedScoreFormatter)
+            .AddSingleton(nestedCardGameFormatter)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CardGameRepository>()
             .AddSingleton<HoroscopeRepository>();
