@@ -31,22 +31,4 @@ public class WeatherService
                 .LevelFor(tuple.Item2)))
             .ToDictionary(tuple => tuple.type, tuple => tuple.Item2);
     }
-
-    public async Task<string> CurrentRatios(string city)
-    {
-        var currentWeather = await CurrentFor(city);
-        return WeatherBeaconsHolder.Types
-            .Select(metric => (metric, currentWeather.Get(metric)))
-            .Select(tuple => (tuple.metric, WeatherBeaconsHolder
-                .GetTypeBeacon(tuple.metric)
-                .Ratio(tuple.Item2)))
-            .Select(tuple => $"{tuple.metric}: {tuple.Item2}%")
-            .JoinWithNewlines();
-    }
-
-    public string CurrentMetrics(string city)
-    {
-        var currentWeather = CurrentFor(city);
-        return currentWeather.ToString();
-    }
 }
