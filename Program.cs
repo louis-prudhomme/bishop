@@ -34,7 +34,7 @@ internal static class Program
         _generator.RegisterBulk(CommandClasses);
 
         _discord = _generator.Client;
-        AdaptUserIdTo.UserNameAsync = async id => (await _discord.GetUserAsync(id)).Username;
+        UserNameAccessor.FetchUserName = async id => (await _discord.GetUserAsync(id)).Username;
 
         Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");
@@ -75,6 +75,5 @@ internal static class Program
             typeof(RecordController),
             typeof(CardGameService),
             typeof(WeatherController),
-            typeof(UserNameCacheService),
         }.ToArray();
 }

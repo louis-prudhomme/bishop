@@ -51,27 +51,27 @@ public class DiscordClientGenerator
 
     private IServiceCollection AssembleServiceCollection()
     {
-        var nestedCache = new UserNameCache();
-        var nestedScoreFormatter = new ScoreFormatter
-        {
-            Cache = nestedCache
-        };
+        // CACHES
         var nestedGriveCache =
             new AutoUpdatingKeyBasedCache<GriveDirectory, ImmutableList<string>>(GriveWalker.CacheFor,
                 GriveWalker.FetchFiles);
         var nestedWeatherCache =
             new AutoUpdatingKeyBasedCache<string, WeatherEntity>(WeatherAccessor.CacheForSeconds,
                 WeatherAccessor.CurrentSync);
+        var nestedUserNameCacheService =
+            new AutoUpdatingKeyBasedCache<ulong, string>(UserNameAccessor.CacheForSeconds,
+                UserNameAccessor.FetchUserNameSync);
+        // OTHERS
+        var nestedScoreFormatter = new ScoreFormatter
+        {
+            Cache = nestedUserNameCacheService
+        };
         var nestedRecordsService = new RecordController
         {
-            Cache = nestedCache,
+            Cache = nestedUserNameCacheService,
             Random = new Random(),
             Repository = new RecordRepository(),
             ScoreFormatter = nestedScoreFormatter,
-        };
-        var nestedUserNameCacheService = new UserNameCacheService
-        {
-            Cache = nestedCache
         };
         var nestedWeatherService = new WeatherService
         {
@@ -80,10 +80,9 @@ public class DiscordClientGenerator
 
         return new ServiceCollection()
             .AddSingleton(nestedRecordsService)
-            .AddSingleton(nestedCache)
             .AddSingleton<IKeyBasedCache<GriveDirectory, ImmutableList<string>>>(nestedGriveCache)
             .AddSingleton<IKeyBasedCache<string, WeatherEntity>>(nestedWeatherCache)
-            .AddSingleton(nestedUserNameCacheService)
+            .AddSingleton<IKeyBasedCache<ulong, string>>(nestedUserNameCacheService)
             .AddSingleton(nestedWeatherService)
             .AddSingleton(nestedScoreFormatter)
             .AddSingleton<RecordRepository>()

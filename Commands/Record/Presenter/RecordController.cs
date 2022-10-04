@@ -22,7 +22,7 @@ public partial class RecordController : BaseCommandModule
 {
     private const int DefaultLimit = 10;
     public Random Random { private get; set; } = null!;
-    public UserNameCache Cache { private get; set; } = null!;
+    public IKeyBasedCache<ulong, string> Cache { private get; set; } = null!;
     public RecordRepository Repository { private get; set; } = null!;
 
     [Command("rand")]
@@ -42,7 +42,7 @@ public partial class RecordController : BaseCommandModule
 
         var picked = records.ElementAt(Random.Next(0, records.Count));
         // TODO default value as l'étranger
-        var originalUser = await Cache.GetAsync(picked.UserId);
+        var originalUser = Cache.Get(picked.UserId);
 
         await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
     }
@@ -63,7 +63,7 @@ public partial class RecordController : BaseCommandModule
 
         var picked = records.ElementAt(Random.Next(0, records.Count));
         // TODO default value as l'étranger
-        var originalUser = await Cache.GetAsync(picked.UserId);
+        var originalUser = Cache.Get(picked.UserId);
 
         await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
     }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Bishop.Commands.Record.Model;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -33,7 +34,14 @@ public class RassCounterController : BaseCommandModule
     [Description("Returns all rass scores")]
     public async Task ScoreRass(CommandContext context)
     {
-        await Controller.Score(context, CounterCategory.Rass);
+        try
+        {
+            await Controller.Score(context, CounterCategory.Rass);
+        }
+        catch (Exception e)
+        {
+            await context.RespondAsync(e.Message);
+        }
     }
 
     [Command("rass")]

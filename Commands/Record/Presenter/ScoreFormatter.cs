@@ -1,22 +1,22 @@
 using System.Threading.Tasks;
 using Bishop.Commands.Record.Model;
 using Bishop.Config;
+using Bishop.Helper;
 using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Record.Presenter;
 
 public class ScoreFormatter
 {
-    public UserNameCache Cache { private get; set; } = null!;
-
-
-    public async Task<string> Format(ulong userId, CounterCategory category, long score, int? rank = null) =>
-        Format(await Cache.GetAsync(userId), category, score, rank);
+    public IKeyBasedCache<ulong, string> Cache { private get; set; } = null!;
+    
+    public string Format(ulong userId, CounterCategory category, long score, int? rank = null) =>
+        Format(Cache.GetValue(userId), category, score, rank);
 
     public string Format(DiscordMember member, CounterCategory category, long score, int? rank = null) =>
          Format(member.Username, category, score, rank);
 
-    public string Format(string username, CounterCategory category, long score, int? rank = null)
+    private string Format(string username, CounterCategory category, long score, int? rank = null)
     {
         var displayedRank = rank switch
         {
