@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Bishop.Helper;
+namespace Bishop.Helper.Extensions;
 
 public static class Enumerable
 {

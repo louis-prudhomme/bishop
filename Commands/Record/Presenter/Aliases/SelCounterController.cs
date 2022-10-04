@@ -8,7 +8,7 @@ namespace Bishop.Commands.Record.Presenter.Aliases;
 
 public class SelCounterController : BaseCommandModule
 {
-    public Record.Presenter.RecordController Controller { private get; set; } = null!;
+    public RecordController Controller { private get; set; } = null!;
 
     [Command("sel")]
     [Description("Adds a provided value to @someone’s sel score")]

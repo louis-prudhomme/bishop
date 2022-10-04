@@ -1,6 +1,7 @@
+using System;
+using System.Data;
 using System.Threading.Tasks;
 using Bishop.Commands.Record.Model;
-using Bishop.Config;
 using Bishop.Helper;
 using DSharpPlus.Entities;
 

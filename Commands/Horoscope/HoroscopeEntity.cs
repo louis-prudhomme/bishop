@@ -1,12 +1,8 @@
-﻿using Bishop.Helper;
+﻿using System;
+using Bishop.Helper;
 using Bishop.Helper.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Bishop.Commands.Dump
+namespace Bishop.Commands.Horoscope
 {
     public class HoroscopeEntity : DbEntity
     {

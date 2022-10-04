@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Immutable;
 using Bishop.Commands.CardGame;
-using Bishop.Commands.Dump;
+using Bishop.Commands.Horoscope;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Presenter;
 using Bishop.Commands.Weather.Domain;

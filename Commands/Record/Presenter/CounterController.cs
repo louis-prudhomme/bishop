@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Model;
 using Bishop.Commands.Record.Presenter.Aliases;
-using Bishop.Helper;
+using Bishop.Helper.Extensions;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -15,7 +15,7 @@ namespace Bishop.Commands.Record.Presenter;
 ///     This file contains all the general and generic commands.
 ///     Classes specific to each category exist (ex: <see cref="SelCounterController" />).
 /// </summary>
-public partial class RecordController : BaseCommandModule
+public partial class RecordController
 {
     public ScoreFormatter ScoreFormatter { private get; set; } = new();
     public RecordRepository RecordRepository { private get; set; } = new();

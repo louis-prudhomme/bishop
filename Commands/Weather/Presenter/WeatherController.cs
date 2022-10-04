@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Bishop.Commands.Weather.Domain;
 using Bishop.Commands.Weather.Service;
 using Bishop.Helper;
+using Bishop.Helper.Extensions;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 

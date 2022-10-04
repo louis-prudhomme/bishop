@@ -8,7 +8,7 @@ namespace Bishop.Commands.Record.Presenter.Aliases;
 
 public class BdmCounterController : BaseCommandModule
 {
-    public Record.Presenter.RecordController Controller { private get; set; } = null!;
+    public RecordController Controller { private get; set; } = null!;
 
     [Command("bdm")]
     [Description("Adds a provided value to @someone’s bdm score")]

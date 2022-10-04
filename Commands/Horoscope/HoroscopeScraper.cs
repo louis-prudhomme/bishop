@@ -2,10 +2,9 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Bishop.Commands.Dump;
 using HtmlAgilityPack;
 
-namespace Bishop.Helper;
+namespace Bishop.Commands.Horoscope;
 
 /// <summary>
 ///     See <see cref="Horoscope" />.

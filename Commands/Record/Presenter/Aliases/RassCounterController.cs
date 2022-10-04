@@ -9,7 +9,7 @@ namespace Bishop.Commands.Record.Presenter.Aliases;
 
 public class RassCounterController : BaseCommandModule
 {
-    public Record.Presenter.RecordController Controller { private get; set; } = null!;
+    public RecordController Controller { private get; set; } = null!;
 
     [Command("rass")]
     [Description("Adds a provided value to @someone’s rass score")]

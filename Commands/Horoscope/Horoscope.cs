@@ -6,7 +6,7 @@ using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 
-namespace Bishop.Commands.Dump;
+namespace Bishop.Commands.Horoscope;
 
 /// <summary>
 ///     Provide a command to send horoscopes to @users.

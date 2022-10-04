@@ -1,9 +1,6 @@
 ﻿using Bishop.Helper.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+namespace Bishop.Commands.Horoscope;
 
 /// <summary>
 ///     Specifies and implements interactions of <see cref="HoroscopeEntity" /> with DB.
