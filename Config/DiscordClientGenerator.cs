@@ -63,7 +63,7 @@ public class DiscordClientGenerator
             new AutoUpdatingKeyBasedCache<ulong, string>(UserNameAccessor.CacheForSeconds,
                 UserNameAccessor.FetchUserName);
         // OTHERS
-        var nestedScoreFormatter = new ScoreFormatter
+        var nestedScoreFormatter = new RecordFormatter
         {
             Cache = nestedUserNameCacheService
         };
@@ -72,7 +72,7 @@ public class DiscordClientGenerator
             Cache = nestedUserNameCacheService,
             Random = new Random(),
             Repository = new RecordRepository(),
-            ScoreFormatter = nestedScoreFormatter,
+            Formatter = nestedScoreFormatter,
         };
         var nestedWeatherService = new WeatherService
         {
@@ -85,10 +85,10 @@ public class DiscordClientGenerator
 
         return new ServiceCollection()
             .AddSingleton(nestedRecordsService)
+            .AddSingleton(nestedWeatherService)
             .AddSingleton<IKeyBasedCache<GriveDirectory, ImmutableList<string>>>(nestedGriveCache)
             .AddSingleton<IKeyBasedCache<string, WeatherEntity>>(nestedWeatherCache)
             .AddSingleton<IKeyBasedCache<ulong, string>>(nestedUserNameCacheService)
-            .AddSingleton(nestedWeatherService)
             .AddSingleton(nestedScoreFormatter)
             .AddSingleton(nestedCardGameFormatter)
             .AddSingleton<RecordRepository>()

@@ -7,18 +7,21 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Record.Presenter;
 
-public class ScoreFormatter
+public class RecordFormatter
 {
     public IKeyBasedCache<ulong, string> Cache { private get; set; } = null!;
-    
-    // FIXME fix default!
-    public async Task<string> Format(ulong userId, CounterCategory category, long score, int? rank = null) =>
-        Format(await Cache.GetValue(userId) ?? default!, category, score, rank);
 
-    public string Format(DiscordMember member, CounterCategory category, long score, int? rank = null) =>
-         Format(member.Username, category, score, rank);
+    public async Task<string> FormatRecordRanking(ulong userId, CounterCategory category, long score, int? rank = null)
+    {
+        var username = await Cache.GetValue(userId) ?? throw new NoNullAllowedException();
+        
+        return FormatRecordRanking(username, category, score, rank);
+    }
 
-    private string Format(string username, CounterCategory category, long score, int? rank = null)
+    public string FormatRecordRanking(DiscordMember member, CounterCategory category, long score, int? rank = null) =>
+        FormatRecordRanking(member.Username, category, score, rank);
+
+    private string FormatRecordRanking(string username, CounterCategory category, long score, int? rank = null)
     {
         var displayedRank = rank switch
         {
@@ -28,7 +31,20 @@ public class ScoreFormatter
             null => string.Empty,
             _ => "⠀ ⠀"
         };
-        
+
         return $"{displayedRank}{username}’s {category} ⇒ {score}";
+    }
+
+    public string FormatRecordWithCategory(RecordEntity toFormat) => FormatRecord(toFormat, true);
+    public string FormatRecord(RecordEntity toFormat) => FormatRecord(toFormat, false);
+
+    private string FormatRecord(RecordEntity toFormat, bool shouldIncludeCategory)
+    {
+        var reason = toFormat.Motive == null
+            ? "*For reasons unknown to History*"
+            : $"*« {toFormat.Motive} »*";
+        return shouldIncludeCategory
+            ? $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)} in **{toFormat.Category}**"
+            : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";
     }
 }

@@ -54,7 +54,7 @@ public partial class RecordController : BaseCommandModule
         var records = (await Repository.FindByUser(member.Id))
             .Where(record => record.Motive != null)
             .ToList();
-        
+
         if (!records.Any())
         {
             await context.RespondAsync("No history recorded.");
@@ -99,10 +99,13 @@ public partial class RecordController : BaseCommandModule
     )
     {
         var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
-        var trueLimit = limit <= 0 ? records.Count : limit ?? records.Count;
+        var trueLimit = limit <= 0 ? records.Count : limit ?? DefaultLimit;
 
         if (records.Any())
-            await FormatRecordList(context, records, trueLimit, false);
+            await context.RespondAsync(records
+                .Select(Formatter.FormatRecord)
+                .Take(trueLimit)
+                .ToList());
         else
             await context.RespondAsync(
                 $"No history recorded for category user {member.Username} and {counterCategory}");
@@ -123,18 +126,19 @@ public partial class RecordController : BaseCommandModule
         var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
         var total = Convert.ToDouble(records.Count);
         var recordsSince = Convert.ToDouble(records.Select(record => record.RecordedAt >= since).Count());
-        
+
         if (total == 0)
-        { 
+        {
             await context.RespondAsync("No progression to measure on nothing, cunt.");
             return;
         }
 
         var ratio = recordsSince / total;
-        switch (ratio)  
+        switch (ratio)
         {
             case 0:
-                await context.RespondAsync($"There's no progression for you in {counterCategory.ToString().ToLower()} since {DateHelper.FromDateTimeToStringDate(since)}. How sad...");
+                await context.RespondAsync(
+                    $"There's no progression for you in {counterCategory.ToString().ToLower()} since {DateHelper.FromDateTimeToStringDate(since)}. How sad...");
                 return;
             case > 0.1:
                 await context.RespondAsync(
@@ -152,13 +156,17 @@ public partial class RecordController : BaseCommandModule
         [Description("@User to know the history of")]
         DiscordUser member,
         [Description("Number of records to pull")]
-        int? limit = DefaultLimit
+        int? limit
     )
     {
         var records = await Repository.FindByUser(member.Id);
+        var trueLimit = limit <= 0 ? records.Count : limit ?? DefaultLimit;
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? DefaultLimit, true);
+            await context.RespondAsync(records
+                .Select(Formatter.FormatRecordWithCategory)
+                .Take(trueLimit)
+                .ToList());
         else
             await context.RespondAsync(
                 $"No history recorded for user {member.Username}");
@@ -169,13 +177,17 @@ public partial class RecordController : BaseCommandModule
         [Description("Category to pull records of")]
         CounterCategory category,
         [Description("Number of records to pull")]
-        int? limit = DefaultLimit
+        int? limit
     )
     {
         var records = await Repository.FindByCategory(category);
+        var trueLimit = limit <= 0 ? records.Count : limit ?? DefaultLimit;
 
         if (records.Any())
-            await FormatRecordList(context, records, limit ?? DefaultLimit, false);
+            await context.RespondAsync(records
+                .Select(Formatter.FormatRecord)
+                .Take(trueLimit)
+                .ToList());
         else
             await context.RespondAsync(
                 $"No history recorded for category {category}");
@@ -190,20 +202,5 @@ public partial class RecordController : BaseCommandModule
         }
 
         await Repository.InsertManyAsync(recordsToInsert);
-    }
-
-    private static async Task FormatRecordList(CommandContext context,
-        IReadOnlyCollection<RecordEntity> records,
-        int limit,
-        bool shouldIncludeCategory)
-    {
-        var trueLimit = limit <= 0 ? records.Count : limit;
-
-        var toSend = records
-            .Select(record => record.ToString(shouldIncludeCategory))
-            .Take(trueLimit)
-            .ToList();
-
-        await DiscordMessageCutter.PaginateAnswer(toSend, context.RespondAsync);
     }
 }
