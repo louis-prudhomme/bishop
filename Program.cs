@@ -34,7 +34,6 @@ internal static class Program
         _generator.RegisterBulk(CommandClasses);
 
         _discord = _generator.Client;
-        UserNameAccessor.FetchUserName = async id => (await _discord.GetUserAsync(id)).Username;
 
         Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");

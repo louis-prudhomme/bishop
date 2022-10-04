@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Bishop.Config;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -34,9 +33,10 @@ internal class CardGameService : BaseCommandModule
             return;
         }
 
-        var formattedCardGames = cardGames
+        // TODO fix nullability
+        var formattedCardGames = await Task.WhenAll(cardGames
             .Take(trueLimit)
-            .Select(game => game.ToString(Cache.GetValue));
+            .Select(game => game.ToString(Cache.GetValue)));
 
         await DiscordMessageCutter.PaginateAnswer(formattedCardGames.ToList(), context.RespondAsync,
             $"The collection currently counts *{cardGames.Count}* card games :");

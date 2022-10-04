@@ -42,7 +42,7 @@ public partial class RecordController : BaseCommandModule
 
         var picked = records.ElementAt(Random.Next(0, records.Count));
         // TODO default value as l'étranger
-        var originalUser = Cache.Get(picked.UserId);
+        var originalUser = await Cache.Get(picked.UserId);
 
         await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
     }
@@ -63,7 +63,7 @@ public partial class RecordController : BaseCommandModule
 
         var picked = records.ElementAt(Random.Next(0, records.Count));
         // TODO default value as l'étranger
-        var originalUser = Cache.Get(picked.UserId);
+        var originalUser = await Cache.Get(picked.UserId);
 
         await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
     }

@@ -20,7 +20,7 @@ public class WeatherAccessor
 
     private static readonly RestClient Client = new(Options);
 
-    private static async Task<WeatherEntity> Current(string city)
+    public static async Task<WeatherEntity> Current(string city)
     {
         var request = new RestRequest(CurrentRoute)
             .AddQueryParameter("key", ApiKey)
@@ -33,6 +33,4 @@ public class WeatherAccessor
 
         return WeatherAdapter.FromDtoToEntity(response.Data);
     }
-
-    public static WeatherEntity CurrentSync(string city) => Current(city).Result;
 }

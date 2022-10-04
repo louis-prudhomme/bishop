@@ -55,10 +55,10 @@ public partial class RecordController : BaseCommandModule
             await context.RespondAsync($"No scores for category {counterCategory}");
         else
         {
-            var entities = scores
+            var entities = await Task.WhenAll(scores
                 .Select(pair => pair)
                 .OrderByDescending(pair => pair.Value)
-                .Select((pair, i) => ScoreFormatter.Format(pair.Key, counterCategory, pair.Value, i));
+                .Select((pair, i) => ScoreFormatter.Format(pair.Key, counterCategory, pair.Value, i)));
 
             await context.RespondAsync(entities.JoinWithNewlines());
         }

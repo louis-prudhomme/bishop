@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bishop.Helper.Grive;
 
@@ -30,6 +31,9 @@ public class GriveWalker
 
     public static ImmutableList<string> FetchFiles(GriveDirectory directory) =>
         FetchFiles(GriveDirectoryFormatter.FormatToRelative(GrivePath, directory));
+
+    public static Task<ImmutableList<string>> FetchFilesAsync(GriveDirectory directory) =>
+        Task.FromResult(FetchFiles(directory));
 
     public void BuildGriveCache()
     {

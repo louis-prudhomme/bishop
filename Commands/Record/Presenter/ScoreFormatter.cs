@@ -10,8 +10,9 @@ public class ScoreFormatter
 {
     public IKeyBasedCache<ulong, string> Cache { private get; set; } = null!;
     
-    public string Format(ulong userId, CounterCategory category, long score, int? rank = null) =>
-        Format(Cache.GetValue(userId), category, score, rank);
+    // FIXME fix default!
+    public async Task<string> Format(ulong userId, CounterCategory category, long score, int? rank = null) =>
+        Format(await Cache.GetValue(userId) ?? default!, category, score, rank);
 
     public string Format(DiscordMember member, CounterCategory category, long score, int? rank = null) =>
          Format(member.Username, category, score, rank);

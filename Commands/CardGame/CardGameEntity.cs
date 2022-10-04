@@ -20,9 +20,10 @@ public class CardGameEntity : DbEntity
     public DateTime Date { get; set; }
     public long Timestamp { get; set; }
 
-    public string ToString(Func<ulong, string> idToNameMapper)
+    public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper)
     {
-        return
-            $"• *{Name}*, offered by **{idToNameMapper(GifterUserId)}** the {DateHelper.FromDateTimeToStringDate(Date)}";
+        return $"• *{Name}*, " +
+               $"offered by **{await idToNameMapper(GifterUserId)}** " +
+               $"the {DateHelper.FromDateTimeToStringDate(Date)}";
     }
 }

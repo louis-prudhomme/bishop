@@ -51,16 +51,17 @@ public class DiscordClientGenerator
 
     private IServiceCollection AssembleServiceCollection()
     {
+        UserNameAccessor.FetchUserName = async id => (await Client.GetUserAsync(id)).Username;
         // CACHES
         var nestedGriveCache =
             new AutoUpdatingKeyBasedCache<GriveDirectory, ImmutableList<string>>(GriveWalker.CacheFor,
-                GriveWalker.FetchFiles);
+                GriveWalker.FetchFilesAsync);
         var nestedWeatherCache =
             new AutoUpdatingKeyBasedCache<string, WeatherEntity>(WeatherAccessor.CacheForSeconds,
-                WeatherAccessor.CurrentSync);
+                WeatherAccessor.Current);
         var nestedUserNameCacheService =
             new AutoUpdatingKeyBasedCache<ulong, string>(UserNameAccessor.CacheForSeconds,
-                UserNameAccessor.FetchUserNameSync);
+                UserNameAccessor.FetchUserName);
         // OTHERS
         var nestedScoreFormatter = new ScoreFormatter
         {
@@ -99,7 +100,7 @@ public class DiscordClientGenerator
         };
     }
 
-    private DiscordConfiguration AssembleConfig()
+    private static DiscordConfiguration AssembleConfig()
     {
         return new DiscordConfiguration
         {
@@ -107,11 +108,6 @@ public class DiscordClientGenerator
             TokenType = TokenType.Bot,
             Intents = DiscordIntents.AllUnprivileged | DiscordIntents.GuildMembers
         };
-    }
-
-    public void Register<T>() where T : BaseCommandModule
-    {
-        _commands.RegisterCommands<T>();
     }
 
     public void RegisterBulk(params Type[] types)
