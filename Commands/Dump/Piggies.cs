@@ -23,7 +23,7 @@ public class Piggies: BaseCommandModule
         // FIXME later
         try
         {
-            var p = (await FilesCache.Get(GriveDirectory.Pigtures)).Value!.Random();
+            var p = (await FilesCache.Get(GriveDirectory.Pigtures)).Value.Random();
             if (p == null) return;
             var z = new DiscordMessageBuilder();
             await using var f = File.Open(p, FileMode.Open);

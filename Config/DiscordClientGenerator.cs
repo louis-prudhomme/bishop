@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Horoscope;
 using Bishop.Commands.Record.Domain;
@@ -52,10 +54,17 @@ public class DiscordClientGenerator
     private IServiceCollection AssembleServiceCollection()
     {
         UserNameAccessor.FetchUserName = async id => (await Client.GetUserAsync(id)).Username;
+        // TODO find a better way to add conditions per-folder rather than globally
+        var griveWalker = new GriveWalker(new List<FileCheck>
+        {
+            Path.HasExtension,
+            path => GriveWalker.AuthorizedExtensions.Contains(Path.GetExtension(path).ToLowerInvariant()),
+            path => new FileInfo(path).Length < GriveWalker.DiscordFileSizeLimitBytes
+        });
         // CACHES
         var nestedGriveCache =
             new AutoUpdatingKeyBasedCache<GriveDirectory, ImmutableList<string>>(GriveWalker.CacheForSeconds,
-                GriveWalker.FetchFilesAsync);
+                griveWalker.FetchFilesAsync);
         var nestedWeatherCache =
             new AutoUpdatingKeyBasedCache<string, WeatherEntity>(WeatherAccessor.CacheForSeconds,
                 WeatherAccessor.Current);
