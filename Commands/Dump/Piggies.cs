@@ -20,20 +20,18 @@ public class Piggies: BaseCommandModule
     [Description("Sends a random pigture.")]
     public async Task Random(CommandContext context)
     {
-        // FIXME later
-        try
-        {
-            var p = (await FilesCache.Get(GriveDirectory.Pigtures)).Value.Random();
-            if (p == null) return;
-            var z = new DiscordMessageBuilder();
-            await using var f = File.Open(p, FileMode.Open);
-            z.WithFile(f);
-            await context.RespondAsync(z);
-        }
-        catch (Exception e)
-        {
-            await context.RespondAsync(e.Message);
-        }
+            var cache = await FilesCache.Get(GriveDirectory.Pigtures);
+            var cachedFiles = cache.Value;
+            if (cachedFiles == null || cachedFiles.Count == 0)
+            {
+                await context.RespondAsync("No piggies could be retrieved :'(");
+                return;
+            }
+
+            var builder = new DiscordMessageBuilder();
+            await using var piggy = File.Open(cachedFiles!.Random()!, FileMode.Open);
+            builder.WithFile(piggy);
+            await context.RespondAsync(builder);
     }
     
 }
