@@ -8,8 +8,14 @@ using Bishop.Helper.Extensions;
 
 namespace Bishop.Helper.Grive;
 
+// TODO make asynchronous ?
 public delegate bool FileCheck(string path);
 
+/// <summary>
+/// Class which helps scrap files contained in the Grive folder.
+/// The Grive folder path must be within environment variables.
+/// Subfolder names are determined by <see cref="GriveDirectoryFormatter"/>.
+/// </summary>
 public class GriveWalker
 {
     public static readonly List<string> AuthorizedExtensions = new() {".jpg", ".png", ".gif"};
@@ -26,14 +32,23 @@ public class GriveWalker
         _checks = checks;
     }
 
+    /// <summary>
+    /// Performs every check on a given path.
+    /// </summary>
+    /// <param name="path">To check</param>
+    /// <returns></returns>
     private bool PerformAllChecks(string path)
     {
         return _checks
             .Select(check => check(path))
             .Aggregate(BooleanAdditions.And);
     }
-
-
+    
+    /// <summary>
+    /// Recursively finds all the files at a given path which conform to <see cref="_checks"/>. 
+    /// </summary>
+    /// <param name="path">To scrap.</param>
+    /// <returns>All files contained and valid.</returns>
     private ImmutableList<string> FetchFiles(string path)
     {
         var files = Directory.EnumerateDirectories(path)
@@ -51,6 +66,13 @@ public class GriveWalker
     private ImmutableList<string> FetchFiles(GriveDirectory directory) =>
         FetchFiles(GriveDirectoryFormatter.FormatToRelative(GrivePath, directory));
 
+    
+    /// <summary>
+    /// Recursively finds all the files at a given path which conform to provided <see cref="_checks"/>.
+    /// This is just a wrapper over a synchronous method. 
+    /// </summary>
+    /// <param name="directory">To scrap.</param>
+    /// <returns>All files contained and valid.</returns>
     public Task<ImmutableList<string>> FetchFilesAsync(GriveDirectory directory) =>
         Task.FromResult(FetchFiles(directory));
 }
