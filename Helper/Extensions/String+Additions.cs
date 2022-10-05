@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Bishop.Helper;
+namespace Bishop.Helper.Extensions;
 
 public static class StringExtensions
 {
@@ -8,7 +8,7 @@ public static class StringExtensions
     /// From https://stackoverflow.com/questions/1879395/how-do-i-generate-a-stream-from-a-string
     /// </summary>
     /// <param name="s">To streamify</param>
-    /// <returns>a stream that can be "<see cref="using"/>"ed</returns>
+    /// <returns>a stream that can be `using`ed</returns>
     public static Stream ToStream(this string s)
     {
         var stream = new MemoryStream();
@@ -18,5 +18,4 @@ public static class StringExtensions
         stream.Position = 0;
         return stream;
     }
-
 }

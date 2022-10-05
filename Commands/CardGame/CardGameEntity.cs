@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Bishop.Helper;
 using Bishop.Helper.Database;
 
@@ -19,10 +18,4 @@ public class CardGameEntity : DbEntity
     public ulong GifterUserId { get; set; }
     public DateTime Date { get; set; }
     public long Timestamp { get; set; }
-
-    public async Task<string> ToString(Func<ulong, Task<string>> idToNameMapper)
-    {
-        return
-            $"• *{Name}*, offered by **{await idToNameMapper(GifterUserId)}** the {DateHelper.FromDateTimeToStringDate(Date)}";
-    }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Bishop.Commands.Weather.Domain;
 using Bishop.Commands.Weather.Service;
 using Bishop.Helper;
+using Bishop.Helper.Extensions;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 
@@ -59,42 +60,6 @@ public class WeatherController : BaseCommandModule
         {
             if (e.StatusCode == HttpStatusCode.BadRequest)
                 await context.RespondAsync($"No city was found with the name « {city} »");
-        }
-    }
-
-    [Command("_weather_debug_1")]
-    [Aliases("_wd1")]
-    public async Task GetDebugRatios(CommandContext context, [Description("City to know the weather of")] string city)
-    {
-        if (string.IsNullOrEmpty(city)) return;
-
-        try
-        {
-            var current = await Service.CurrentRatios(city);
-            await context.RespondAsync(current);
-        }
-        catch (HttpRequestException e)
-        {
-            if (e.StatusCode == HttpStatusCode.BadRequest)
-                await context.RespondAsync($"No city was found with the name {city}");
-        }
-    }
-
-    [Command("_weather_debug_2")]
-    [Aliases("_wd2")]
-    public async Task GetDebugMetrics(CommandContext context, [Description("City to know the weather of")] string city)
-    {
-        if (string.IsNullOrEmpty(city)) return;
-
-        try
-        {
-            var current = await Service.CurrentMetrics(city);
-            await context.RespondAsync(current);
-        }
-        catch (HttpRequestException e)
-        {
-            if (e.StatusCode == HttpStatusCode.BadRequest)
-                await context.RespondAsync($"No city was found with the name {city}");
         }
     }
 }

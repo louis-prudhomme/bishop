@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Model;
 using Bishop.Commands.Record.Presenter.Aliases;
-using Bishop.Helper;
+using Bishop.Helper.Extensions;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -15,9 +15,9 @@ namespace Bishop.Commands.Record.Presenter;
 ///     This file contains all the general and generic commands.
 ///     Classes specific to each category exist (ex: <see cref="SelCounterController" />).
 /// </summary>
-public partial class RecordController : BaseCommandModule
+public partial class RecordController
 {
-    public ScoreFormatter ScoreFormatter { private get; set; } = new();
+    public RecordFormatter Formatter { private get; set; } = new();
     public RecordRepository RecordRepository { private get; set; } = new();
 
     // TODO give rank of user for each metric
@@ -36,7 +36,7 @@ public partial class RecordController : BaseCommandModule
         else
         {
             var lines = scores
-                .Select(group => ScoreFormatter.Format(member, group.Key, group.Value))
+                .Select(group => Formatter.FormatRecordRanking(member, group.Key, group.Value))
                 .JoinWithNewlines();
 
             await context.RespondAsync(lines);
@@ -58,7 +58,7 @@ public partial class RecordController : BaseCommandModule
             var entities = await Task.WhenAll(scores
                 .Select(pair => pair)
                 .OrderByDescending(pair => pair.Value)
-                .Select((pair, i) => ScoreFormatter.Format(pair.Key, counterCategory, pair.Value, i)));
+                .Select((pair, i) => Formatter.FormatRecordRanking(pair.Key, counterCategory, pair.Value, i)));
 
             await context.RespondAsync(entities.JoinWithNewlines());
         }
@@ -72,7 +72,7 @@ public partial class RecordController : BaseCommandModule
     {
         var score = await RecordRepository.CountByUserAndCategory(member.Id, counterCategory);
 
-        await context.RespondAsync(ScoreFormatter.Format(member, counterCategory, score));
+        await context.RespondAsync(Formatter.FormatRecordRanking(member, counterCategory, score));
     }
 
     [Command("score")]
@@ -93,7 +93,7 @@ public partial class RecordController : BaseCommandModule
 
         await AddGhostRecords(member, counterCategory, nb);
 
-        var formatted = ScoreFormatter.Format(member, counterCategory, previous + nb);
+        var formatted = Formatter.FormatRecordRanking(member, counterCategory, previous + nb);
         await context.RespondAsync($"{formatted} (from {previous})");
 
         var milestone = GetNextMilestone(previous);

@@ -1,11 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.IO;
 using Bishop.Commands.CardGame;
-using Bishop.Commands.Dump;
+using Bishop.Commands.Horoscope;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Presenter;
-using Bishop.Commands.Weather;
+using Bishop.Commands.Weather.Domain;
 using Bishop.Commands.Weather.Service;
 using Bishop.Config.Converters;
+using Bishop.Helper;
+using Bishop.Helper.Grive;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Converters;
@@ -48,33 +53,53 @@ public class DiscordClientGenerator
 
     private IServiceCollection AssembleServiceCollection()
     {
-        var nestedCache = new UserNameCache();
-        var nestedScoreFormatter = new ScoreFormatter
+        UserNameAccessor.FetchUserName = async id => (await Client.GetUserAsync(id)).Username;
+        // TODO find a better way to add conditions per-folder rather than globally
+        var griveWalker = new GriveWalker(new List<FileCheck>
         {
-            Cache = nestedCache
+            Path.HasExtension,
+            path => GriveWalker.AuthorizedExtensions.Contains(Path.GetExtension(path).ToLowerInvariant()),
+            path => new FileInfo(path).Length < GriveWalker.DiscordFileSizeLimitBytes
+        });
+        // CACHES
+        var nestedGriveCache =
+            new AutoUpdatingKeyBasedCache<GriveDirectory, ImmutableList<string>>(GriveWalker.CacheForSeconds,
+                griveWalker.FetchFilesAsync);
+        var nestedWeatherCache =
+            new AutoUpdatingKeyBasedCache<string, WeatherEntity>(WeatherAccessor.CacheForSeconds,
+                WeatherAccessor.Current);
+        var nestedUserNameCacheService =
+            new AutoUpdatingKeyBasedCache<ulong, string>(UserNameAccessor.CacheForSeconds,
+                UserNameAccessor.FetchUserName);
+        // OTHERS
+        var nestedScoreFormatter = new RecordFormatter
+        {
+            Cache = nestedUserNameCacheService
         };
         var nestedRecordsService = new RecordController
         {
-            Cache = nestedCache,
+            Cache = nestedUserNameCacheService,
             Random = new Random(),
             Repository = new RecordRepository(),
-            ScoreFormatter = nestedScoreFormatter,
-        };
-        var nestedUserNameCacheService = new UserNameCacheService
-        {
-            Cache = nestedCache
+            Formatter = nestedScoreFormatter,
         };
         var nestedWeatherService = new WeatherService
         {
-            Accessor = new WeatherAccessor()
+            Cache = nestedWeatherCache
+        };
+        var nestedCardGameFormatter = new CardGameFormatter
+        {
+            Cache = nestedUserNameCacheService
         };
 
         return new ServiceCollection()
             .AddSingleton(nestedRecordsService)
-            .AddSingleton(nestedCache)
-            .AddSingleton(nestedUserNameCacheService)
             .AddSingleton(nestedWeatherService)
+            .AddSingleton<IKeyBasedCache<GriveDirectory, ImmutableList<string>>>(nestedGriveCache)
+            .AddSingleton<IKeyBasedCache<string, WeatherEntity>>(nestedWeatherCache)
+            .AddSingleton<IKeyBasedCache<ulong, string>>(nestedUserNameCacheService)
             .AddSingleton(nestedScoreFormatter)
+            .AddSingleton(nestedCardGameFormatter)
             .AddSingleton<RecordRepository>()
             .AddSingleton<CardGameRepository>()
             .AddSingleton<HoroscopeRepository>();
@@ -89,7 +114,7 @@ public class DiscordClientGenerator
         };
     }
 
-    private DiscordConfiguration AssembleConfig()
+    private static DiscordConfiguration AssembleConfig()
     {
         return new DiscordConfiguration
         {
@@ -97,11 +122,6 @@ public class DiscordClientGenerator
             TokenType = TokenType.Bot,
             Intents = DiscordIntents.AllUnprivileged | DiscordIntents.GuildMembers
         };
-    }
-
-    public void Register<T>() where T : BaseCommandModule
-    {
-        _commands.RegisterCommands<T>();
     }
 
     public void RegisterBulk(params Type[] types)

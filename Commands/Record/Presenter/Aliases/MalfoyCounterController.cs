@@ -8,7 +8,7 @@ namespace Bishop.Commands.Record.Presenter.Aliases;
 
 public class MalfoyCounterController : BaseCommandModule
 {
-    public Record.Presenter.RecordController Controller { private get; set; } = null!;
+    public RecordController Controller { private get; set; } = null!;
 
     [Command("malfoy")]
     [Description("Adds a provided value to @someone’s malfoy score")]

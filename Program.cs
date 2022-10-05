@@ -4,12 +4,11 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
+using Bishop.Commands.Horoscope;
 using Bishop.Commands.Record.Presenter;
 using Bishop.Commands.Record.Presenter.Aliases;
-using Bishop.Commands.Weather;
 using Bishop.Commands.Weather.Presenter;
 using Bishop.Config;
-using Bishop.Helper;
 using DSharpPlus;
 using log4net;
 using log4net.Config;
@@ -34,7 +33,6 @@ internal static class Program
         _generator.RegisterBulk(CommandClasses);
 
         _discord = _generator.Client;
-        AdaptUserIdTo.UserNameAsync = async id => (await _discord.GetUserAsync(id)).Username;
 
         Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");
@@ -63,6 +61,7 @@ internal static class Program
             typeof(Horoscope),
             typeof(Quote),
             typeof(Vote),
+            typeof(Piggies),
             typeof(Deleter),
             typeof(BdmCounterController),
             typeof(BeaufCounterController),
@@ -74,7 +73,5 @@ internal static class Program
             typeof(RecordController),
             typeof(CardGameService),
             typeof(WeatherController),
-            typeof(UserNameCacheService),
-            typeof(Pigs)
         }.ToArray();
 }

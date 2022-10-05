@@ -7,11 +7,11 @@ namespace Bishop.Helper;
 
 public delegate Task<DiscordMessage> FollowUp(string paragraph);
 
-public class DiscordMessageCutter
+public static class DiscordMessageCutter
 {
     private const int MessageMaxNumberOfLines = 12;
 
-    public static List<string> DispatchIntoParagraphs(List<string> lines)
+    private static List<string> DispatchIntoParagraphs(IReadOnlyCollection<string> lines)
     {
         var paragraphs = new List<string>();
 

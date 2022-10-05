@@ -9,11 +9,6 @@ namespace Bishop.Commands.Record.Model;
 /// </summary>
 public class RecordEntity : DbEntity
 {
-    public RecordEntity()
-    {
-        Motive = null!;
-    }
-
     public RecordEntity(ulong discordMemberId, CounterCategory category, string? motive)
     {
         RecordedAt = DateTime.Now;
@@ -29,15 +24,4 @@ public class RecordEntity : DbEntity
     public DateTime RecordedAt { get; set; }
     public string? Motive { get; set; }
     public long Timestamp { get; set; }
-
-    // TODO: better decoupling of formatting
-    public string ToString(bool shouldIncludeCategory = false)
-    {
-        var reason = Motive == null
-            ? "*For reasons unknown to History*"
-            : $"*« {Motive} »*";
-        return shouldIncludeCategory
-            ? $"{reason} – {DateHelper.FromDateTimeToStringDate(RecordedAt)} in **{Category}**"
-            : $"{reason} – {DateHelper.FromDateTimeToStringDate(RecordedAt)}";
-    }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Bishop.Config;
-using Bishop.Helper;
+using Bishop.Helper.Extensions;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -17,7 +16,7 @@ namespace Bishop.Commands.CardGame;
 internal class CardGameService : BaseCommandModule
 {
     public CardGameRepository Repository { private get; set; } = null!;
-    public UserNameCache Cache { private get; set; } = null!;
+    public CardGameFormatter Formatter { private get; set; } = null!;
 
     [GroupCommand]
     [Description("Prompts all card games owned by Vayames.")]
@@ -35,11 +34,13 @@ internal class CardGameService : BaseCommandModule
         }
 
         var formattedCardGames = await Task.WhenAll(cardGames
-            .Take(trueLimit)
-            .Select(game => game.ToString(Cache.GetAsync)));
+                .Take(trueLimit)
+                .Select(Formatter.Format));
+        var answer = formattedCardGames
+            .Prepend($"The collection currently counts *{cardGames.Count}* card games :")
+            .ToList();
 
-        await DiscordMessageCutter.PaginateAnswer(formattedCardGames.ToList(), context.RespondAsync,
-            $"The collection currently counts *{cardGames.Count}* card games :");
+        await context.RespondAsync(answer);
     }
 
     [Command("add")]

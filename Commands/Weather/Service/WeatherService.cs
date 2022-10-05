@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Weather.Domain;
@@ -9,36 +8,21 @@ namespace Bishop.Commands.Weather.Service;
 
 public class WeatherService
 {
-    private const long CacheFor = 14400;
 
-    private readonly Dictionary<string, WeatherEntity> _cache = new();
+    public IKeyBasedCache<string, WeatherEntity> Cache { private get; set; } = null!;
 
-    public WeatherAccessor Accessor { private get; set; } = null!;
-
-    public async Task<WeatherEntity> CurrentFor(string city)
+    private async Task<WeatherEntity?> CurrentFor(string city)
     {
-        var currentEpoch = DateHelper.FromDateTimeToTimestamp(DateTime.Now);
         var cityKey = city.Trim().ToLower();
 
-        if (_cache.ContainsKey(cityKey))
-        {
-            var cachedEntity = _cache[cityKey];
-            if (currentEpoch - cachedEntity.Epoch <= CacheFor) return _cache[cityKey];
-
-            _cache.Remove(cityKey);
-            _cache.Add(cityKey, await Accessor.Current(cityKey));
-        }
-        else
-        {
-            _cache.Add(cityKey, await Accessor.Current(cityKey));
-        }
-
-        return _cache[cityKey];
+        return await Cache.GetValue(cityKey);
     }
 
     public async Task<Dictionary<WeatherMetric, string>> CurrentRatiosByMetrics(string city)
     {
         var currentWeather = await CurrentFor(city);
+        if (currentWeather == null) return new Dictionary<WeatherMetric, string>();
+        
         return WeatherBeaconsHolder.Types
             .Select(type => (type, WeatherBeaconsHolder.GetTypeBeacon(type)
                 .Ratio(currentWeather.Get(type)) * 100))
@@ -46,23 +30,5 @@ public class WeatherService
                 .GetTypeBeacon(tuple.type)
                 .LevelFor(tuple.Item2)))
             .ToDictionary(tuple => tuple.type, tuple => tuple.Item2);
-    }
-
-    public async Task<string> CurrentRatios(string city)
-    {
-        var currentWeather = await CurrentFor(city);
-        return WeatherBeaconsHolder.Types
-            .Select(metric => (metric, currentWeather.Get(metric)))
-            .Select(tuple => (tuple.metric, WeatherBeaconsHolder
-                .GetTypeBeacon(tuple.metric)
-                .Ratio(tuple.Item2)))
-            .Select(tuple => $"{tuple.metric}: {tuple.Item2}%")
-            .JoinWithNewlines();
-    }
-
-    public async Task<string> CurrentMetrics(string city)
-    {
-        var currentWeather = await CurrentFor(city);
-        return currentWeather.ToString();
     }
 }
