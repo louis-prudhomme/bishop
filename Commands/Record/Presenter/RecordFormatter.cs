@@ -39,9 +39,21 @@ public class RecordFormatter
 
     private string FormatRecord(RecordEntity toFormat, bool shouldIncludeCategory)
     {
-        var reason = toFormat.Motive == null
-            ? "*For reasons unknown to History*"
-            : $"*« {toFormat.Motive} »*";
+        var reason = "";
+        if (toFormat.Category.Equals(CounterCategory.Raclette))
+        {
+            long MotiveLong;
+            long.TryParse(toFormat.Motive, out MotiveLong);
+            reason = toFormat.Motive == null
+                ? "*Unknown Raclette*"
+                : $"*« Raclette of {DateHelper.FromTimestampToDateTime(MotiveLong).ToString("dd-MM-yyyy")} »*";
+        }
+        else
+        {
+            reason = toFormat.Motive == null
+                ? "*For reasons unknown to History*"
+                : $"*« {toFormat.Motive} »*";
+        }
         return shouldIncludeCategory
             ? $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)} in **{toFormat.Category}**"
             : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";
