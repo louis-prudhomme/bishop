@@ -13,5 +13,6 @@ public enum CounterCategory
     Beauf,
     Rass,
     Malfoy,
-    Wind
+    Wind,
+    Raclette
 }

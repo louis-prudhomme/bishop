@@ -73,5 +73,6 @@ internal static class Program
             typeof(RecordController),
             typeof(CardGameService),
             typeof(WeatherController),
+            typeof(RacletteCounterController)
         }.ToArray();
 }
