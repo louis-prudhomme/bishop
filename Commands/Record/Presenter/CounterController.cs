@@ -110,7 +110,17 @@ public partial class RecordController
         [RemainingText] [Description("Context for the point(s) addition")]
         string motive)
     {
+        var previous = await RecordRepository
+            .CountByUserAndCategory(member.Id, counterCategory);
+
         await Add(context, member, counterCategory, motive);
+
+        var formatted = Formatter.FormatRecordRanking(member, counterCategory, previous + 1);
+        await context.RespondAsync($"{formatted} (from {previous})");
+
+        var milestone = GetNextMilestone(previous);
+        if (previous + 1 >= milestone)
+            await context.RespondAsync($"A new milestone has been broken through: {milestone}! 🎉");
     }
 
     private static long GetNextMilestone(long current)
