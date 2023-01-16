@@ -12,6 +12,7 @@ using DSharpPlus.Entities;
 using Microsoft.FSharp.Core;
 using Plotly.NET;
 using Plotly.NET.ImageExport;
+using Plotly.NET.TraceObjects;
 using PuppeteerSharp.Input;
 
 namespace Bishop.Commands.Record.Presenter;
@@ -42,6 +43,51 @@ public partial class RecordController
                 FSharpOption<string>.None,
                 FSharpOption<IEnumerable<string>>.Some(tags),
                 StyleParam.TextPosition.TopCenter);
+
+            var builder = new DiscordMessageBuilder();
+            var uuid = Guid.NewGuid();
+            var filename = $"./{uuid}.jpg";
+            graph.SaveJPG(uuid.ToString());
+            builder.WithFile(File.Open(filename, FileMode.Open));
+            await context.RespondAsync(builder);
+            File.Delete(filename);
+        }
+        catch (Exception e)
+        {
+            await context.RespondAsync(e.Message);
+        }
+    }
+
+    [Command("histogram")]
+    public async Task Histogram(CommandContext context, DiscordMember member, CounterCategory category)
+    {
+        try
+        {
+            var dates = await FetchAllDatesOfAdditionsForUserAndCategory(member, category);
+            var allAdditions = GetCountOfAdditionsByDay(dates);
+            var tags = GetListOfTagsForAbnormalBumps(allAdditions);
+
+            var graph = Chart2D.Chart.Column(
+                allAdditions.Select(tuple => tuple.Count),
+                FSharpOption<IEnumerable<string>>.Some(allAdditions.Select(tuple => tuple.Key)),
+                null,
+                false,
+                null,
+                null,
+                null,
+                FSharpOption<IEnumerable<string>>.Some(tags),
+                FSharpOption<Color>.None,
+                FSharpOption<StyleParam.Colorscale>.None,
+                FSharpOption<Line>.None,
+                FSharpOption<StyleParam.PatternShape>.None,
+                FSharpOption<IEnumerable<StyleParam.PatternShape>>.None,
+                FSharpOption<Pattern>.None,
+                FSharpOption<Marker>.None,
+                FSharpOption<int>.None,
+                FSharpOption<int>.None,
+                FSharpOption<IEnumerable<int>>.None,
+                FSharpOption<StyleParam.TextPosition>.Some(StyleParam.TextPosition.Outside)
+            );
 
             var builder = new DiscordMessageBuilder();
             var uuid = Guid.NewGuid();
@@ -89,7 +135,7 @@ public partial class RecordController
             .ToList();
     }
 
-    private IEnumerable<string> GetListOfTagsForAbnormalBumps(List<Countach> allAdditions)
+    private IEnumerable<string> GetListOfTagsForAbnormalBumps(IReadOnlyCollection<Countach> allAdditions)
     {
         var allBumps = allAdditions
             .Select(tuple => tuple.Count)
