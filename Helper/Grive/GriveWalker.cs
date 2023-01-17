@@ -18,7 +18,7 @@ public delegate bool FileCheck(string path);
 /// </summary>
 public class GriveWalker
 {
-    public static readonly List<string> AuthorizedExtensions = new() {".jpg", ".png", ".gif"};
+    public static readonly List<string> AuthorizedExtensions = new() {".jpg", ".png", ".gif", ".mp4", ".webm", ".webp"};
     public const long DiscordFileSizeLimitBytes = 8_000_000; // 8mb
     public const long CacheForSeconds = 14400;
 

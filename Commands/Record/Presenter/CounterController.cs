@@ -11,7 +11,7 @@ using DSharpPlus.Entities;
 namespace Bishop.Commands.Record.Presenter;
 
 /// <summary>
-///     The <c>Counter</c>-part of the <c>RecordService</c> class provides a set of commands to keep trace of user's deeds.
+///     The <c>Counter</c>-part of the <c>RecordController</c> class provides a set of commands to keep trace of user's deeds.
 ///     This file contains all the general and generic commands.
 ///     Classes specific to each category exist (ex: <see cref="SelCounterController" />).
 /// </summary>

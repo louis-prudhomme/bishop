@@ -6,11 +6,11 @@ namespace Bishop.Helper;
 public class DateHelper
 {
     /// <summary>
-    ///     Unix Epoch.
+    ///     Bishop Epoch, _ie_: when the project was created.
     /// </summary>
     /// <seealso href="https://www.wikiwand.com/en/Unix_time" />
-    /// <returns><see cref="DateTime" /> representing the Unix Epoch.</returns>
-    private static readonly DateTime UnixStart = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+    /// <returns><see cref="DateTime" /> representing the Bishop Epoch.</returns>
+    public static readonly DateTime BishopEpoch = new(2021, 5, 28, 0, 0, 0, 0, DateTimeKind.Utc);
 
     /// <summary>
     ///     Converts a unix timestamp to a <see cref="DateTime" />.
@@ -21,7 +21,8 @@ public class DateHelper
     public static DateTime FromTimestampToDateTime(long timestamp)
     {
         return DateTimeOffset
-            .FromUnixTimeSeconds(timestamp).LocalDateTime;
+            .FromUnixTimeSeconds(timestamp)
+            .LocalDateTime;
     }
     
     public static long CurrentEpoch => FromDateTimeToTimestamp(DateTime.Now);
@@ -33,7 +34,7 @@ public class DateHelper
     /// <returns>Timestamp.</returns>
     public static long FromDateTimeToTimestamp(DateTime date)
     {
-        var span = date - UnixStart;
+        var span = date - DateTime.UnixEpoch;
         return Convert.ToInt64(span.TotalSeconds);
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Bishop.Helper.Extensions;
 
-public static class Enumerable
+public static class EnumerableAdditions
 {
     public static string Join(this IEnumerable<string> source)
     {
@@ -33,5 +33,15 @@ public static class Enumerable
         while (enumerator.MoveNext())
             acc = string.Join("\n", acc, enumerator.Current);
         return acc;
+    }
+    
+    public static IEnumerable<int> CumulativeSum(this IEnumerable<int> sequence)
+    {
+        var sum = 0;
+        foreach(var item in sequence)
+        {
+            sum += item;
+            yield return sum;
+        }        
     }
 }
