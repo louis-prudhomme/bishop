@@ -26,85 +26,59 @@ public partial class RecordController
     [Command("cumulative")]
     public async Task Cumulative(CommandContext context, DiscordMember member, CounterCategory category)
     {
-        try
-        {
-            var dates = await FetchAllDatesOfAdditionsForUserAndCategory(member, category);
-            var allAdditions = GetCountOfAdditionsByDay(dates);
-            var tags = GetListOfTagsForAbnormalBumps(allAdditions);
+        var dates = await FetchAllDatesOfAdditionsForUserAndCategory(member, category);
+        var allAdditions = GetCountOfAdditionsByDay(dates);
+        var tags = GetListOfTagsForAbnormalBumps(allAdditions);
 
-            var graph = Chart2D.Chart.Line(
-                allAdditions.Select(tuple => tuple.Count).CumulativeSum(),
-                allAdditions.Select(tuple => tuple.Key),
-                true,
-                FSharpOption<string>.None,
-                true,
-                FSharpOption<double>.None,
-                FSharpOption<IEnumerable<double>>.None,
-                FSharpOption<string>.None,
-                FSharpOption<IEnumerable<string>>.Some(tags),
-                StyleParam.TextPosition.TopCenter);
+        var graph = Chart2D.Chart.Line(
+            allAdditions.Select(tuple => tuple.Key),
+            allAdditions.Select(tuple => tuple.Count).CumulativeSum(),
+            true,
+            FSharpOption<string>.None,
+            false,
+            FSharpOption<double>.None,
+            FSharpOption<IEnumerable<double>>.None,
+            FSharpOption<string>.None,
+            FSharpOption<IEnumerable<string>>.Some(tags),
+            StyleParam.TextPosition.TopCenter);
 
-            var builder = new DiscordMessageBuilder();
-            var uuid = Guid.NewGuid();
-            var filename = $"./{uuid}.jpg";
-            graph.SaveJPG(uuid.ToString());
-            builder.WithFile(File.Open(filename, FileMode.Open));
-            await context.RespondAsync(builder);
-            File.Delete(filename);
-        }
-        catch (Exception e)
-        {
-            await context.RespondAsync(e.Message);
-        }
+        await SendGraph(context, graph);
     }
 
     [Command("histogram")]
     public async Task Histogram(CommandContext context, DiscordMember member, CounterCategory category)
     {
-        try
-        {
-            var dates = await FetchAllDatesOfAdditionsForUserAndCategory(member, category);
-            var allAdditions = GetCountOfAdditionsByDay(dates);
-            var tags = GetListOfTagsForAbnormalBumps(allAdditions);
+        var dates = await FetchAllDatesOfAdditionsForUserAndCategory(member, category);
+        var allAdditions = GetCountOfAdditionsByDay(dates);
+        var tags = GetListOfTagsForAbnormalBumps(allAdditions);
 
-            var graph = Chart2D.Chart.Column(
-                allAdditions.Select(tuple => tuple.Count),
-                FSharpOption<IEnumerable<string>>.Some(allAdditions.Select(tuple => tuple.Key)),
-                null,
-                false,
-                null,
-                null,
-                null,
-                FSharpOption<IEnumerable<string>>.Some(tags),
-                FSharpOption<Color>.None,
-                FSharpOption<StyleParam.Colorscale>.None,
-                FSharpOption<Line>.None,
-                FSharpOption<StyleParam.PatternShape>.None,
-                FSharpOption<IEnumerable<StyleParam.PatternShape>>.None,
-                FSharpOption<Pattern>.None,
-                FSharpOption<Marker>.None,
-                FSharpOption<int>.None,
-                FSharpOption<int>.None,
-                FSharpOption<IEnumerable<int>>.None,
-                FSharpOption<StyleParam.TextPosition>.Some(StyleParam.TextPosition.Outside)
-            );
-
-            var builder = new DiscordMessageBuilder();
-            var uuid = Guid.NewGuid();
-            var filename = $"./{uuid}.jpg";
-            graph.SaveJPG(uuid.ToString());
-            builder.WithFile(File.Open(filename, FileMode.Open));
-            await context.RespondAsync(builder);
-            File.Delete(filename);
-        }
-        catch (Exception e)
-        {
-            await context.RespondAsync(e.Message);
-        }
+        var graph = Chart2D.Chart.Column(
+            allAdditions.Select(tuple => tuple.Count),
+            FSharpOption<IEnumerable<string>>.Some(allAdditions.Select(tuple => tuple.Key)),
+            null,
+            false,
+            null,
+            null,
+            null,
+            FSharpOption<IEnumerable<string>>.Some(tags),
+            FSharpOption<Color>.None,
+            FSharpOption<StyleParam.Colorscale>.None,
+            FSharpOption<Line>.None,
+            FSharpOption<StyleParam.PatternShape>.None,
+            FSharpOption<IEnumerable<StyleParam.PatternShape>>.None,
+            FSharpOption<Pattern>.None,
+            FSharpOption<Marker>.None,
+            FSharpOption<int>.None,
+            FSharpOption<int>.None,
+            FSharpOption<IEnumerable<int>>.None,
+            FSharpOption<StyleParam.TextPosition>.Some(StyleParam.TextPosition.Outside)
+        );
+        
+        await SendGraph(context, graph);
     }
 
 
-    private async Task<List<DateTime>> FetchAllDatesOfAdditionsForUserAndCategory(DiscordMember member,
+    private async Task<List<DateTime>> FetchAllDatesOfAdditionsForUserAndCategory(SnowflakeObject member,
         CounterCategory category)
     {
         var records = await RecordRepository.FindByUserAndCategory(member.Id, category);
@@ -114,6 +88,19 @@ public partial class RecordController
             .Where(time => time >= DateHelper.BishopEpoch) // discard legacy placeholder dates, which are placed in 1970
             .OrderBy(date => date)
             .ToList();
+    }
+
+    private async Task SendGraph(CommandContext context, GenericChart.GenericChart graph)
+    {
+        var builder = new DiscordMessageBuilder();
+        var uuid = Guid.NewGuid();
+        var filename = $"./{uuid}.jpg";
+        var temp = await context.RespondAsync("Sending...");
+        graph.SaveJPG(uuid.ToString());
+        builder.WithFile(File.Open(filename, FileMode.Open));
+        await context.RespondAsync(builder);
+        File.Delete(filename);
+        await temp.DeleteAsync();
     }
 
     record Countach(string Key, int Count);
@@ -144,7 +131,7 @@ public partial class RecordController
         var firstQuartile = allBumps.Skip(allAdditions.Count * 1 / 4).Take(1).First();
         var thirdQuartile = allBumps.Skip(allAdditions.Count * 3 / 4).Take(1).First();
         var interquartile = thirdQuartile - firstQuartile;
-        var higherExternalBound = interquartile + thirdQuartile * 3;
+        var higherExternalBound = interquartile + thirdQuartile * 2;
         higherExternalBound = higherExternalBound <= 2 ? int.MaxValue : higherExternalBound;
 
         return allAdditions

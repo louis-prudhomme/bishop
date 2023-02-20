@@ -1,14 +1,25 @@
 # syntax=docker/dockerfile:1
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-WORKDIR /app
-    
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build-env
+
 # Copy csproj and restore as distinct layers
+WORKDIR /app
 COPY . ./
-RUN dotnet restore "Bishop.csproj"
-RUN dotnet publish -c Release -o out --runtime linux-x64 --self-contained true
-   
+
+RUN dotnet restore "Bishop.csproj" --use-current-runtime /p:PublishReadyToRun=true
+RUN dotnet publish -c Release -o out  \
+    --no-restore                      \
+    --use-current-runtime             \
+    --runtime linux-musl-x64          \
+    --self-contained true             \
+    /p:PublishReadyToRun=true         \
+    /p:PublishSingleFile=true
+
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine 
+
+RUN apk add xorg-server xf86-input-libinput xinit udev
+RUN apk add chromium
+
 WORKDIR /app
 COPY --from=build-env /app/out .
-ENTRYPOINT ./Bishop
+ENTRYPOINT ["./Bishop"]
