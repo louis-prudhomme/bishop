@@ -10,9 +10,7 @@ RUN dotnet publish -c Release -o out  \
     --no-restore                      \
     --use-current-runtime             \
     --runtime linux-musl-x64          \
-    --self-contained true             \
-    /p:PublishReadyToRun=true         \
-    /p:PublishSingleFile=true
+    --self-contained true
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine 
