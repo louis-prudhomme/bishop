@@ -73,7 +73,7 @@ public partial class RecordController
             FSharpOption<IEnumerable<int>>.None,
             FSharpOption<StyleParam.TextPosition>.Some(StyleParam.TextPosition.Outside)
         );
-        
+
         await SendGraph(context, graph);
     }
 

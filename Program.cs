@@ -12,6 +12,7 @@ using Bishop.Config;
 using DSharpPlus;
 using log4net;
 using log4net.Config;
+using Plotly.NET.ImageExport;
 
 namespace Bishop;
 
@@ -28,6 +29,9 @@ internal static class Program
     private static void Main()
     {
         XmlConfigurator.Configure();
+
+        PuppeteerSharpRendererOptions.localBrowserExecutablePath = "/usr/bin/chromium-browser";
+        PuppeteerSharpRendererOptions.launchOptions.Args = new[] {"--no-sandbox"}; 
 
         _generator = new DiscordClientGenerator();
         _generator.RegisterBulk(CommandClasses);

@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build-env
 WORKDIR /app
 COPY . ./
 
-RUN dotnet restore "Bishop.csproj" --use-current-runtime /p:PublishReadyToRun=true
+RUN dotnet restore "Bishop.csproj" --use-current-runtime
 RUN dotnet publish -c Release -o out  \
     --no-restore                      \
     --use-current-runtime             \
