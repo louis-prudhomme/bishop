@@ -129,7 +129,9 @@ public partial class RecordController
         {
             < 10 => 10,
             < 50 => 50,
+            < 69 => 69,
             < 100 => 100,
+            < 666 => 666,
             _ => (current / 100 + 1) * 100
         };
     }
