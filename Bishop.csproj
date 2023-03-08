@@ -6,6 +6,7 @@
         <FileUpgradeFlags>40</FileUpgradeFlags>
         <OldToolsVersion>Current</OldToolsVersion>
         <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
     </PropertyGroup>
     <ItemGroup>
         <None Remove="Resources\aleds.json" />

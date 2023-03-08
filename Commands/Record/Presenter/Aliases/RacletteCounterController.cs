@@ -10,7 +10,7 @@ namespace Bishop.Commands.Record.Presenter.Aliases;
 
 public class RacletteCounterController : BaseCommandModule
 {
-    public Record.Presenter.RecordController Controller { private get; set; } = null!;
+    public RecordController Controller { private get; set; } = null!;
 
     [Command("raclette")]
     [Description("Gently tells off the user to add a date to the counter")]

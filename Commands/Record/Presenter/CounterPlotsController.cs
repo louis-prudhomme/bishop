@@ -13,7 +13,6 @@ using Microsoft.FSharp.Core;
 using Plotly.NET;
 using Plotly.NET.ImageExport;
 using Plotly.NET.TraceObjects;
-using PuppeteerSharp.Input;
 
 namespace Bishop.Commands.Record.Presenter;
 
