@@ -15,7 +15,7 @@ public class BeaufCounterController : BaseCommandModule
     public async Task ScoreBeauf(CommandContext context,
         [Description("User to increment the beauf score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Beauf, nb);
     }

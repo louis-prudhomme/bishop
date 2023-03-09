@@ -15,7 +15,7 @@ public class SelCounterController : BaseCommandModule
     public async Task ScoreSel(CommandContext context,
         [Description("User to increment the sel score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Sel, nb);
     }

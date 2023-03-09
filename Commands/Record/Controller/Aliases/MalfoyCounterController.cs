@@ -15,7 +15,7 @@ public class MalfoyCounterController : BaseCommandModule
     public async Task ScoreMalfoy(CommandContext context,
         [Description("User to increment the malfoy score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Malfoy, nb);
     }

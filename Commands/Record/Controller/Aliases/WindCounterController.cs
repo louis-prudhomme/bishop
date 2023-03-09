@@ -15,7 +15,7 @@ public class WindCounterController : BaseCommandModule
     public async Task ScoreWind(CommandContext context,
         [Description("User to increment the wind score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Wind, nb);
     }
@@ -25,7 +25,7 @@ public class WindCounterController : BaseCommandModule
     public async Task ScoreRot(CommandContext context,
         [Description("User to increment the rot score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Wind, nb);
     }
@@ -35,7 +35,7 @@ public class WindCounterController : BaseCommandModule
     public async Task ScorePetWind(CommandContext context,
         [Description("User to increment the pet score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Wind, nb);
     }

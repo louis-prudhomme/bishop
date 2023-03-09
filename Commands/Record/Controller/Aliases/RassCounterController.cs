@@ -16,7 +16,7 @@ public class RassCounterController : BaseCommandModule
     public async Task ScoreRass(CommandContext context,
         [Description("User to increment the rass score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Rass, nb);
     }

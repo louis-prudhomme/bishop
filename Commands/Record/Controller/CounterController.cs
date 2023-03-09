@@ -77,7 +77,7 @@ public partial class RecordController
         DiscordMember member,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
         CounterCategory counterCategory,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         if (nb <= 0)
         { 
