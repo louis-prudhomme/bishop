@@ -16,9 +16,6 @@ namespace Bishop.Commands.Record.Controller;
 /// </summary>
 public partial class RecordController
 {
-    public RecordFormatter Formatter { private get; set; } = new();
-    public RecordRepository RecordRepository { private get; set; } = new();
-
     // TODO give rank of user for each metric
     [Command("score")]
     [Description(

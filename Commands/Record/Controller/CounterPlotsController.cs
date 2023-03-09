@@ -80,7 +80,7 @@ public partial class RecordController
     private async Task<List<DateTime>> FetchAllDatesOfAdditionsForUserAndCategory(SnowflakeObject member,
         CounterCategory category)
     {
-        var records = await RecordRepository.FindByUserAndCategory(member.Id, category);
+        var records = await Repository.FindByUserAndCategory(member.Id, category);
         return records
             .Select(record => record.Timestamp)
             .Select(DateHelper.FromTimestampToDateTime)

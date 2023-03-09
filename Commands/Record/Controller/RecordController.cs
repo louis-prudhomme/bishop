@@ -20,8 +20,6 @@ namespace Bishop.Commands.Record.Controller;
 public partial class RecordController : BaseCommandModule
 {
     private const int DefaultLimit = 10;
-    public Random Random { private get; set; } = null!;
-    public IKeyBasedCache<ulong, string> Cache { private get; set; } = null!;
     public RecordRepository Repository { private get; set; } = null!;
 
     [Command("rand")]
