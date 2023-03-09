@@ -96,7 +96,7 @@ public partial class RecordController : BaseCommandModule
     )
     {
         var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
-        var trueLimit = limit <= 0 ? records.Count : limit ?? DefaultLimit;
+        var trueLimit = GetLimit(limit, records.Count);
 
         if (records.Any())
             await context.RespondAsync(records
@@ -157,7 +157,7 @@ public partial class RecordController : BaseCommandModule
     )
     {
         var records = await Repository.FindByUser(member.Id);
-        var trueLimit = limit <= 0 ? records.Count : limit ?? DefaultLimit;
+        var trueLimit = GetLimit(limit, records.Count);
 
         if (records.Any())
             await context.RespondAsync(records
@@ -178,7 +178,7 @@ public partial class RecordController : BaseCommandModule
     )
     {
         var records = await Repository.FindByCategory(category);
-        var trueLimit = limit <= 0 ? records.Count : limit ?? DefaultLimit;
+        var trueLimit = GetLimit(limit, records.Count);
 
         if (records.Any())
             await context.RespondAsync(records
@@ -189,4 +189,6 @@ public partial class RecordController : BaseCommandModule
             await context.RespondAsync(
                 $"No history recorded for category {category}");
     }
+    
+    private static int GetLimit(int? preference, int recordsCount) => preference <= 0 ? recordsCount : preference ?? DefaultLimit;
 }
