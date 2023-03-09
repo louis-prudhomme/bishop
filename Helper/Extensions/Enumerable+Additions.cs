@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bishop.Helper.Extensions;
 
@@ -43,5 +45,13 @@ public static class EnumerableAdditions
             sum += item;
             yield return sum;
         }        
+    }
+    
+    public static async Task<TResult> WhenAll<TSource, TResult>(this IEnumerable<Task<TSource>> self, Func<IEnumerable<TSource>, TResult> action)
+    {
+        if (self == null)
+            throw new ArgumentNullException(nameof(self));
+        var selves = await Task.WhenAll(self);
+        return action(selves);
     }
 }

@@ -54,11 +54,9 @@ public partial class RecordController
             return;
         }
 
-        var scoresWithUserNames =
-            (await Task.WhenAll(
-                scores.Select(async tuple => (
-                    UserName: await Cache.GetValue(tuple.UserId) ?? throw new ArgumentNullException(), tuple.Score))))
-            .ToList();
+        var scoresWithUserNames = await scores
+            .Select(async tuple => (UserName: await Cache.GetValue(tuple.UserId) ?? "", tuple.Score))
+            .WhenAll(list => list.ToList());
         var formattedRankings = Manager
             .RankScores(scoresWithUserNames)
             .Select(tuple => (UserName: tuple.Key, tuple.Score, tuple.Ranking))
@@ -109,8 +107,9 @@ public partial class RecordController
         var record = new RecordEntity(member.Id, category, motive);
         await RecordAndRespondAsync(context, member, category, new List<RecordEntity> {record});
     }
-    
-    private async Task RecordAndRespondAsync(CommandContext context, DiscordMember member, CounterCategory category, List<RecordEntity> records)
+
+    private async Task RecordAndRespondAsync(CommandContext context, DiscordMember member, CounterCategory category,
+        List<RecordEntity> records)
     {
         var (previous, current, nextMilestone) = await Manager.Save(member.Id, category, records);
 
