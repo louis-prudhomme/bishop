@@ -11,7 +11,7 @@ namespace Bishop.Commands.Horoscope;
 /// <summary>
 ///     Provide a command to send horoscopes to @users.
 /// </summary>
-public class Horoscope : BaseCommandModule
+public class HoroscopeController : BaseCommandModule
 {
     public HoroscopeRepository Repository { private get; set; } = null!;
 

@@ -1,14 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
-using Bishop.Commands.Record.Model;
-using Bishop.Commands.Record.Presenter.Aliases;
+using Bishop.Commands.Record.Controller.Aliases;
 using Bishop.Helper.Extensions;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Record.Presenter;
+namespace Bishop.Commands.Record.Controller;
 
 /// <summary>
 ///     The <c>Counter</c>-part of the <c>RecordController</c> class provides a set of commands to keep trace of user's deeds.

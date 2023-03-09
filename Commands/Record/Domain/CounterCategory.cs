@@ -1,5 +1,5 @@
 ﻿
-namespace Bishop.Commands.Record.Model;
+namespace Bishop.Commands.Record.Domain;
 
 /// <summary>
 ///     Represent every possible category for <see cref="RecordEntity" />.

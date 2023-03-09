@@ -5,7 +5,7 @@ using System.IO;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Horoscope;
 using Bishop.Commands.Record.Domain;
-using Bishop.Commands.Record.Presenter;
+using Bishop.Commands.Record.Controller;
 using Bishop.Commands.Weather.Domain;
 using Bishop.Commands.Weather.Service;
 using Bishop.Config.Converters;

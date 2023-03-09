@@ -1,10 +1,10 @@
 using System.Data;
 using System.Threading.Tasks;
-using Bishop.Commands.Record.Model;
+using Bishop.Commands.Record.Domain;
 using Bishop.Helper;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Record.Presenter;
+namespace Bishop.Commands.Record.Controller;
 
 public class RecordFormatter
 {

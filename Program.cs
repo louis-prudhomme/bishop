@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
 using Bishop.Commands.Horoscope;
-using Bishop.Commands.Record.Presenter;
-using Bishop.Commands.Record.Presenter.Aliases;
+using Bishop.Commands.Record.Controller;
+using Bishop.Commands.Record.Controller.Aliases;
 using Bishop.Commands.Weather.Presenter;
 using Bishop.Config;
 using DSharpPlus;
@@ -62,7 +62,7 @@ internal static class Program
             typeof(Stalk),
             typeof(Tomato),
             typeof(Aled),
-            typeof(Horoscope),
+            typeof(HoroscopeController),
             typeof(Quote),
             typeof(Vote),
             typeof(Piggies),
