@@ -8,19 +8,16 @@ namespace Bishop.Commands.Record.Controller;
 
 public class RecordFormatter
 {
-    public IKeyBasedCache<ulong, string> Cache { private get; set; } = null!;
+    public string FormatRecordRankingUpdate(DiscordMember member, CounterCategory category, long score,
+        long previousScore) =>
+        $"{FormatRecordRanking(member.Username, category, score, null)} (from {previousScore})";
 
-    public async Task<string> FormatRecordRanking(ulong userId, CounterCategory category, long score, int? rank = null)
-    {
-        var username = await Cache.GetValue(userId) ?? throw new NoNullAllowedException();
-        
-        return FormatRecordRanking(username, category, score, rank);
-    }
+    public string FormatBrokenMilestone(long milestone) => $"A new milestone has been broken through: {milestone}! 🎉";
 
-    public string FormatRecordRanking(DiscordMember member, CounterCategory category, long score, int? rank = null) =>
-        FormatRecordRanking(member.Username, category, score, rank);
+    public string FormatRecordRanking(DiscordMember member, CounterCategory category, long score) =>
+        FormatRecordRanking(member.Username, category, score, null);
 
-    private string FormatRecordRanking(string username, CounterCategory category, long score, int? rank = null)
+    public string FormatRecordRanking(string username, CounterCategory category, long score, int? rank)
     {
         var displayedRank = rank switch
         {
@@ -54,6 +51,7 @@ public class RecordFormatter
                 ? "*For reasons unknown to History*"
                 : $"*« {toFormat.Motive} »*";
         }
+
         return shouldIncludeCategory
             ? $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)} in **{toFormat.Category}**"
             : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";

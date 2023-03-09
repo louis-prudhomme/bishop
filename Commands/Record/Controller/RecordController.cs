@@ -189,15 +189,4 @@ public partial class RecordController : BaseCommandModule
             await context.RespondAsync(
                 $"No history recorded for category {category}");
     }
-
-    public async Task AddGhostRecords(SnowflakeObject member, CounterCategory category, long nb)
-    {
-        var recordsToInsert = new List<RecordEntity>();
-        for (var i = 0; i < nb; i++)
-        {
-            recordsToInsert.Add(new RecordEntity(member.Id, category, null));
-        }
-
-        await Repository.InsertManyAsync(recordsToInsert);
-    }
 }

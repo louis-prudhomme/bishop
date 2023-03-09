@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Controller.Aliases;
@@ -25,7 +27,7 @@ public partial class RecordController
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member)
     {
-        var scores = await RecordRepository.CountByUserGroupByCategory(member.Id);
+        var scores = await Manager.GetUserScores(member.Id);
 
         if (!scores.Any())
             await context.RespondAsync($"No scores for user {member.Username}");
@@ -42,33 +44,39 @@ public partial class RecordController
     [Command("score")]
     public async Task Score(CommandContext context,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
-        CounterCategory counterCategory)
+        CounterCategory category)
     {
-        var scores = await RecordRepository
-            .CountByCategoryGroupByUser(counterCategory);
+        var scores = await Manager.GetCategoryScores(category);
 
         if (!scores.Any())
-            await context.RespondAsync($"No scores for category {counterCategory}");
-        else
         {
-            var entities = await Task.WhenAll(scores
-                .Select(pair => pair)
-                .OrderByDescending(pair => pair.Value)
-                .Select((pair, i) => Formatter.FormatRecordRanking(pair.Key, counterCategory, pair.Value, i)));
-
-            await context.RespondAsync(entities.JoinWithNewlines());
+            await context.RespondAsync($"No scores for category {category}");
+            return;
         }
+
+        var scoresWithUserNames =
+            (await Task.WhenAll(
+                scores.Select(async tuple => (
+                    UserName: await Cache.GetValue(tuple.UserId) ?? throw new ArgumentNullException(), tuple.Score))))
+            .ToList();
+        var formattedRankings = Manager
+            .RankScores(scoresWithUserNames)
+            .Select(tuple => (UserName: tuple.Key, tuple.Score, tuple.Ranking))
+            .Select(tuple => Formatter.FormatRecordRanking(tuple.UserName, category, tuple.Score, tuple.Ranking))
+            .JoinWithNewlines();
+
+        await context.RespondAsync(formattedRankings);
     }
 
     [Command("score")]
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
-        CounterCategory counterCategory)
+        CounterCategory category)
     {
-        var score = await RecordRepository.CountByUserAndCategory(member.Id, counterCategory);
+        var score = await Manager.Count(member.Id, category);
 
-        await context.RespondAsync(Formatter.FormatRecordRanking(member, counterCategory, score));
+        await context.RespondAsync(Formatter.FormatRecordRanking(member, category, score));
     }
 
     [Command("score")]
@@ -76,25 +84,17 @@ public partial class RecordController
         [Description("User to add some score to")]
         DiscordMember member,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
-        CounterCategory counterCategory,
+        CounterCategory category,
         [Description("To increment by")] int nb)
     {
         if (nb <= 0)
-        { 
+        {
             await context.RespondAsync("Negative & null increments are not handled yet.");
             return;
         }
-        var previous = await RecordRepository
-            .CountByUserAndCategory(member.Id, counterCategory);
 
-        await AddGhostRecords(member, counterCategory, nb);
-
-        var formatted = Formatter.FormatRecordRanking(member, counterCategory, previous + nb);
-        await context.RespondAsync($"{formatted} (from {previous})");
-
-        var milestone = GetNextMilestone(previous);
-        if (previous + nb >= milestone)
-            await context.RespondAsync($"A new milestone has been broken through: {milestone}! 🎉");
+        var records = Manager.CreateGhostRecords(member, category, nb);
+        await RecordAndRespondAsync(context, member, category, records);
     }
 
     [Command("score")]
@@ -102,33 +102,19 @@ public partial class RecordController
         [Description("User to increment score of")]
         DiscordMember member,
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
-        CounterCategory counterCategory,
+        CounterCategory category,
         [RemainingText] [Description("Context for the point(s) addition")]
         string motive)
     {
-        var previous = await RecordRepository
-            .CountByUserAndCategory(member.Id, counterCategory);
-
-        await Add(context, member, counterCategory, motive);
-
-        var formatted = Formatter.FormatRecordRanking(member, counterCategory, previous + 1);
-        await context.RespondAsync($"{formatted} (from {previous})");
-
-        var milestone = GetNextMilestone(previous);
-        if (previous + 1 >= milestone)
-            await context.RespondAsync($"A new milestone has been broken through: {milestone}! 🎉");
+        var record = new RecordEntity(member.Id, category, motive);
+        await RecordAndRespondAsync(context, member, category, new List<RecordEntity> {record});
     }
-
-    private static long GetNextMilestone(long current)
+    
+    private async Task RecordAndRespondAsync(CommandContext context, DiscordMember member, CounterCategory category, List<RecordEntity> records)
     {
-        return current switch
-        {
-            < 10 => 10,
-            < 50 => 50,
-            < 69 => 69,
-            < 100 => 100,
-            < 666 => 666,
-            _ => (current / 100 + 1) * 100
-        };
+        var (previous, current, nextMilestone) = await Manager.Save(member.Id, category, records);
+
+        await context.RespondAsync(Formatter.FormatRecordRankingUpdate(member, category, current, previous));
+        if (current >= nextMilestone) await context.RespondAsync(Formatter.FormatBrokenMilestone(nextMilestone));
     }
 }

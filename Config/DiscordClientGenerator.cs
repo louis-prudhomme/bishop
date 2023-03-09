@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.IO;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Horoscope;
+using Bishop.Commands.Record.Business;
 using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Controller;
 using Bishop.Commands.Weather.Domain;
@@ -72,16 +73,18 @@ public class DiscordClientGenerator
             new AutoUpdatingKeyBasedCache<ulong, string>(UserNameAccessor.CacheForSeconds,
                 UserNameAccessor.FetchUserName);
         // OTHERS
-        var nestedScoreFormatter = new RecordFormatter
+        var nestedRecordRepository = new RecordRepository();
+        var nestedRecordManager = new RecordManager
         {
-            Cache = nestedUserNameCacheService
+            Repository = nestedRecordRepository
         };
-        var nestedRecordsService = new RecordController
+        var nestedRecordsController = new RecordController
         {
             Cache = nestedUserNameCacheService,
             Random = new Random(),
             Repository = new RecordRepository(),
-            Formatter = nestedScoreFormatter,
+            Formatter = new RecordFormatter(),
+            Manager = nestedRecordManager
         };
         var nestedWeatherService = new WeatherService
         {
@@ -93,14 +96,14 @@ public class DiscordClientGenerator
         };
 
         return new ServiceCollection()
-            .AddSingleton(nestedRecordsService)
+            .AddSingleton(nestedRecordsController)
             .AddSingleton(nestedWeatherService)
             .AddSingleton<IKeyBasedCache<GriveDirectory, ImmutableList<string>>>(nestedGriveCache)
             .AddSingleton<IKeyBasedCache<string, WeatherEntity>>(nestedWeatherCache)
             .AddSingleton<IKeyBasedCache<ulong, string>>(nestedUserNameCacheService)
-            .AddSingleton(nestedScoreFormatter)
+            .AddSingleton(nestedRecordManager)
             .AddSingleton(nestedCardGameFormatter)
-            .AddSingleton<RecordRepository>()
+            .AddSingleton<RecordFormatter>()
             .AddSingleton<CardGameRepository>()
             .AddSingleton<HoroscopeRepository>();
     }
