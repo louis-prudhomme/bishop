@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
@@ -24,8 +23,7 @@ public partial class RecordController
         "Allows interaction with @users’ scores. The scores can be seen by key or by @user, " +
         "and it is possible to add points to a player in a certain category. " +
         "It is also possible to add a reason for the point, which will then be in the @user’s history.")]
-    public async Task Score(CommandContext context,
-        [Description("Target @user")] DiscordMember member)
+    public async Task Score(CommandContext context, [Description("Target @user")] DiscordMember member)
     {
         var scores = await Manager.FindScores(member.Id);
 
@@ -42,9 +40,7 @@ public partial class RecordController
     }
 
     [Command("score")]
-    public async Task Score(CommandContext context,
-        [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
-        CounterCategory category)
+    public async Task Score(CommandContext context, [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")] CounterCategory category)
     {
         var scores = await Manager.FindScores(category);
 
@@ -106,10 +102,10 @@ public partial class RecordController
     {
         var record = new RecordEntity(member.Id, category, motive);
         await RecordAndRespondAsync(context, member, category, new List<RecordEntity> {record});
+        await context.RespondAsync(Formatter.FormatScoreUpdate(member, category, motive));
     }
 
-    private async Task RecordAndRespondAsync(CommandContext context, DiscordMember member, CounterCategory category,
-        List<RecordEntity> records)
+    private async Task RecordAndRespondAsync(CommandContext context, DiscordMember member, CounterCategory category, List<RecordEntity> records)
     {
         var (previous, current, nextMilestone) = await Manager.Save(member.Id, category, records);
 
