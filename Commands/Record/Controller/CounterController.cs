@@ -27,7 +27,7 @@ public partial class RecordController
     public async Task Score(CommandContext context,
         [Description("Target @user")] DiscordMember member)
     {
-        var scores = await Manager.GetUserScores(member.Id);
+        var scores = await Manager.FindScores(member.Id);
 
         if (!scores.Any())
             await context.RespondAsync($"No scores for user {member.Username}");
@@ -46,7 +46,7 @@ public partial class RecordController
         [Description("Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
         CounterCategory category)
     {
-        var scores = await Manager.GetCategoryScores(category);
+        var scores = await Manager.FindScores(category);
 
         if (!scores.Any())
         {

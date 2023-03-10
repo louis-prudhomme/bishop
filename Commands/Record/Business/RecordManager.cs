@@ -17,7 +17,30 @@ public class RecordManager
         return await Repository.CountByUserGroupByCategory(memberId);
     }
 
-    public async Task<List<(ulong UserId, long Score)>> GetCategoryScores(CounterCategory category)
+    public async Task<List<RecordEntity>> GetAllNonNulls() => (await Repository.FindAllAsync())
+        .Where(record => record.Motive != null)
+        .ToList();
+
+    public async Task<List<RecordEntity>> Find(ulong userId) => (await Repository.FindByUser(userId))
+        .Where(record => record.Motive != null)
+        .ToList();
+
+    public async Task<List<RecordEntity>> Find(ulong userId, CounterCategory category) =>
+        (await Repository.FindByUserAndCategory(userId, category))
+        .Where(record => record.Motive != null)
+        .ToList();
+
+    public async Task<List<RecordEntity>> Find(CounterCategory category) =>
+        (await Repository.FindByCategory(category))
+        .Where(record => record.Motive != null)
+        .ToList();
+
+    public async Task<Dictionary<CounterCategory, long>> FindScores(ulong memberId)
+    {
+        return await Repository.CountByUserGroupByCategory(memberId);
+    }
+
+    public async Task<List<(ulong UserId, long Score)>> FindScores(CounterCategory category)
     {
         return (await Repository.CountByCategoryGroupByUser(category))
             .Select(pair => (UserId: pair.Key, Score: pair.Value))
@@ -36,7 +59,8 @@ public class RecordManager
         return await Repository.CountByUserAndCategory(userId, category);
     }
 
-    public record SaveRecordResponse(long PreviousScore, long CurrentScore, long NextMilestone); 
+    public record SaveRecordResponse(long PreviousScore, long CurrentScore, long NextMilestone);
+
     public List<RecordEntity> CreateGhostRecords(SnowflakeObject member, CounterCategory category, int nb)
     {
         return Enumerable
@@ -53,7 +77,7 @@ public class RecordManager
         else await Repository.InsertManyAsync(toSave);
 
         var current = previous + toSave.Count;
-        return new SaveRecordResponse(previous, current,  GetNextMilestone(previous));
+        return new SaveRecordResponse(previous, current, GetNextMilestone(previous));
     }
 
     private static long GetNextMilestone(long current)
