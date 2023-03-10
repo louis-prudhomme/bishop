@@ -1,7 +1,9 @@
-using System.Data;
-using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Bishop.Commands.Record.Domain;
 using Bishop.Helper;
+using Bishop.Helper.Extensions;
 using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Record.Controller;
@@ -55,6 +57,12 @@ public class RecordFormatter
         return shouldIncludeCategory
             ? $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)} in **{toFormat.Category}**"
             : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";
+    }
+
+    public string FormatLongRecord(DiscordMember member, CounterCategory category, long ranking, long score, IEnumerable<RecordEntity> records)
+    {
+        return $"*{member.Username}* has accumulated {score} points and ranks #{ranking} in {category}\n" +
+               $"Their last records are:\n{records.Select(FormatRecord).JoinWithNewlines()}";
     }
 
     public string FormatProgression(DiscordMember member, CounterCategory category, double ratio, int recordsSince, DateTime since) => ratio switch

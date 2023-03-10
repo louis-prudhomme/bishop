@@ -21,7 +21,7 @@ public partial class RecordController : BaseCommandModule
 {
     private const int DefaultLimit = 10;
 
-    [Command("rand")]
+    [Command("random")]
     [Aliases("r")]
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
@@ -32,7 +32,7 @@ public partial class RecordController : BaseCommandModule
         else await context.RespondAsync(Formatter.FormatRecord(picked));
     }
 
-    [Command("rand")]
+    [Command("random")]
     [Description("Returns a @member's random record")]
     public async Task PickRandom(CommandContext context, DiscordMember member)
     {
@@ -42,36 +42,41 @@ public partial class RecordController : BaseCommandModule
         else await context.RespondAsync(Formatter.FormatRecord(picked));
     }
 
-    [Command("consult")]
+    [Command("random")]
+    [Description("Returns a random record from the category")]
+    public async Task PickRandom(CommandContext context, CounterCategory category)
+    {
+        var picked = (await Manager.Find(category)).Random();
+
+        if (picked == null) await context.RespondAsync("No history recorded.");
+        else await context.RespondAsync(Formatter.FormatRecord(picked));
+    }
+
+    [GroupCommand]
     [Aliases("c")]
     [Description("To see the history of a @member")]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
-        DiscordUser member,
+        DiscordMember member,
         [Description("Category to know the history of")]
-        CounterCategory counterCategory,
+        CounterCategory category,
         [Description("Number of records to pull")]
-        int? limit = DefaultLimit
+        int? limit
     )
     {
-        var records = await Manager.Find(member.Id, counterCategory);
+        var records = await Manager.Find(member.Id, category);
+        var ranking = await Manager.FindScore(member.Id, category);
 
-        if (records.Any())
-            await context.RespondAsync(records
-                .Select(Formatter.FormatRecord)
-                .Take(GetLimit(limit))
-                .ToList());
-        else
-            await context.RespondAsync(
-                $"No history recorded for category user {member.Username} and {counterCategory}");
+        if (records.Any()) await context.RespondAsync(Formatter.FormatLongRecord(member, category, ranking, records.Count, records.Take(GetLimit(limit))));
+        else await context.RespondAsync($"No history recorded for category user {member.Username} and {category}");
     }
 
-    [Command("consult")]
+    [Command("since")]
     [Aliases("s")]
-    [Description("To see the history of a @member")]
+    [Description("To see the history of a @member since a date")]
     private async Task Since(CommandContext context,
         [Description("@User to know the progression of")]
-        DiscordUser member,
+        DiscordMember member,
         [Description("Category to know the history of")]
         CounterCategory counterCategory,
         [Description("Date from which compute progression")]
@@ -79,20 +84,19 @@ public partial class RecordController : BaseCommandModule
     )
     {
         var records = await Manager.Find(member.Id, counterCategory);
-        var total = records.Count;
         var recordsSince = records.Select(record => record.RecordedAt >= since).Count();
 
-        if (total == 0)
+        if (records.IsEmpty())
         {
             await context.RespondAsync("No progression to measure on nothing, cunt.");
             return;
         }
 
-        var ratio = recordsSince / total;
+        var ratio = recordsSince / records.Count;
         await context.RespondAsync(Formatter.FormatProgression(member, counterCategory, ratio, recordsSince, since));
     }
 
-    [Command("consult")]
+    [GroupCommand]
     private async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordUser member,
@@ -110,7 +114,7 @@ public partial class RecordController : BaseCommandModule
         else await context.RespondAsync($"No history recorded for user {member.Username}");
     }
 
-    [Command("consult")]
+    [GroupCommand]
     private async Task Consult(CommandContext context,
         [Description("Category to pull records of")]
         CounterCategory category,

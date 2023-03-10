@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Bishop.Helper.Extensions;
@@ -14,4 +15,6 @@ public static class ListAdditions
 
         return self.Count == 0 ? default : self[Rand.Next(0, self.Count)];
     }
+
+    public static bool IsEmpty(this IList self) => self.Count == 0;
 }

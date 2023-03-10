@@ -12,11 +12,6 @@ public class RecordManager
 {
     public RecordRepository Repository { private get; set; } = new();
 
-    public async Task<Dictionary<CounterCategory, long>> GetUserScores(ulong memberId)
-    {
-        return await Repository.CountByUserGroupByCategory(memberId);
-    }
-
     public async Task<List<RecordEntity>> GetAllNonNulls() => (await Repository.FindAllAsync())
         .Where(record => record.Motive != null)
         .ToList();
@@ -25,15 +20,18 @@ public class RecordManager
         .Where(record => record.Motive != null)
         .ToList();
 
-    public async Task<List<RecordEntity>> Find(ulong userId, CounterCategory category) =>
-        (await Repository.FindByUserAndCategory(userId, category))
+    public async Task<List<RecordEntity>> Find(ulong userId, CounterCategory category) => (await Repository.FindByUserAndCategory(userId, category))
         .Where(record => record.Motive != null)
         .ToList();
 
-    public async Task<List<RecordEntity>> Find(CounterCategory category) =>
-        (await Repository.FindByCategory(category))
+    public async Task<List<RecordEntity>> Find(CounterCategory category) => (await Repository.FindByCategory(category))
         .Where(record => record.Motive != null)
         .ToList();
+
+    public async Task<long> FindScore(ulong memberId, CounterCategory category)
+    {
+        return (await Repository.CountByUserGroupByCategory(memberId)).GetValueOrDefault(category);
+    }
 
     public async Task<Dictionary<CounterCategory, long>> FindScores(ulong memberId)
     {
@@ -47,7 +45,7 @@ public class RecordManager
             .ToList();
     }
 
-    public List<(TKeyType Key, long Score, int Ranking)> RankScores<TKeyType>(List<(TKeyType, long Score)> toRank)
+    public List<(TKeyType Key, long Score, int Ranking)> RankScores<TKeyType>(IEnumerable<(TKeyType, long Score)> toRank)
     {
         return toRank.OrderByDescending(pair => pair.Score)
             .Select((pair, i) => (pair.Item1, Value: pair.Score, Ranking: i))
