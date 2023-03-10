@@ -53,9 +53,8 @@ public partial class RecordController : BaseCommandModule
     }
 
     [GroupCommand]
-    [Aliases("c")]
     [Description("To see the history of a @member")]
-    private async Task Consult(CommandContext context,
+    public async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordMember member,
         [Description("Category to know the history of")]
@@ -74,7 +73,7 @@ public partial class RecordController : BaseCommandModule
     [Command("since")]
     [Aliases("s")]
     [Description("To see the history of a @member since a date")]
-    private async Task Since(CommandContext context,
+    public async Task Since(CommandContext context,
         [Description("@User to know the progression of")]
         DiscordMember member,
         [Description("Category to know the history of")]
@@ -97,7 +96,7 @@ public partial class RecordController : BaseCommandModule
     }
 
     [GroupCommand]
-    private async Task Consult(CommandContext context,
+    public async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordUser member,
         [Description("Number of records to pull")]
@@ -115,7 +114,7 @@ public partial class RecordController : BaseCommandModule
     }
 
     [GroupCommand]
-    private async Task Consult(CommandContext context,
+    public async Task Consult(CommandContext context,
         [Description("Category to pull records of")]
         CounterCategory category,
         [Description("Number of records to pull")]

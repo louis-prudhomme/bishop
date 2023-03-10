@@ -26,7 +26,7 @@ public class MalfoyCounterController : BaseCommandModule
         [Description("User to know the malfoy score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Malfoy);
+        await Controller.Consult(context, member, CounterCategory.Malfoy, null);
     }
 
     [Command("malfoy")]

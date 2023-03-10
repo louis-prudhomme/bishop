@@ -46,7 +46,7 @@ public class WindCounterController : BaseCommandModule
         [Description("User to know the wind score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Wind);
+        await Controller.Consult(context, member, CounterCategory.Wind, null);
     }
 
     [Command("wind")]

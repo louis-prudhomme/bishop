@@ -28,7 +28,7 @@ public class RacletteCounterController : BaseCommandModule
         [Description("User to know the raclette score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Raclette);
+        await Controller.Consult(context, member, CounterCategory.Raclette, null);
     }
 
     [Command("raclette")]

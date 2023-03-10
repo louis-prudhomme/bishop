@@ -26,7 +26,7 @@ public class BdmCounterController : BaseCommandModule
         [Description("User to know the bdm score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Bdm);
+        await Controller.Consult(context, member, CounterCategory.Bdm, null);
     }
 
     [Command("bdm")]

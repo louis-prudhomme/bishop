@@ -26,7 +26,7 @@ public class BeaufCounterController : BaseCommandModule
         [Description("User to know the beauf score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Beauf);
+        await Controller.Consult(context, member, CounterCategory.Beauf, null);
     }
 
     [Command("beauf")]

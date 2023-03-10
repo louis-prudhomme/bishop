@@ -26,7 +26,7 @@ public class SelCounterController : BaseCommandModule
         [Description("User to know the sel score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Sel);
+        await Controller.Consult(context, member, CounterCategory.Sel, null);
     }
 
     [Command("sel")]

@@ -26,7 +26,7 @@ public class SauceCounterController : BaseCommandModule
         [Description("User to know the sauce score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Sauce);
+        await Controller.Consult(context, member, CounterCategory.Sauce, null);
     }
 
     [Command("sauce")]

@@ -27,7 +27,7 @@ public class RassCounterController : BaseCommandModule
         [Description("User to know the rass score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Rass);
+        await Controller.Consult(context, member, CounterCategory.Rass, null);
     }
 
     [Command("rass")]
