@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Bishop.Commands.Record.Business;
 using Bishop.Commands.Record.Domain;
 using Bishop.Helper;
 using Bishop.Helper.Extensions;
@@ -92,13 +93,11 @@ public partial class RecordController
     private async Task SendGraph(CommandContext context, GenericChart.GenericChart graph)
     {
         var builder = new DiscordMessageBuilder();
-        var uuid = Guid.NewGuid();
-        var filename = $"./{uuid}.jpg";
+        using var file = new DisposableImage();
         var temp = await context.RespondAsync("Sending...");
-        graph.SaveJPG(uuid.ToString());
-        builder.WithFile(File.Open(filename, FileMode.Open));
+        graph.SaveJPG(file.FilenameWithoutExtension);
+        builder.WithFile(file.Stream());
         await context.RespondAsync(builder);
-        File.Delete(filename);
         await temp.DeleteAsync();
     }
 
