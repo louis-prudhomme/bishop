@@ -7,7 +7,7 @@ public static class ListAdditions
 {
     private static readonly Random Rand = new ();
     
-    public static T? Random<T>(this IList<T?> self)
+    public static T? Random<T>(this IList<T> self)
     {
         if (self == null)
             throw new ArgumentNullException(nameof(self));

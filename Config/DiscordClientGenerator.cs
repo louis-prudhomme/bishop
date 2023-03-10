@@ -82,7 +82,6 @@ public class DiscordClientGenerator
         {
             Cache = nestedUserNameCacheService,
             Random = new Random(),
-            Repository = new RecordRepository(),
             Formatter = new RecordFormatter(),
             Manager = nestedRecordManager
         };

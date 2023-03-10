@@ -8,28 +8,28 @@ namespace Bishop.Commands.Record.Controller;
 
 public class RecordFormatter
 {
-    public string FormatRecordRankingUpdate(DiscordMember member, CounterCategory category, long score,
-        long previousScore) =>
+    public string FormatRecordRankingUpdate(DiscordMember member, CounterCategory category, long score, long previousScore) =>
         $"{FormatRecordRanking(member.Username, category, score, null)} (from {previousScore})";
+
+    public string FormatScoreUpdate(DiscordMember member, CounterCategory category, string motive) => $"Added «*{motive}*» to {member.Mention}’s {category} history.";
 
     public string FormatBrokenMilestone(long milestone) => $"A new milestone has been broken through: {milestone}! 🎉";
 
-    public string FormatRecordRanking(DiscordMember member, CounterCategory category, long score) =>
-        FormatRecordRanking(member.Username, category, score, null);
+    public string FormatRecordRanking(DiscordMember member, CounterCategory category, long score) => FormatRecordRanking(member.Username, category, score, null);
 
     public string FormatRecordRanking(string username, CounterCategory category, long score, int? rank)
     {
-        var displayedRank = rank switch
-        {
-            0 => "🥇 ",
-            1 => "🥈 ",
-            2 => "🥉 ",
-            null => string.Empty,
-            _ => "⠀ ⠀"
-        };
-
-        return $"{displayedRank}{username}’s {category} ⇒ {score}";
+        return $"{FormatRank(rank)}{username}’s {category} ⇒ {score}";
     }
+
+    private string FormatRank(int? rank) => rank switch
+    {
+        0 => "🥇 ",
+        1 => "🥈 ",
+        2 => "🥉 ",
+        null => string.Empty,
+        _ => "⠀ ⠀"
+    };
 
     public string FormatRecordWithCategory(RecordEntity toFormat) => FormatRecord(toFormat, true);
     public string FormatRecord(RecordEntity toFormat) => FormatRecord(toFormat, false);
@@ -56,4 +56,10 @@ public class RecordFormatter
             ? $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)} in **{toFormat.Category}**"
             : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";
     }
+
+    public string FormatProgression(DiscordMember member, CounterCategory category, double ratio, int recordsSince, DateTime since) => ratio switch
+    {
+        0 => $"There's no progression for you in {category.ToString().ToLower()} since {DateHelper.FromDateTimeToStringDate(since)}. How sad...",
+        _ => $"{member.Mention} gained {recordsSince} in {category.ToString().ToLower()} points since {DateHelper.FromDateTimeToStringDate(since)}"
+    };
 }

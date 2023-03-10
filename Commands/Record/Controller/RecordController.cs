@@ -20,67 +20,26 @@ namespace Bishop.Commands.Record.Controller;
 public partial class RecordController : BaseCommandModule
 {
     private const int DefaultLimit = 10;
-    public RecordRepository Repository { private get; set; } = null!;
 
     [Command("rand")]
     [Aliases("r")]
     [Description("Picks a random record to expose")]
     public async Task PickRandom(CommandContext context)
     {
-        var records = (await Repository.FindAllAsync())
-            .Where(record => record.Motive != null)
-            .ToList();
+        var picked = (await Manager.GetAllNonNulls()).Random();
 
-        if (!records.Any())
-        {
-            await context.RespondAsync("No history recorded.");
-            return;
-        }
-
-        var picked = records.ElementAt(Random.Next(0, records.Count));
-        // TODO default value as l'étranger
-        var originalUser = await Cache.Get(picked.UserId);
-
-        await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
+        if (picked == null) await context.RespondAsync("No history recorded.");
+        else await context.RespondAsync(Formatter.FormatRecord(picked));
     }
 
     [Command("rand")]
     [Description("Returns a @member's random record")]
-    public async Task ConsultShort(CommandContext context, DiscordMember member)
+    public async Task PickRandom(CommandContext context, DiscordMember member)
     {
-        var records = (await Repository.FindByUser(member.Id))
-            .Where(record => record.Motive != null)
-            .ToList();
+        var picked = (await Manager.Find(member.Id)).Random();
 
-        if (!records.Any())
-        {
-            await context.RespondAsync("No history recorded.");
-            return;
-        }
-
-        var picked = records.ElementAt(Random.Next(0, records.Count));
-        // TODO default value as l'étranger
-        var originalUser = await Cache.Get(picked.UserId);
-
-        await context.RespondAsync($"«*{picked.Motive}*» — {originalUser}");
-    }
-
-    [Command("add")]
-    [Aliases("a")]
-    [Description("To add a new record to a @member’s history")]
-    public async Task Add(CommandContext context,
-        [Description("@User to add the record to")]
-        DiscordMember member,
-        [Description("Category to add the record to")]
-        CounterCategory counterCategory,
-        [Description("Record to add")] [RemainingText]
-        string motive)
-    {
-        var record = new RecordEntity(member.Id, counterCategory, motive);
-
-        await Repository.SaveAsync(record);
-        await context.RespondAsync(
-            $"Added «*{record.Motive}*» to {member.Mention}’s {counterCategory} history.");
+        if (picked == null) await context.RespondAsync("No history recorded.");
+        else await context.RespondAsync(Formatter.FormatRecord(picked));
     }
 
     [Command("consult")]
@@ -95,13 +54,12 @@ public partial class RecordController : BaseCommandModule
         int? limit = DefaultLimit
     )
     {
-        var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
-        var trueLimit = GetLimit(limit, records.Count);
+        var records = await Manager.Find(member.Id, counterCategory);
 
         if (records.Any())
             await context.RespondAsync(records
                 .Select(Formatter.FormatRecord)
-                .Take(trueLimit)
+                .Take(GetLimit(limit))
                 .ToList());
         else
             await context.RespondAsync(
@@ -120,9 +78,9 @@ public partial class RecordController : BaseCommandModule
         DateTime since
     )
     {
-        var records = await Repository.FindByUserAndCategory(member.Id, counterCategory);
-        var total = Convert.ToDouble(records.Count);
-        var recordsSince = Convert.ToDouble(records.Select(record => record.RecordedAt >= since).Count());
+        var records = await Manager.Find(member.Id, counterCategory);
+        var total = records.Count;
+        var recordsSince = records.Select(record => record.RecordedAt >= since).Count();
 
         if (total == 0)
         {
@@ -131,21 +89,7 @@ public partial class RecordController : BaseCommandModule
         }
 
         var ratio = recordsSince / total;
-        switch (ratio)
-        {
-            case 0:
-                await context.RespondAsync(
-                    $"There's no progression for you in {counterCategory.ToString().ToLower()} since {DateHelper.FromDateTimeToStringDate(since)}. How sad...");
-                return;
-            case > 0.1:
-                await context.RespondAsync(
-                    $"You're on fire, {member.Mention}'s ! {recordsSince} points in {counterCategory.ToString().ToLower()} since {DateHelper.FromDateTimeToStringDate(since)}");
-                return;
-            default:
-                await context.RespondAsync(
-                    $"{member.Mention} gained {recordsSince} in {counterCategory.ToString().ToLower()} points since {DateHelper.FromDateTimeToStringDate(since)}");
-                return;
-        }
+        await context.RespondAsync(Formatter.FormatProgression(member, counterCategory, ratio, recordsSince, since));
     }
 
     [Command("consult")]
@@ -156,17 +100,14 @@ public partial class RecordController : BaseCommandModule
         int? limit
     )
     {
-        var records = await Repository.FindByUser(member.Id);
-        var trueLimit = GetLimit(limit, records.Count);
+        var records = await Manager.Find(member.Id);
 
         if (records.Any())
             await context.RespondAsync(records
                 .Select(Formatter.FormatRecordWithCategory)
-                .Take(trueLimit)
+                .Take(GetLimit(limit))
                 .ToList());
-        else
-            await context.RespondAsync(
-                $"No history recorded for user {member.Username}");
+        else await context.RespondAsync($"No history recorded for user {member.Username}");
     }
 
     [Command("consult")]
@@ -177,18 +118,15 @@ public partial class RecordController : BaseCommandModule
         int? limit
     )
     {
-        var records = await Repository.FindByCategory(category);
-        var trueLimit = GetLimit(limit, records.Count);
+        var records = await Manager.Find(category);
 
         if (records.Any())
             await context.RespondAsync(records
                 .Select(Formatter.FormatRecord)
-                .Take(trueLimit)
+                .Take(GetLimit(limit))
                 .ToList());
-        else
-            await context.RespondAsync(
-                $"No history recorded for category {category}");
+        else await context.RespondAsync($"No history recorded for category {category}");
     }
-    
-    private static int GetLimit(int? preference, int recordsCount) => preference <= 0 ? recordsCount : preference ?? DefaultLimit;
+
+    private static int GetLimit(int? preference) => preference ?? DefaultLimit;
 }
