@@ -78,12 +78,14 @@ public class DiscordClientGenerator
         {
             Repository = nestedRecordRepository
         };
+        var nestedPlotManager = new PlotManager();
         var nestedRecordsController = new RecordController
         {
             Cache = nestedUserNameCacheService,
             Random = new Random(),
             Formatter = new RecordFormatter(),
-            Manager = nestedRecordManager
+            Manager = nestedRecordManager,
+            PlotManager = nestedPlotManager
         };
         var nestedWeatherService = new WeatherService
         {
@@ -100,6 +102,7 @@ public class DiscordClientGenerator
             .AddSingleton<IKeyBasedCache<GriveDirectory, ImmutableList<string>>>(nestedGriveCache)
             .AddSingleton<IKeyBasedCache<string, WeatherEntity>>(nestedWeatherCache)
             .AddSingleton<IKeyBasedCache<ulong, string>>(nestedUserNameCacheService)
+            .AddSingleton(nestedPlotManager)
             .AddSingleton(nestedRecordManager)
             .AddSingleton(nestedCardGameFormatter)
             .AddSingleton<RecordFormatter>()
