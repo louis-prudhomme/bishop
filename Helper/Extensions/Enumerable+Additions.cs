@@ -21,8 +21,10 @@ public static class EnumerableAdditions
             acc = string.Join(acc, enumerator.Current);
         return acc;
     }
+
+    public static string JoinWithNewlines(this IEnumerable<string> source) => source.JoinWith("\n");
     
-    public static string JoinWithNewlines(this IEnumerable<string> source)
+    public static string JoinWith(this IEnumerable<string> source, string separator)
     {
         if (source == null)
             throw new ArgumentNullException(nameof(source));
@@ -33,7 +35,7 @@ public static class EnumerableAdditions
 
         var acc = enumerator.Current;
         while (enumerator.MoveNext())
-            acc = string.Join("\n", acc, enumerator.Current);
+            acc = string.Join(separator, acc, enumerator.Current);
         return acc;
     }
     

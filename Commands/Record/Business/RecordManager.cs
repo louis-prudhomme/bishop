@@ -33,6 +33,14 @@ public class RecordManager
         return (await Repository.CountByUserGroupByCategory(memberId)).GetValueOrDefault(category);
     }
 
+    public async Task<int> FindRank(ulong memberId, CounterCategory category)
+    {
+        return RankScores((await Repository.CountByCategoryGroupByUser(category))
+                .Select(pair => (UserId: pair.Key, Score: pair.Value)))
+            .First(tuple => tuple.Key == memberId)
+            .Ranking;
+    }
+
     public async Task<Dictionary<CounterCategory, long>> FindScores(ulong memberId)
     {
         return await Repository.CountByUserGroupByCategory(memberId);

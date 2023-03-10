@@ -52,7 +52,8 @@ public partial class RecordController : BaseCommandModule
         else await context.RespondAsync(Formatter.FormatRecord(picked));
     }
 
-    [GroupCommand]
+    [Command("consult")]
+    [Aliases("c")]
     [Description("To see the history of a @member")]
     public async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
@@ -64,10 +65,11 @@ public partial class RecordController : BaseCommandModule
     )
     {
         var records = await Manager.Find(member.Id, category);
-        var ranking = await Manager.FindScore(member.Id, category);
+        var score = await Manager.FindScore(member.Id, category);
+        var rank = await Manager.FindRank(member.Id, category);
 
-        if (records.Any()) await context.RespondAsync(Formatter.FormatLongRecord(member, category, ranking, records.Count, records.Take(GetLimit(limit))));
-        else await context.RespondAsync($"No history recorded for category user {member.Username} and {category}");
+        if (records.Any()) await context.RespondAsync(Formatter.FormatLongRecord(member, category, rank + 1, score, records.Take(GetLimit(limit))));
+        else await context.RespondAsync($"No history recorded for user {member.Username} and category {category}");
     }
 
     [Command("since")]
@@ -95,7 +97,7 @@ public partial class RecordController : BaseCommandModule
         await context.RespondAsync(Formatter.FormatProgression(member, counterCategory, ratio, recordsSince, since));
     }
 
-    [GroupCommand]
+    [Command("consult")]
     public async Task Consult(CommandContext context,
         [Description("@User to know the history of")]
         DiscordUser member,
@@ -113,7 +115,7 @@ public partial class RecordController : BaseCommandModule
         else await context.RespondAsync($"No history recorded for user {member.Username}");
     }
 
-    [GroupCommand]
+    [Command("consult")]
     public async Task Consult(CommandContext context,
         [Description("Category to pull records of")]
         CounterCategory category,
