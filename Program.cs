@@ -22,6 +22,9 @@ internal static class Program
         .GetLogger(MethodBase.GetCurrentMethod()?
             .DeclaringType);
 
+    private static readonly string? ChromiumPath = Environment
+        .GetEnvironmentVariable("CHROMIUM_PATH");
+    
     private static DiscordClient _discord = null!;
     private static DiscordClientGenerator _generator = null!;
 
@@ -30,8 +33,11 @@ internal static class Program
     {
         XmlConfigurator.Configure();
 
-        PuppeteerSharpRendererOptions.localBrowserExecutablePath = "/usr/bin/chromium-browser";
-        PuppeteerSharpRendererOptions.launchOptions.Args = new[] {"--no-sandbox"}; 
+        if (ChromiumPath != null)
+        {
+            PuppeteerSharpRendererOptions.localBrowserExecutablePath = ChromiumPath;
+            PuppeteerSharpRendererOptions.launchOptions.Args = new[] {"--no-sandbox"};
+        } 
 
         _generator = new DiscordClientGenerator();
         _generator.RegisterBulk(CommandClasses);
