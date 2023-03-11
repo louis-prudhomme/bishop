@@ -24,8 +24,18 @@ public class DateHelper
             .FromUnixTimeSeconds(timestamp)
             .LocalDateTime;
     }
-    
+
     public static long CurrentEpoch => FromDateTimeToTimestamp(DateTime.Now);
+
+    /// <summary>
+    ///     Converts a unix timestamp to a formatted date of the <c>dd/mm/yyyy</c> representation.
+    /// </summary>
+    /// <param name="timestamp">To convert.</param>
+    /// <returns>Timestamp.</returns>
+    public static string FromTimestampToStringDate(long timestamp)
+    {
+        return FromDateTimeToStringDate(FromTimestampToDateTime(timestamp));
+    }
 
     /// <summary>
     ///     Converts a <see cref="DateTime" /> to the corresponding unix timestamp.

@@ -5,6 +5,7 @@ using Bishop.Commands.Record.Domain;
 using Bishop.Helper;
 using Bishop.Helper.Extensions;
 using DSharpPlus.Entities;
+using static System.Int64;
 
 namespace Bishop.Commands.Record.Controller;
 
@@ -38,24 +39,17 @@ public class RecordFormatter
 
     private string FormatRecord(RecordEntity toFormat, bool shouldIncludeCategory)
     {
-        var reason = "";
-        if (toFormat.Category.Equals(CounterCategory.Raclette))
-        {
-            long MotiveLong;
-            long.TryParse(toFormat.Motive, out MotiveLong);
-            reason = toFormat.Motive == null
+        var reason = toFormat.Motive == null
+            ? "*For reasons unknown to History*"
+            : $"*« {toFormat.Motive} »*";
+
+        if (toFormat.Category == CounterCategory.Raclette)
+            reason = TryParse(toFormat.Motive, out var motiveLong)
                 ? "*Unknown Raclette*"
-                : $"*« Raclette of {DateHelper.FromTimestampToDateTime(MotiveLong).ToString("dd-MM-yyyy")} »*";
-        }
-        else
-        {
-            reason = toFormat.Motive == null
-                ? "*For reasons unknown to History*"
-                : $"*« {toFormat.Motive} »*";
-        }
+                : $"*« Raclette of {DateHelper.FromTimestampToStringDate(motiveLong)} »*";
 
         return shouldIncludeCategory
-            ? $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)} in **{toFormat.Category}**"
+            ? $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)} in **{toFormat.Category.DisplayName()}**"
             : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";
     }
 
