@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Bishop.Commands.Record.Model;
+using Bishop.Commands.Record.Domain;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Record.Presenter.Aliases;
+namespace Bishop.Commands.Record.Controller.Aliases;
 
 public class SelCounterController : BaseCommandModule
 {
@@ -15,7 +15,7 @@ public class SelCounterController : BaseCommandModule
     public async Task ScoreSel(CommandContext context,
         [Description("User to increment the sel score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Sel, nb);
     }
@@ -26,7 +26,7 @@ public class SelCounterController : BaseCommandModule
         [Description("User to know the sel score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Sel);
+        await Controller.Consult(context, member, CounterCategory.Sel, null);
     }
 
     [Command("sel")]

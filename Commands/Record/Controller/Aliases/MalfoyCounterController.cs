@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using Bishop.Commands.Record.Model;
+using Bishop.Commands.Record.Domain;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Record.Presenter.Aliases;
+namespace Bishop.Commands.Record.Controller.Aliases;
 
 public class MalfoyCounterController : BaseCommandModule
 {
@@ -15,7 +15,7 @@ public class MalfoyCounterController : BaseCommandModule
     public async Task ScoreMalfoy(CommandContext context,
         [Description("User to increment the malfoy score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Malfoy, nb);
     }
@@ -26,7 +26,7 @@ public class MalfoyCounterController : BaseCommandModule
         [Description("User to know the malfoy score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Malfoy);
+        await Controller.Consult(context, member, CounterCategory.Malfoy, null);
     }
 
     [Command("malfoy")]

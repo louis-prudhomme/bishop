@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Dump;
 using Bishop.Commands.Horoscope;
-using Bishop.Commands.Record.Presenter;
-using Bishop.Commands.Record.Presenter.Aliases;
+using Bishop.Commands.Record.Controller;
+using Bishop.Commands.Record.Controller.Aliases;
 using Bishop.Commands.Weather.Presenter;
 using Bishop.Config;
 using DSharpPlus;
@@ -22,6 +22,9 @@ internal static class Program
         .GetLogger(MethodBase.GetCurrentMethod()?
             .DeclaringType);
 
+    private static readonly string? ChromiumPath = Environment
+        .GetEnvironmentVariable("CHROMIUM_PATH");
+    
     private static DiscordClient _discord = null!;
     private static DiscordClientGenerator _generator = null!;
 
@@ -30,8 +33,11 @@ internal static class Program
     {
         XmlConfigurator.Configure();
 
-        PuppeteerSharpRendererOptions.localBrowserExecutablePath = "/usr/bin/chromium-browser";
-        PuppeteerSharpRendererOptions.launchOptions.Args = new[] {"--no-sandbox"}; 
+        if (ChromiumPath != null)
+        {
+            PuppeteerSharpRendererOptions.localBrowserExecutablePath = ChromiumPath;
+            PuppeteerSharpRendererOptions.launchOptions.Args = new[] {"--no-sandbox"};
+        } 
 
         _generator = new DiscordClientGenerator();
         _generator.RegisterBulk(CommandClasses);
@@ -62,7 +68,7 @@ internal static class Program
             typeof(Stalk),
             typeof(Tomato),
             typeof(Aled),
-            typeof(Horoscope),
+            typeof(HoroscopeController),
             typeof(Quote),
             typeof(Vote),
             typeof(Piggies),

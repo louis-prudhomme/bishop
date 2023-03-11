@@ -2,7 +2,7 @@
 using Bishop.Helper;
 using Bishop.Helper.Database;
 
-namespace Bishop.Commands.Record.Model;
+namespace Bishop.Commands.Record.Domain;
 
 /// <summary>
 ///     Specifies and implements interactions of <see cref="RecordEntity" /> with DB.

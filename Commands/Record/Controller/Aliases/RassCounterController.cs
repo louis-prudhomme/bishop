@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bishop.Commands.Record.Model;
+using Bishop.Commands.Record.Domain;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Record.Presenter.Aliases;
+namespace Bishop.Commands.Record.Controller.Aliases;
 
 public class RassCounterController : BaseCommandModule
 {
@@ -16,7 +16,7 @@ public class RassCounterController : BaseCommandModule
     public async Task ScoreRass(CommandContext context,
         [Description("User to increment the rass score of")]
         DiscordMember member,
-        [Description("To increment by")] long nb)
+        [Description("To increment by")] int nb)
     {
         await Controller.Score(context, member, CounterCategory.Rass, nb);
     }
@@ -27,7 +27,7 @@ public class RassCounterController : BaseCommandModule
         [Description("User to know the rass score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Rass);
+        await Controller.Consult(context, member, CounterCategory.Rass, null);
     }
 
     [Command("rass")]

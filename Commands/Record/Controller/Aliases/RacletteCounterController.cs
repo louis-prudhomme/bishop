@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bishop.Commands.Record.Model;
+using Bishop.Commands.Record.Domain;
 using Bishop.Helper;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 
-namespace Bishop.Commands.Record.Presenter.Aliases;
+namespace Bishop.Commands.Record.Controller.Aliases;
 
 public class RacletteCounterController : BaseCommandModule
 {
-    public Record.Presenter.RecordController Controller { private get; set; } = null!;
+    public RecordController Controller { private get; set; } = null!;
 
     [Command("raclette")]
     [Description("Gently tells off the user to add a date to the counter")]
@@ -28,7 +28,7 @@ public class RacletteCounterController : BaseCommandModule
         [Description("User to know the raclette score of")]
         DiscordMember member)
     {
-        await Controller.Score(context, member, CounterCategory.Raclette);
+        await Controller.Consult(context, member, CounterCategory.Raclette, null);
     }
 
     [Command("raclette")]

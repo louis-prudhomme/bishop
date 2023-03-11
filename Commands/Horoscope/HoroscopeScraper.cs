@@ -7,7 +7,7 @@ using HtmlAgilityPack;
 namespace Bishop.Commands.Horoscope;
 
 /// <summary>
-///     See <see cref="Horoscope" />.
+///     See <see cref="HoroscopeController" />.
 ///     Scrapes TheOnion's website
 /// </summary>
 public class HoroscopeScraper
