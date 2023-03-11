@@ -27,8 +27,7 @@ public partial class RecordController
     {
         var scores = await Manager.FindScores(member.Id);
 
-        if (!scores.Any())
-            await context.RespondAsync($"No scores for user {member.Username}");
+        if (!scores.Any()) await context.RespondAsync($"No scores for user {member.Username}");
         else
         {
             var lines = scores
@@ -44,22 +43,20 @@ public partial class RecordController
     {
         var scores = await Manager.FindScores(category);
 
-        if (!scores.Any())
+        if (!scores.Any()) await context.RespondAsync($"No scores for category {category}");
+        else
         {
-            await context.RespondAsync($"No scores for category {category}");
-            return;
+            var scoresWithUserNames = await scores
+                .Select(async tuple => (UserName: await Cache.GetValue(tuple.UserId) ?? "", tuple.Score))
+                .WhenAll(list => list.ToList());
+            var formattedRankings = Manager
+                .RankScores(scoresWithUserNames)
+                .Select(tuple => (UserName: tuple.Key, tuple.Score, tuple.Ranking))
+                .Select(tuple => Formatter.FormatRecordRanking(tuple.UserName, category, tuple.Score, tuple.Ranking))
+                .JoinWithNewlines();
+
+            await context.RespondAsync(formattedRankings);
         }
-
-        var scoresWithUserNames = await scores
-            .Select(async tuple => (UserName: await Cache.GetValue(tuple.UserId) ?? "", tuple.Score))
-            .WhenAll(list => list.ToList());
-        var formattedRankings = Manager
-            .RankScores(scoresWithUserNames)
-            .Select(tuple => (UserName: tuple.Key, tuple.Score, tuple.Ranking))
-            .Select(tuple => Formatter.FormatRecordRanking(tuple.UserName, category, tuple.Score, tuple.Ranking))
-            .JoinWithNewlines();
-
-        await context.RespondAsync(formattedRankings);
     }
 
     [Command("score")]
@@ -81,14 +78,12 @@ public partial class RecordController
         CounterCategory category,
         [Description("To increment by")] int nb)
     {
-        if (nb <= 0)
+        if (nb <= 0) await context.RespondAsync("Negative & null increments are not handled yet.");
+        else
         {
-            await context.RespondAsync("Negative & null increments are not handled yet.");
-            return;
+            var records = Manager.CreateGhostRecords(member, category, nb);
+            await RecordAndRespondAsync(context, member, category, records);
         }
-
-        var records = Manager.CreateGhostRecords(member, category, nb);
-        await RecordAndRespondAsync(context, member, category, records);
     }
 
     [Command("score")]

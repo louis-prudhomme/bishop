@@ -68,8 +68,18 @@ public partial class RecordController : BaseCommandModule
         var score = await Manager.FindScore(member.Id, category);
         var rank = await Manager.FindRank(member.Id, category);
 
-        if (records.Any()) await context.RespondAsync(Formatter.FormatLongRecord(member, category, rank + 1, score, records.Take(GetLimit(limit))));
-        else await context.RespondAsync($"No history recorded for user {member.Username} and category {category}");
+        if (records.IsEmpty()) await context.RespondAsync($"No history recorded for user {member.Username} and category {category}");
+        else
+        {
+            var builder = new DiscordMessageBuilder
+            {
+                Content = Formatter.FormatLongRecord(member, category, rank + 1, score, records.Take(GetLimit(limit))),
+            };
+            var temp = await context.RespondAsync(builder);
+            using var figure = PlotManager.Cumulative(records).Image();
+            builder.WithFile(figure.Stream());
+            await temp.ModifyAsync(builder);
+        }
     }
 
     [Command("since")]
@@ -94,7 +104,14 @@ public partial class RecordController : BaseCommandModule
         }
 
         var ratio = recordsSince / records.Count;
-        await context.RespondAsync(Formatter.FormatProgression(member, counterCategory, ratio, recordsSince, since));
+        var builder = new DiscordMessageBuilder
+        {
+            Content = Formatter.FormatProgression(member, counterCategory, ratio, recordsSince, since),
+        };
+        var temp = await context.RespondAsync(builder);
+        using var figure = PlotManager.Cumulative(records).Image();
+        builder.WithFile(figure.Stream());
+        await temp.ModifyAsync(builder);
     }
 
     [Command("consult")]

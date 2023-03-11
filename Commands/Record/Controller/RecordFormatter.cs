@@ -61,9 +61,10 @@ public class RecordFormatter
 
     public string FormatLongRecord(DiscordMember member, CounterCategory category, long ranking, long score, IEnumerable<RecordEntity> records)
     {
-        return $"*{member.Mention}* has accumulated **{score}** points and ranks **#{ranking}** in *{category.DisplayName()}*\n" +
-               "======\n" +
-               $"Their last records are:\n   {records.Select(FormatRecord).JoinWith("\n   ")}";
+        const string lineSeparator = "\n\t";
+        return $"*{member.Mention}* has accumulated **{score}** points and ranks **#{ranking}** in **{category.DisplayName()}**"
+               + "\n__Their last records are:__"
+               + $"{lineSeparator}{records.Select(FormatRecord).JoinWith(lineSeparator)}";
     }
 
     public string FormatProgression(DiscordMember member, CounterCategory category, double ratio, int recordsSince, DateTime since) => ratio switch
