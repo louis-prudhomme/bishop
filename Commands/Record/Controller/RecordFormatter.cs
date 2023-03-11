@@ -14,24 +14,23 @@ public class RecordFormatter
     public string FormatRecordRankingUpdate(DiscordMember member, CounterCategory category, long score, long previousScore) =>
         $"{FormatRecordRanking(member.Username, category, score, null)} (from {previousScore})";
 
-    public string FormatScoreUpdate(DiscordMember member, CounterCategory category, string motive) => $"Added «*{motive}*» to {member.Mention}’s {category} history.";
+    public string FormatScoreUpdate(DiscordMember member, CounterCategory category, string motive) =>
+        $"Added «*{motive}*» to {member.Mention}’s {category.DisplayName()} history.";
 
     public string FormatBrokenMilestone(long milestone) => $"A new milestone has been broken through: {milestone}! 🎉";
 
-    public string FormatRecordRanking(DiscordMember member, CounterCategory category, long score) => FormatRecordRanking(member.Username, category, score, null);
+    public string FormatRecordRanking(DiscordMember member, CounterCategory category, long score) =>
+        FormatRecordRanking(member.Username, category, score, null);
 
-    public string FormatRecordRanking(string username, CounterCategory category, long score, int? rank)
-    {
-        return $"{FormatRank(rank)}{username}’s {category} ⇒ {score}";
-    }
+    public string FormatRecordRanking(string username, CounterCategory category, long score, int? rank) =>
+        $"{FormatRank(rank) ?? "⠀ ⠀"}{username}’s {category.DisplayName()} ⇒ {score}";
 
-    private string FormatRank(int? rank) => rank switch
+    private string? FormatRank(int? rank) => rank switch
     {
-        0 => "🥇 ",
-        1 => "🥈 ",
-        2 => "🥉 ",
-        null => string.Empty,
-        _ => "⠀ ⠀"
+        0 => "🥇",
+        1 => "🥈",
+        2 => "🥉",
+        _ => null
     };
 
     public string FormatRecordWithCategory(RecordEntity toFormat) => FormatRecord(toFormat, true);
@@ -53,10 +52,12 @@ public class RecordFormatter
             : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";
     }
 
-    public string FormatLongRecord(DiscordMember member, CounterCategory category, long ranking, long score, IEnumerable<RecordEntity> records)
+    public string FormatLongRecord(DiscordMember member, CounterCategory category, int ranking, long score, IEnumerable<RecordEntity> records)
     {
         const string lineSeparator = "\n\t";
-        return $"*{member.Mention}* has accumulated **{score}** points and ranks **#{ranking}** in **{category.DisplayName()}**"
+        var rank = FormatRank(ranking);
+        
+        return $"*{member.Mention}* has accumulated **{score}** points and ranks **#{ranking}** {rank} in **{category.DisplayName()}**"
                + "\n__Their last records are:__"
                + $"{lineSeparator}{records.Select(FormatRecord).JoinWith(lineSeparator)}";
     }
