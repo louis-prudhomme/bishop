@@ -75,10 +75,10 @@ public partial class RecordController : BaseCommandModule
             {
                 Content = Formatter.FormatLongRecord(member, category, rank + 1, score, records.Take(GetLimit(limit))),
             };
-            var temp = await context.RespondAsync(builder);
+            var message = await context.RespondAsync(builder);
             using var figure = PlotManager.Cumulative(records).Image();
             builder.WithFile(figure.Stream());
-            await temp.ModifyAsync(builder);
+            await message.ModifyAsync(builder);
         }
     }
 
@@ -97,21 +97,19 @@ public partial class RecordController : BaseCommandModule
         var records = await Manager.Find(member.Id, counterCategory);
         var recordsSince = records.Select(record => record.RecordedAt >= since).Count();
 
-        if (records.IsEmpty())
+        if (records.IsEmpty()) await context.RespondAsync("No progression to measure on nothing, cunt.");
+        else
         {
-            await context.RespondAsync("No progression to measure on nothing, cunt.");
-            return;
+            var ratio = recordsSince / records.Count;
+            var builder = new DiscordMessageBuilder
+            {
+                Content = Formatter.FormatProgression(member, counterCategory, ratio, recordsSince, since),
+            };
+            var message = await context.RespondAsync(builder);
+            using var figure = PlotManager.Cumulative(records).Image();
+            builder.WithFile(figure.Stream());
+            await message.ModifyAsync(builder);
         }
-
-        var ratio = recordsSince / records.Count;
-        var builder = new DiscordMessageBuilder
-        {
-            Content = Formatter.FormatProgression(member, counterCategory, ratio, recordsSince, since),
-        };
-        var temp = await context.RespondAsync(builder);
-        using var figure = PlotManager.Cumulative(records).Image();
-        builder.WithFile(figure.Stream());
-        await temp.ModifyAsync(builder);
     }
 
     [Command("consult")]
