@@ -33,8 +33,10 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Install Transcrypt
+      run: git clone https://github.com/elasticdog/transcrypt.git build/transcrypt
     - name: Decrypt
-      run: ./.transcrypt/transcrypt -c aes-256-cbc -p '${{ secrets.TranscryptKey }}' -y
+      run: build/transcrypt/transcrypt -y -c aes-256-cbc -p '${{ secrets.TranscryptKey }}'
     - name: Build Image
       run: docker-compose build
     - name: Mount Image
