@@ -15,7 +15,7 @@ RUN dotnet publish -c Release -o out  \
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine 
 
-RUN apk add xorg-server xf86-input-libinput xinit udev icu-libs chromium --no-cache
+RUN apk add xorg-server xf86-input-libinput xinit udev icu-libs icu-data-full chromium --no-cache
 
 WORKDIR /app
 COPY --from=build-env /app/out .

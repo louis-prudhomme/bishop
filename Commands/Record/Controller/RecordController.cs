@@ -73,7 +73,7 @@ public partial class RecordController : BaseCommandModule
         {
             var builder = new DiscordMessageBuilder
             {
-                Content = Formatter.FormatLongRecord(member, category, rank + 1, score, records.Take(GetLimit(limit))),
+                Content = Formatter.FormatLongRecord(member, category, rank, score, records.Take(GetLimit(limit))),
             };
             var message = await context.RespondAsync(builder);
             using var figure = PlotManager.Cumulative(records).Image();
