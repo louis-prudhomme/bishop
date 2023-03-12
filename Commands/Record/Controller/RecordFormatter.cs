@@ -57,7 +57,7 @@ public class RecordFormatter
         const string lineSeparator = "\n\t";
         var rank = FormatRank(ranking);
         
-        return $"*{member.Mention}* has accumulated **{score}** points and ranks **#{ranking}** {rank} in **{category.DisplayName()}**"
+        return $"{member.Mention} has accumulated **{score}** points and ranks **#{ranking + 1}** {rank} in **{category.DisplayName()}**"
                + "\n__Their last records are:__"
                + $"{lineSeparator}{records.Select(FormatRecord).JoinWith(lineSeparator)}";
     }
