@@ -36,7 +36,7 @@ jobs:
     - name: Install Transcrypt
       run: git clone https://github.com/elasticdog/transcrypt.git build/transcrypt
     - name: Decrypt
-      run: build/transcrypt/transcrypt -y -c aes-256-cbc -p '${{ secrets.TranscryptKey }}'
+      run: build/transcrypt/transcrypt -c aes-256-cbc -p '${{ secrets.TranscryptKey }}' -y
     - name: Build Image
       run: docker-compose build
     - name: Mount Image
