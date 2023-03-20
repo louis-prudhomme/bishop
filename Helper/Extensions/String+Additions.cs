@@ -18,4 +18,8 @@ public static class StringExtensions
         stream.Position = 0;
         return stream;
     }
+
+    public static bool IsEmpty(this string s) => s.Length == 0;
+
+    public static string IfEmpty(this string s, string placeholder) => s.IsEmpty() ? placeholder : s;
 }

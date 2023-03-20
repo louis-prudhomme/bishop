@@ -32,7 +32,7 @@ public partial class RecordController
         {
             var lines = scores
                 .Select(group => Formatter.FormatRecordRanking(member, group.Key, group.Value))
-                .JoinWithNewlines();
+                .JoinWith(RecordFormatter.TabulatedNewline);
 
             await context.RespondAsync(lines);
         }
@@ -78,11 +78,20 @@ public partial class RecordController
         CounterCategory category,
         [Description("To increment by")] int nb)
     {
-        if (nb <= 0) await context.RespondAsync("Negative & null increments are not handled yet.");
-        else
+        switch (nb)
         {
-            var records = Manager.CreateGhostRecords(member, category, nb);
-            await RecordAndRespondAsync(context, member, category, records);
+            case <= 0:
+                await context.RespondAsync("Negative & null increments are not handled yet.");
+                break;
+            case > 10:
+                await context.RespondAsync("This is probably an error, fix your shit.");
+                break;
+            default:
+            {
+                var records = Manager.CreateGhostRecords(member, category, nb);
+                await RecordAndRespondAsync(context, member, category, records);
+                break;
+            }
         }
     }
 
@@ -97,14 +106,17 @@ public partial class RecordController
     {
         var record = new RecordEntity(member.Id, category, motive);
         await RecordAndRespondAsync(context, member, category, new List<RecordEntity> {record});
-        await context.RespondAsync(Formatter.FormatScoreUpdate(member, category, motive));
     }
 
     private async Task RecordAndRespondAsync(CommandContext context, DiscordMember member, CounterCategory category, List<RecordEntity> records)
     {
         var (previous, current, nextMilestone) = await Manager.Save(member.Id, category, records);
 
-        await context.RespondAsync(Formatter.FormatRecordRankingUpdate(member, category, current, previous));
+        var reason = records.Count == 1 && records.First().Motive != null
+            ? Formatter.FormatScoreUpdate(records.First().Motive!)
+            : Formatter.FormatGhostScoreUpdate(records.Count);
+
+        await context.RespondAsync(Formatter.FormatRecordRankingUpdate(member, category, current, previous, reason));
         if (current >= nextMilestone) await context.RespondAsync(Formatter.FormatBrokenMilestone(nextMilestone));
     }
 }

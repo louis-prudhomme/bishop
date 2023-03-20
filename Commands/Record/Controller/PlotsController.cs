@@ -35,7 +35,7 @@ public partial class RecordController
         var builder = new DiscordMessageBuilder();
         using var file = image.Image();
         var temp = await context.RespondAsync("Sending...");
-        builder.WithFile(file.Stream());
+        builder.AddFile(file.Stream());
         await context.RespondAsync(builder);
         await temp.DeleteAsync();
     }

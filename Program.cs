@@ -10,6 +10,7 @@ using Bishop.Commands.Record.Controller.Aliases;
 using Bishop.Commands.Weather.Presenter;
 using Bishop.Config;
 using DSharpPlus;
+using DSharpPlus.Entities;
 using log4net;
 using log4net.Config;
 using Plotly.NET.ImageExport;
@@ -24,7 +25,10 @@ internal static class Program
 
     private static readonly string? ChromiumPath = Environment
         .GetEnvironmentVariable("CHROMIUM_PATH");
-    
+
+    private static readonly string? BotStatus = Environment
+        .GetEnvironmentVariable("BOT_STATUS");
+
     private static DiscordClient _discord = null!;
     private static DiscordClientGenerator _generator = null!;
 
@@ -54,7 +58,7 @@ internal static class Program
 
     private static async Task MainAsync()
     {
-        await _discord.ConnectAsync();
+        await _discord.ConnectAsync(new(BotStatus, ActivityType.Competing));
         await Task.Delay(-1);
     }
     

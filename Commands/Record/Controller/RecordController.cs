@@ -77,7 +77,7 @@ public partial class RecordController : BaseCommandModule
             };
             var message = await context.RespondAsync(builder);
             using var figure = PlotManager.Cumulative(records).Image();
-            builder.WithFile(figure.Stream());
+            builder.AddFile(figure.Stream());
             await message.ModifyAsync(builder);
         }
     }
@@ -107,7 +107,7 @@ public partial class RecordController : BaseCommandModule
             };
             var message = await context.RespondAsync(builder);
             using var figure = PlotManager.Cumulative(records).Image();
-            builder.WithFile(figure.Stream());
+            builder.AddFile(figure.Stream());
             await message.ModifyAsync(builder);
         }
     }
