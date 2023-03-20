@@ -125,7 +125,7 @@ public class DiscordClientGenerator
         {
             Token = DiscordToken,
             TokenType = TokenType.Bot,
-            Intents = DiscordIntents.AllUnprivileged | DiscordIntents.GuildMembers
+            Intents = DiscordIntents.AllUnprivileged | DiscordIntents.GuildMembers | DiscordIntents.MessageContents
         };
     }
 

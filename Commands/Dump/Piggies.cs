@@ -29,7 +29,7 @@ public class Piggies: BaseCommandModule
 
             var builder = new DiscordMessageBuilder();
             await using var piggy = File.Open(cachedFiles!.Random()!, FileMode.Open);
-            builder.WithFile(piggy);
+            builder.AddFile(piggy);
             await context.RespondAsync(builder);
     }
     
