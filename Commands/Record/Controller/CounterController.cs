@@ -32,7 +32,7 @@ public partial class RecordController
         {
             var lines = scores
                 .Select(group => Formatter.FormatRecordRanking(member, group.Key, group.Value))
-                .JoinWithNewlines();
+                .JoinWith(RecordFormatter.TabulatedNewline);
 
             await context.RespondAsync(lines);
         }
@@ -106,14 +106,17 @@ public partial class RecordController
     {
         var record = new RecordEntity(member.Id, category, motive);
         await RecordAndRespondAsync(context, member, category, new List<RecordEntity> {record});
-        await context.RespondAsync(Formatter.FormatScoreUpdate(member, category, motive));
     }
 
     private async Task RecordAndRespondAsync(CommandContext context, DiscordMember member, CounterCategory category, List<RecordEntity> records)
     {
         var (previous, current, nextMilestone) = await Manager.Save(member.Id, category, records);
 
-        await context.RespondAsync(Formatter.FormatRecordRankingUpdate(member, category, current, previous));
+        var reason = records.Count == 1 && records.First().Motive != null
+            ? Formatter.FormatScoreUpdate(records.First().Motive!)
+            : Formatter.FormatGhostScoreUpdate(records.Count);
+
+        await context.RespondAsync(Formatter.FormatRecordRankingUpdate(member, category, current, previous, reason));
         if (current >= nextMilestone) await context.RespondAsync(Formatter.FormatBrokenMilestone(nextMilestone));
     }
 }
