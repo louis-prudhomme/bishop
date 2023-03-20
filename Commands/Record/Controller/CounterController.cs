@@ -78,11 +78,20 @@ public partial class RecordController
         CounterCategory category,
         [Description("To increment by")] int nb)
     {
-        if (nb <= 0) await context.RespondAsync("Negative & null increments are not handled yet.");
-        else
+        switch (nb)
         {
-            var records = Manager.CreateGhostRecords(member, category, nb);
-            await RecordAndRespondAsync(context, member, category, records);
+            case <= 0:
+                await context.RespondAsync("Negative & null increments are not handled yet.");
+                break;
+            case > 10:
+                await context.RespondAsync("This is probably an error, fix your shit.");
+                break;
+            default:
+            {
+                var records = Manager.CreateGhostRecords(member, category, nb);
+                await RecordAndRespondAsync(context, member, category, records);
+                break;
+            }
         }
     }
 
