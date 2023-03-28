@@ -18,9 +18,9 @@ public class WeatherController : ApplicationCommandModule
     private static readonly TextInfo Capital = new CultureInfo("en-US", false).TextInfo;
     public WeatherService Service { private get; set; } = null!;
 
-    [SlashCommand("weather", "placeholder")]
+    [SlashCommand("weather", "Get the weather in a specific city")]
     public async Task Get(InteractionContext context,
-        [OptionAttribute("city", "placeholder")]
+        [OptionAttribute("city", "Which city ?")]
          string city)
     {
         if (string.IsNullOrEmpty(city)) return;

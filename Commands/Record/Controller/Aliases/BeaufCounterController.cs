@@ -7,42 +7,44 @@ using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Record.Controller.Aliases;
 
-[SlashCommandGroup("beauf", "placeholder")]
+[SlashCommandGroup("beauf", "Interact with beauf history")]
 public class BeaufCounterController : ApplicationCommandModule
 {
     public RecordController Controller { private get; set; } = null!;
 
-    [SlashCommand("addmany", "Adds a provided value to @someone’s beauf score")]
+    [SlashCommand("addmany", "Add many points to someone's beauf history")]
     public async Task ScoreBeauf(InteractionContext context,
-        [OptionAttribute("member", "User to increment the beauf score of")]
-        DiscordUser member,
-        [OptionAttribute("nb", "To increment by")]
+        [OptionAttribute("user", "User to increment the beauf score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
         long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Beauf, nb);
+        await Controller.Score(context, user, CounterCategory.Beauf, nb);
     }
 
-    [SlashCommand("consult", "Returns the value of @someone’s beauf score")]
+    [SlashCommand("consult", "Get someone’s beauf score")]
     public async Task ScoreBeauf(InteractionContext context,
-        [OptionAttribute("member", "User to know the beauf score of")]
-        DiscordUser member)
+        [OptionAttribute("user", "User to know the beauf score of")]
+        DiscordUser user)
     {
-        await Controller.Consult(context, member, CounterCategory.Beauf);
+        await Controller.Consult(context, user, CounterCategory.Beauf);
     }
 
-    [SlashCommand("all", "Returns all beauf scores")]
+    [SlashCommand("all", "Get all beauf scores")]
     public async Task ScoreBeauf(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Beauf);
     }
 
-    [SlashCommand("add", "Adds a provided value to @someone’s beauf score")]
+    [SlashCommand("add", "Add a record to someone's beauf history")]
     public async Task ScoreBeauf(InteractionContext context,
-        [OptionAttribute("member", "User to increment the beauf score of by 1")]
-        DiscordUser member,
+        [OptionAttribute("user", "User to increment the beauf score of by 1")]
+        DiscordUser user,
         [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Beauf, reason);
+        await Controller.Score(context, user, CounterCategory.Beauf, reason);
     }
 }

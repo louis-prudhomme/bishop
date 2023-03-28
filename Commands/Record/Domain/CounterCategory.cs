@@ -9,14 +9,14 @@ namespace Bishop.Commands.Record.Domain;
 /// </summary>
 public enum CounterCategory
 {
-    Bdm,
-    Sauce,
-    Sel,
-    Beauf,
-    Rass,
-    Malfoy,
-    Wind,
-    Raclette
+    Bdm = 0,
+    Sauce = 1,
+    Sel = 2,
+    Beauf = 3,
+    Rass = 4,
+    Malfoy = 5,
+    Wind = 6,
+    Raclette = 7
 }
 
 public static class EnumRelations

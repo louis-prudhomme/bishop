@@ -7,42 +7,44 @@ using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Record.Controller.Aliases;
 
-[SlashCommandGroup("sel", "placeholder")]
+[SlashCommandGroup("sel", "Interact with sel history")]
 public class SelCounterController : ApplicationCommandModule
 {
     public RecordController Controller { private get; set; } = null!;
 
-    [SlashCommand("addmany", "Adds a provided value to @someone’s sel score")]
+    [SlashCommand("addmany", "Add many points to someone's sel history")]
     public async Task ScoreSel(InteractionContext context,
-        [OptionAttribute("member", "User to increment the sel score of")]
-        DiscordUser member,
-        [OptionAttribute("nb", "To increment by")]
+        [OptionAttribute("user", "User to increment the sel score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
         long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Sel, nb);
+        await Controller.Score(context, user, CounterCategory.Sel, nb);
     }
 
-    [SlashCommand("consult", "Returns the value of @someone’s sel score")]
+    [SlashCommand("consult", "Get someone’s sel score")]
     public async Task ScoreSel(InteractionContext context,
-        [OptionAttribute("member", "User to know the sel score of")]
-        DiscordUser member)
+        [OptionAttribute("user", "User to know the sel score of")]
+        DiscordUser user)
     {
-        await Controller.Consult(context, member, CounterCategory.Sel);
+        await Controller.Consult(context, user, CounterCategory.Sel);
     }
 
-    [SlashCommand("all", "Returns all sel scores")]
+    [SlashCommand("all", "Get all sel scores")]
     public async Task ScoreSel(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Sel);
     }
 
-    [SlashCommand("add", "Adds a provided value to @someone’s sel score")]
+    [SlashCommand("add", "Add a record to someone's sel history")]
     public async Task ScoreSel(InteractionContext context,
-        [OptionAttribute("member", "User to increment the sel score of by 1")]
-        DiscordUser member,
+        [OptionAttribute("user", "User to increment the sel score of by 1")]
+        DiscordUser user,
         [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Sel, reason);
+        await Controller.Score(context, user, CounterCategory.Sel, reason);
     }
 }

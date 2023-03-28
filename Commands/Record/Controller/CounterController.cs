@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Bishop.Commands.Record.Controller.Aliases;
 using Bishop.Commands.Record.Domain;
 using Bishop.Helper.Extensions;
-
-
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 
@@ -20,28 +18,39 @@ namespace Bishop.Commands.Record.Controller;
 public partial class RecordController
 {
     // TODO give rank of user for each metric
-    [SlashCommand("score_user", "placeholder")]
-    public async Task Score(InteractionContext context, [OptionAttribute("member", "Target @user")] DiscordUser member)
+    [SlashCommand("recap", "See every score of a user")]
+    public async Task Score(InteractionContext context,
+        [OptionAttribute("user", "User to know the scores of")]
+        DiscordUser user)
     {
-        var scores = await Manager.FindScores(member.Id);
+        var scores = await Manager.FindScores(user.Id);
 
         if (!scores.Any())
         {
-            await context.CreateResponseAsync($"No scores for user {member.Username}");
+            await context.CreateResponseAsync($"No scores for user {user.Username}");
         }
         else
         {
             var lines = scores
-                .Select(group => Formatter.FormatRecordRanking(member, group.Key, group.Value))
+                .Select(group => Formatter.FormatRecordRanking(user, group.Key, group.Value))
                 .JoinWith(RecordFormatter.TabulatedNewline);
 
             await context.CreateResponseAsync(lines);
         }
     }
 
-    [SlashCommand("score_category", "placeholder")]
+    [SlashCommand("podium", "See the podium in a specific category")]
     public async Task Score(InteractionContext context,
-        [OptionAttribute("category", "Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("BDM", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category)
     {
         var scores = await Manager.FindScores(category);
@@ -65,66 +74,80 @@ public partial class RecordController
         }
     }
 
-    [SlashCommand("score", "placeholder")]
+    [SlashCommand("score", "See someone's score in a certain category")]
     public async Task Score(InteractionContext context,
-        [OptionAttribute("member", "Target @user")]
-        DiscordUser member,
-        [OptionAttribute("category", "Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
+        [OptionAttribute("user", "User to know the score of")]
+        DiscordUser user,
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("Bdm", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category)
     {
-        var score = await Manager.Count(member.Id, category);
+        var score = await Manager.Count(user.Id, category);
 
-        await context.CreateResponseAsync(Formatter.FormatRecordRanking(member, category, score));
+        await context.CreateResponseAsync(Formatter.FormatRecordRanking(user, category, score));
     }
 
-    [SlashCommand("addmany", "placeholder")]
+    [SlashCommand("addmany", "Add many points to someone's history")]
     public async Task Score(InteractionContext context,
-        [OptionAttribute("member", "User to add some score to")]
-        DiscordUser member,
-        [OptionAttribute("category", "Target key (must be BDM/Beauf/Sauce/Sel/Rass...)")]
+        [OptionAttribute("user", "User to add the points to")]
+        DiscordUser user,
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("Bdm", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category,
-        [OptionAttribute("nb", "To increment by")]
+        [OptionAttribute("points", "How many points ?")] [Maximum(10)] [Minimum(1)]
         long nb)
     {
-        switch (nb)
-        {
-            case <= 0:
-                await context.CreateResponseAsync("Negative & null increments are not handled yet.");
-                break;
-            case > 10:
-                await context.CreateResponseAsync("This is probably an error, fix your shit.");
-                break;
-            default:
-            {
-                var records = Manager.CreateGhostRecords(member, category, nb);
-                await RecordAndCreateResponseAsync(context, member, category, records);
-                break;
-            }
-        }
+        var records = Manager.CreateGhostRecords(user, category, nb);
+        await RecordAndCreateResponseAsync(context, user, category, records);
     }
 
-    [SlashCommand("add", "placeholder")]
+    [SlashCommand("add", "Add a record to someone's history")]
     public async Task Score(InteractionContext context,
-        [OptionAttribute("member", "User to increment score of")]
-        DiscordUser member,
-        [OptionAttribute("category", "Target key (must be BDM/Beauf/Sauce/Sel/Rass)")]
+        [OptionAttribute("user", "User to add the record to")]
+        DiscordUser user,
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("Bdm", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category,
-        [OptionAttribute("motive", "Context for the point(s) addition")]
+        [OptionAttribute("reason", "Context for the point")]
         string motive)
     {
-        var record = new RecordEntity(member.Id, category, motive);
-        await RecordAndCreateResponseAsync(context, member, category, new List<RecordEntity> {record});
+        var record = new RecordEntity(user.Id, category, motive);
+        await RecordAndCreateResponseAsync(context, user, category, new List<RecordEntity> {record});
     }
 
-    private async Task RecordAndCreateResponseAsync(InteractionContext context, DiscordUser member, CounterCategory category, List<RecordEntity> records)
+    private async Task RecordAndCreateResponseAsync(InteractionContext context, DiscordUser user, CounterCategory category, List<RecordEntity> records)
     {
-        var (previous, current, nextMilestone) = await Manager.Save(member.Id, category, records);
+        var (previous, current, nextMilestone) = await Manager.Save(user.Id, category, records);
 
         var reason = records.Count == 1 && records.First().Motive != null
             ? Formatter.FormatScoreUpdate(records.First().Motive!)
             : Formatter.FormatGhostScoreUpdate(records.Count);
 
-        await context.CreateResponseAsync(Formatter.FormatRecordRankingUpdate(member, category, current, previous, reason));
+        await context.CreateResponseAsync(Formatter.FormatRecordRankingUpdate(user, category, current, previous, reason));
         if (current >= nextMilestone) await context.CreateResponseAsync(Formatter.FormatBrokenMilestone(nextMilestone));
     }
 }

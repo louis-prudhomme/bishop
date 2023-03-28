@@ -21,7 +21,7 @@ public class Aled : ApplicationCommandModule
 
     private readonly Random _rand = new();
 
-    [SlashCommand("aled", "Help @someone in need")]
+    [SlashCommand("aled", "Help someone in need")]
     public async Task Help(InteractionContext context)
     {
         await context.CreateResponseAsync($"{Aleds.Random()}");

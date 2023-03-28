@@ -5,42 +5,44 @@ using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Record.Controller.Aliases;
 
-[SlashCommandGroup("bdm", "placeholder")]
+[SlashCommandGroup("bdm", "Interact with BDM history")]
 public class BdmCounterController : ApplicationCommandModule
 {
     public RecordController Controller { private get; set; } = null!;
 
-    [SlashCommand("addmany", "Adds a provided value to @someone’s bdm score")]
+    [SlashCommand("addmany", "Add many points to someone's BDM history")]
     public async Task ScoreBdm(InteractionContext context,
-        [OptionAttribute("member", "User to increment the bdm score of")]
-        DiscordUser member,
-        [OptionAttribute("nb", "To increment by")]
+        [OptionAttribute("user", "User to increment the bdm score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
         long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Bdm, nb);
+        await Controller.Score(context, user, CounterCategory.Bdm, nb);
     }
 
-    [SlashCommand("consult", "Returns the value of @someone’s bdm score")]
+    [SlashCommand("consult", "Get someone’s bdm score")]
     public async Task ScoreBdm(InteractionContext context,
-        [OptionAttribute("member", "User to know the bdm score of")]
-        DiscordUser member)
+        [OptionAttribute("user", "User to know the bdm score of")]
+        DiscordUser user)
     {
-        await Controller.Consult(context, member, CounterCategory.Bdm);
+        await Controller.Consult(context, user, CounterCategory.Bdm);
     }
 
-    [SlashCommand("all", "Returns all bdm scores")]
+    [SlashCommand("all", "Get all bdm scores")]
     public async Task ScoreBdm(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Bdm);
     }
 
-    [SlashCommand("add", "Adds a record to @someone’s bdm history and increments their score")]
+    [SlashCommand("add", "Adds a record to someone’s bdm history and increments their score")]
     public async Task ScoreBdm(InteractionContext context,
-        [OptionAttribute("member", "User to increment the bdm score of by 1")]
-        DiscordUser member,
+        [OptionAttribute("user", "User to increment the bdm score of by 1")]
+        DiscordUser user,
         [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Bdm, reason);
+        await Controller.Score(context, user, CounterCategory.Bdm, reason);
     }
 }

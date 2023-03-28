@@ -38,22 +38,22 @@ public class RecordManager
             .ToList();
     }
 
-    public async Task<long> FindScore(ulong memberId, CounterCategory category)
+    public async Task<long> FindScore(ulong userId, CounterCategory category)
     {
-        return (await Repository.CountByUserGroupByCategory(memberId)).GetValueOrDefault(category);
+        return (await Repository.CountByUserGroupByCategory(userId)).GetValueOrDefault(category);
     }
 
-    public async Task<int> FindRank(ulong memberId, CounterCategory category)
+    public async Task<int> FindRank(ulong userId, CounterCategory category)
     {
         return RankScores((await Repository.CountByCategoryGroupByUser(category))
                 .Select(pair => (UserId: pair.Key, Score: pair.Value)))
-            .First(tuple => tuple.Key == memberId)
+            .First(tuple => tuple.Key == userId)
             .Ranking;
     }
 
-    public async Task<Dictionary<CounterCategory, long>> FindScores(ulong memberId)
+    public async Task<Dictionary<CounterCategory, long>> FindScores(ulong userId)
     {
-        return await Repository.CountByUserGroupByCategory(memberId);
+        return await Repository.CountByUserGroupByCategory(userId);
     }
 
     public async Task<List<(ulong UserId, long Score)>> FindScores(CounterCategory category)
@@ -75,11 +75,11 @@ public class RecordManager
         return await Repository.CountByUserAndCategory(userId, category);
     }
 
-    public List<RecordEntity> CreateGhostRecords(SnowflakeObject member, CounterCategory category, long nb)
+    public List<RecordEntity> CreateGhostRecords(SnowflakeObject user, CounterCategory category, long nb)
     {
         return Enumerable
             .Range(0, unchecked((int)nb))
-            .Select(_ => new RecordEntity(member.Id, category, null))
+            .Select(_ => new RecordEntity(user.Id, category, null))
             .ToList();
     }
 

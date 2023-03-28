@@ -13,26 +13,44 @@ namespace Bishop.Commands.Record.Controller;
 /// </summary>
 public partial class RecordController
 {
-    [SlashCommand("cumulative", "placeholder")]
+    [SlashCommand("cumulative", "Draw a cumulative chart of someone's score over time")]
     public async Task Cumulative(InteractionContext context,
-        [OptionAttribute("user", "placeholder")]
-        DiscordUser member,
-        [OptionAttribute("category", "placeholder")]
+        [OptionAttribute("user", "Who to draw the chart for ?")]
+        DiscordUser user,
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("BDM", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category)
     {
-        var records = await Manager.Find(member.Id, category);
+        var records = await Manager.Find(user.Id, category);
         var graph = PlotManager.Cumulative(records);
         await SendGraph(context, graph);
     }
 
-    [SlashCommand("histogram", "placeholder")]
+    [SlashCommand("histogram", "Draw a histogram chart of someone's score over time")]
     public async Task Histogram(InteractionContext context,
-        [OptionAttribute("user", "placeholder")]
-        DiscordUser member,
-        [OptionAttribute("category", "placeholder")]
+        [OptionAttribute("user", "Who to draw the chart for ?")]
+        DiscordUser user,
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("BDM", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category)
     {
-        var records = await Manager.Find(member.Id, category);
+        var records = await Manager.Find(user.Id, category);
         var graph = PlotManager.Histogram(records);
         await SendGraph(context, graph);
     }

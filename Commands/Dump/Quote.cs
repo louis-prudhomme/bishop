@@ -25,7 +25,7 @@ public class Quote : ApplicationCommandModule
 
     [SlashCommand("quote", "Prints a quote of @person")]
     public async Task Quoting(InteractionContext context,
-        [OptionAttribute("Person", "to quote")]
+        [OptionAttribute("Person", "Who to quote ?")]
         string person)
     {
         var target = Politicians.FirstOrDefault(politician => politician.Names
@@ -36,7 +36,7 @@ public class Quote : ApplicationCommandModule
                                    $"\n                                       - {target?.Names.First()}");
     }
 
-    [SlashCommand("list", "placeholder")]
+    [SlashCommand("list", "List available people to quote")]
     public async Task ListQuotes(InteractionContext context)
     {
         var response = Politicians.Aggregate("Here are the current available people to quote:",

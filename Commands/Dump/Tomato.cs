@@ -21,11 +21,11 @@ public class Tomato : ApplicationCommandModule
 
     private readonly Random _rand = new();
 
-    [SlashCommand("tomato", "Throw a tomato to @someone")]
+    [SlashCommand("tomato", "Throw a tomato at someone")]
     public async Task Throw(InteractionContext context,
-        [OptionAttribute("member", "User to throw the tomato at!")]
-        DiscordUser member)
+        [OptionAttribute("user", "WHO TO FUCK UP ???")]
+        DiscordUser user)
     {
-        await context.CreateResponseAsync($"{member.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
+        await context.CreateResponseAsync($"{user.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
     }
 }

@@ -7,42 +7,44 @@ using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Record.Controller.Aliases;
 
-[SlashCommandGroup("sauce", "placeholder")]
+[SlashCommandGroup("sauce", "Interact with sauce history")]
 public class SauceCounterController : ApplicationCommandModule
 {
     public RecordController Controller { private get; set; } = null!;
 
-    [SlashCommand("addmany", "Adds a provided value to @someone’s sauce score")]
+    [SlashCommand("addmany", "Add many points to someone's sauce history")]
     public async Task ScoreSauce(InteractionContext context,
-        [OptionAttribute("member", "User to increment the sauce score of")]
-        DiscordUser member,
-        [OptionAttribute("nb", "To increment by")]
+        [OptionAttribute("user", "User to increment the sauce score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
         long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Sauce, nb);
+        await Controller.Score(context, user, CounterCategory.Sauce, nb);
     }
 
-    [SlashCommand("consult", "Returns the value of @someone’s sauce score")]
+    [SlashCommand("consult", "Get someone’s sauce score")]
     public async Task ScoreSauce(InteractionContext context,
-        [OptionAttribute("member", "User to know the sauce score of")]
-        DiscordUser member)
+        [OptionAttribute("user", "User to know the sauce score of")]
+        DiscordUser user)
     {
-        await Controller.Consult(context, member, CounterCategory.Sauce);
+        await Controller.Consult(context, user, CounterCategory.Sauce);
     }
 
-    [SlashCommand("all", "Returns all sauce scores")]
+    [SlashCommand("all", "Get all sauce scores")]
     public async Task ScoreSauce(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Sauce);
     }
 
-    [SlashCommand("add", "Adds a provided value to @someone’s sauce score")]
+    [SlashCommand("add", "Add a record to someone's sauce history")]
     public async Task ScoreSauce(InteractionContext context,
-        [OptionAttribute("member", "User to increment the sauce score of by 1")]
-        DiscordUser member,
+        [OptionAttribute("user", "User to increment the sauce score of by 1")]
+        DiscordUser user,
         [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Sauce, reason);
+        await Controller.Score(context, user, CounterCategory.Sauce, reason);
     }
 }

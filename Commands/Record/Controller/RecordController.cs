@@ -25,20 +25,29 @@ public partial class RecordController : ApplicationCommandModule
         else await context.CreateResponseAsync(Formatter.FormatRecord(picked));
     }
 
-    [SlashCommand("random_user", "Returns a @member's random record")]
+    [SlashCommand("randomin_user", "Returns someone's random record")]
     public async Task PickRandom(InteractionContext context,
-        [OptionAttribute("user", "placeholder")]
-        DiscordUser member)
+        [OptionAttribute("user", "Which user ?")]
+        DiscordUser user)
     {
-        var picked = (await Manager.Find(member.Id)).Random();
+        var picked = (await Manager.Find(user.Id)).Random();
 
         if (picked == null) await context.CreateResponseAsync("No history recorded.");
         else await context.CreateResponseAsync(Formatter.FormatRecord(picked));
     }
 
-    [SlashCommand("random_category", "Returns a random record from the category")]
+    [SlashCommand("randomin_category", "Returns a random record from the category")]
     public async Task PickRandom(InteractionContext context,
-        [OptionAttribute("category", "placeholder")]
+        [OptionAttribute("category", "Category to pull the records from")]
+        [ChoiceName("category")]
+        [Choice("BDM", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category)
     {
         var picked = (await Manager.Find(category)).Random();
@@ -47,27 +56,36 @@ public partial class RecordController : ApplicationCommandModule
         else await context.CreateResponseAsync(Formatter.FormatRecord(picked));
     }
 
-    [SlashCommand("consult", "To see the history of a @member")]
+    [SlashCommand("consult", "To see the history of a @user")]
     public async Task Consult(InteractionContext context,
-        [OptionAttribute("member", "@User to know the history of")]
-        DiscordUser member,
-        [OptionAttribute("category", "Category to know the history of")]
+        [OptionAttribute("user", "@User to know the history of")]
+        DiscordUser user,
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("BDM", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category
     )
     {
-        var records = await Manager.Find(member.Id, category);
-        var score = await Manager.FindScore(member.Id, category);
-        var rank = await Manager.FindRank(member.Id, category);
+        var records = await Manager.Find(user.Id, category);
+        var score = await Manager.FindScore(user.Id, category);
+        var rank = await Manager.FindRank(user.Id, category);
 
         if (records.IsEmpty())
         {
-            await context.CreateResponseAsync($"No history recorded for user {member.Username} and category {category}");
+            await context.CreateResponseAsync($"No history recorded for user {user.Username} and category {category}");
         }
         else
         {
             var builder = new DiscordInteractionResponseBuilder
             {
-                Content = Formatter.FormatLongRecord(member, category, rank, score, records.Take(GetLimit()))
+                Content = Formatter.FormatLongRecord(user, category, rank, score, records.Take(GetLimit()))
             };
 
             await context.CreateResponseAsync(builder);
@@ -77,18 +95,27 @@ public partial class RecordController : ApplicationCommandModule
         }
     }
 
-    [SlashCommand("since", "To see the history of a @member since a date")]
+    [SlashCommand("since", "To see the history of a @user since a date")]
     public async Task Since(InteractionContext context,
-        [OptionAttribute("member", "@User to know the progression of")]
-        DiscordUser member,
-        [OptionAttribute("category", "Category to know the history of")]
+        [OptionAttribute("user", "@User to know the progression of")]
+        DiscordUser user,
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("BDM", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory counterCategory,
         [OptionAttribute("since", "Date from which compute progression")]
         TimeSpan? span
     )
     {
         if (span == null) return;
-        var records = await Manager.Find(member.Id, counterCategory);
+        var records = await Manager.Find(user.Id, counterCategory);
         var since = DateTime.Now.Subtract(span.Value);
         var recordsSince = records.Select(record => record.RecordedAt >= since).Count();
 
@@ -101,7 +128,7 @@ public partial class RecordController : ApplicationCommandModule
             var ratio = recordsSince / records.Count;
             var builder = new DiscordInteractionResponseBuilder
             {
-                Content = Formatter.FormatProgression(member, counterCategory, ratio, recordsSince, since)
+                Content = Formatter.FormatProgression(user, counterCategory, ratio, recordsSince, since)
             };
 
             await context.CreateResponseAsync(builder);
@@ -111,25 +138,34 @@ public partial class RecordController : ApplicationCommandModule
         }
     }
 
-    [SlashCommand("for_user", "To see the history of a @member")]
+    [SlashCommand("blame", "To see the history of a @user")]
     public async Task Consult(InteractionContext context,
         [OptionAttribute("user", "@User to know the history of")]
-        DiscordUser member
+        DiscordUser user
     )
     {
-        var records = await Manager.Find(member.Id);
+        var records = await Manager.Find(user.Id);
 
         if (records.Any())
             await context.CreateResponseAsync(records
                 .Select(Formatter.FormatRecordWithCategory)
                 .Take(GetLimit())
                 .ToList());
-        else await context.CreateResponseAsync($"No history recorded for user {member.Username}");
+        else await context.CreateResponseAsync($"No history recorded for user {user.Username}");
     }
 
-    [SlashCommand("for_category", "To see the history of a category")]
+    [SlashCommand("lastentries", "To see the history of a category")]
     public async Task Consult(InteractionContext context,
-        [OptionAttribute("category", "Category to pull records of")]
+        [OptionAttribute("category", "Which category ?")]
+        [ChoiceName("category")]
+        [Choice("BDM", (int) CounterCategory.Bdm)]
+        [Choice("Beauf", (int) CounterCategory.Beauf)]
+        [Choice("Malfoy", (int) CounterCategory.Malfoy)]
+        [Choice("Raclette", (int) CounterCategory.Raclette)]
+        [Choice("Rass", (int) CounterCategory.Rass)]
+        [Choice("Sauce", (int) CounterCategory.Sauce)]
+        [Choice("Sel", (int) CounterCategory.Sel)]
+        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category
     )
     {

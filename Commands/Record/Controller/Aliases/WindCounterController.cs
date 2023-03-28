@@ -5,64 +5,68 @@ using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Record.Controller.Aliases;
 
-[SlashCommandGroup("wind", "placeholder")]
+[SlashCommandGroup("wind", "Interact with wind history")]
 public class WindCounterController : ApplicationCommandModule
 {
     public RecordController Controller { private get; set; } = null!;
 
-    [SlashCommand("rots", "Adds a provided value to @someone’s rot score")]
+    [SlashCommand("rots", "Add a record to someone's rot history")]
     public async Task ScoreRot(InteractionContext context,
-        [OptionAttribute("member", "User to increment the rot score of")]
-        DiscordUser member,
-        [OptionAttribute("nb", "To increment by")]
+        [OptionAttribute("user", "User to increment the rot score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
         long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, nb);
+        await Controller.Score(context, user, CounterCategory.Wind, nb);
     }
 
-    [SlashCommand("pets", "Adds a provided value to @someone’s pet score")]
+    [SlashCommand("pets", "Add a record to someone's pet history")]
     public async Task ScorePetWind(InteractionContext context,
-        [OptionAttribute("member", "User to increment the pet score of")]
-        DiscordUser member,
-        [OptionAttribute("nb", "To increment by")]
+        [OptionAttribute("user", "User to increment the pet score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
         long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, nb);
+        await Controller.Score(context, user, CounterCategory.Wind, nb);
     }
 
-    [SlashCommand("all", "Returns all wind scores")]
+    [SlashCommand("all", "Get all wind scores")]
     public async Task ScoreWind(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Wind);
     }
 
-    [SlashCommand("add", "Adds a record to @someone’s wind history and increments their score")]
+    [SlashCommand("add", "Adds a record to someone’s wind history and increments their score")]
     public async Task ScoreWind(InteractionContext context,
-        [OptionAttribute("member", "User to increment the wind score of by 1")]
-        DiscordUser member,
+        [OptionAttribute("user", "User to increment the wind score of by 1")]
+        DiscordUser user,
         [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, reason);
+        await Controller.Score(context, user, CounterCategory.Wind, reason);
     }
 
-    [SlashCommand("rot", "Adds a rot to @someone’s wind history and increments their score")]
+    [SlashCommand("rot", "Adds a rot to someone’s wind history and increments their score")]
     public async Task ScoreRot(InteractionContext context,
-        [OptionAttribute("member", "User to increment the wind score of by 1")]
-        DiscordUser member,
+        [OptionAttribute("user", "User to increment the wind score of by 1")]
+        DiscordUser user,
         [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, "(rot) " + reason);
+        await Controller.Score(context, user, CounterCategory.Wind, "(rot) " + reason);
     }
 
-    [SlashCommand("pet", "Adds a pet to @someone’s wind history and increments their score")]
+    [SlashCommand("pet", "Adds a pet to someone’s wind history and increments their score")]
     public async Task ScorePet(InteractionContext context,
-        [OptionAttribute("member", "User to increment the wind score of by 1")]
-        DiscordUser member,
+        [OptionAttribute("user", "User to increment the wind score of by 1")]
+        DiscordUser user,
         [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, "(pet) " + reason);
+        await Controller.Score(context, user, CounterCategory.Wind, "(pet) " + reason);
     }
 }
