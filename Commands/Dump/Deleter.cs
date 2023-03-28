@@ -13,43 +13,12 @@ internal class Deleter : ApplicationCommandModule
 {
     private const int MaxNumberOfDeletions = 100;
 
-    [SlashCommand("delete", "Deletes all the messages between the command and the one replied to.")]
-    public async Task Delete(InteractionContext context, [OptionAttribute("Silence", "Must I be silent?")] string silentFlag)
-    {
-        //FIXME: i do not work as of right now
-        if (false)
-        {
-            var messagesToDelete = (await context.Channel
-                    .GetMessagesAfterAsync(context.InteractionId))
-                .TakeWhile(msg => msg.Timestamp >= context.Interaction.CreationTimestamp)
-                .ToList();
-
-            if (messagesToDelete.Count == MaxNumberOfDeletions)
-            {
-                //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
-                await context.CreateResponseAsync("There are more than a hundred messages, cannot delete.");
-                return;
-            }
-
-            await context.Channel.DeleteMessagesAsync(messagesToDelete);
-
-            if (!string.IsNullOrEmpty(silentFlag)) return;
-            await context.CreateResponseAsync($"Removed {messagesToDelete.Count} 😉");
-        }
-        else await context.CreateResponseAsync("You need to answer a message.");
-    }
-
-    [SlashCommand("deleten", "Deletes the n last messages.")]
-    public async Task DeleteN(InteractionContext context, [OptionAttribute("Count", "How many messages to delete")] long n)
+    [SlashCommand("delete", "Deletes the N last messages.")]
+    public async Task DeleteN(InteractionContext context,
+        [OptionAttribute("Count", "How many messages ?")]
+        [Maximum(MaxNumberOfDeletions)] [Minimum(1)] long n)
     {
         var n32 = Convert.ToInt32(n);
-
-        if (n >= MaxNumberOfDeletions)
-        {
-            //TODO find a way to bulk delete even hen more than a hundred (name it bulk nuke?)
-            await context.CreateResponseAsync("There are more than a hundred messages, cannot delete.");
-            return;
-        }
 
         var messagesToDelete = (await context.Channel
                 .GetMessagesBeforeAsync(context.InteractionId, n32))
