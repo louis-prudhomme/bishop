@@ -1,6 +1,7 @@
 ﻿# Bishop
 
-This is bot for a group of friends. It holds no pretention other than being fun and serve as a lab to experiment with dotnet, C#, Discord API, Github Actions and everything we do or use to build this little piece of software.
+This is bot for a group of friends. It holds no pretention other than being fun and serve as a lab to experiment with
+dotnet, C#, Discord API, Github Actions and everything we do or use to build this little piece of software.
 
 ## Transcrypt
 
@@ -10,9 +11,10 @@ Its password can be found somewhere.
 
 ## Environment variables
 
-Some environment variables are necessary to successfully run the program. 
+Some environment variables are necessary to successfully run the program.
 
-They can be set in Visual Studio (`Project → Properties → Debug → Add`) as well as in Jetbrains Ryder (`Edit configuration → Environment variables`).
+They can be set in Visual Studio (`Project → Properties → Debug → Add`) as well as in Jetbrains
+Ryder (`Edit configuration → Environment variables`).
 
 | ENV VAR         | VALUE                         |
 |-----------------|-------------------------------|

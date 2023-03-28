@@ -1,70 +1,64 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Helper.Extensions;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+
+
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.CardGame;
 
 /// <summary>
 ///     This class provides a set of commands to track car games owned by Vayames.
 /// </summary>
-[Group("cardGame")]
-[Aliases("cg")]
-[Description("Card game tracking commands")]
-internal class CardGameService : BaseCommandModule
+[SlashCommandGroup("cardGame", "Card game tracking commands")]
+internal class CardGameService : ApplicationCommandModule
 {
     public CardGameRepository Repository { private get; set; } = null!;
     public CardGameFormatter Formatter { private get; set; } = null!;
 
-    [GroupCommand]
-    [Description("Prompts all card games owned by Vayames.")]
-    public async Task Prompt(CommandContext context,
-        [Description("How many decks do you want to prompt")]
-        int? limit = 0)
+    [SlashCommand("context", "Prompts all card games owned by Vayames.")]
+    public async Task Prompt(InteractionContext context)
     {
         var cardGames = await Repository.FindAllAsync();
-        var trueLimit = limit <= 0 ? cardGames.Count : limit ?? 0;
+        var trueLimit = cardGames.Count; // FIXME: paginate
 
         if (cardGames.Count == 0)
         {
-            await context.RespondAsync("No cards in the collection (weird).");
+            await context.CreateResponseAsync("No cards in the collection (weird).");
             return;
         }
 
         var formattedCardGames = await Task.WhenAll(cardGames
-                .Take(trueLimit)
-                .Select(Formatter.Format));
+            .Take(trueLimit)
+            .Select(Formatter.Format));
         var answer = formattedCardGames
             .Prepend($"The collection currently counts *{cardGames.Count}* card games :")
             .ToList();
 
-        await context.RespondAsync(answer);
+        await context.CreateResponseAsync(answer);
     }
 
-    [Command("add")]
-    [Description("Adds a card game to the collection in the name of provided user.")]
-    public async Task AddFrom(CommandContext context,
-        [Description("User offering the card game")]
-        DiscordMember gifter,
-        [Description("Name of the card game")] [RemainingText]
+    [SlashCommand("add", "Adds a card game to the collection in the name of provided user.")]
+    public async Task AddFrom(InteractionContext context,
+        [OptionAttribute("gifter", "User offering the card game")]
+        DiscordUser gifter,
+        [OptionAttribute("Name", "Name of the card game")]
         string cardGameName)
     {
         var newCardGame = new CardGameEntity(cardGameName, gifter.Id);
 
         await Repository.SaveAsync(newCardGame);
 
-        await context.RespondAsync($"*{cardGameName}* was added to the collection by **{gifter.Mention}** !");
+        await context.CreateResponseAsync($"*{cardGameName}* was added to the collection by **{gifter.Mention}** !");
     }
 
-    [Command("gift")]
-    [Description("Adds a card game to the collection in your name.")]
-    public async Task Add(CommandContext context,
-        [Description("Name of the card game")] [RemainingText]
+    [SlashCommand("gift", "Adds a card game to the collection in your name.")]
+    public async Task Add(InteractionContext context,
+        [OptionAttribute("Name", "Name of the card game")]
         string cardGameName)
     {
         if (context.Member != null) await AddFrom(context, context.Member, cardGameName);
-        else await context.RespondAsync("Wtf happened ?!");
+        else await context.CreateResponseAsync("Wtf happened ?!");
     }
 }

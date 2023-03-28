@@ -2,19 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
 using Bishop.Commands.Horoscope;
 using Bishop.Commands.Record.Business;
-using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Record.Controller;
+using Bishop.Commands.Record.Domain;
 using Bishop.Commands.Weather.Domain;
 using Bishop.Commands.Weather.Service;
-using Bishop.Config.Converters;
 using Bishop.Helper;
 using Bishop.Helper.Grive;
 using DSharpPlus;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Converters;
+using DSharpPlus.SlashCommands;
+using log4net;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bishop.Config;
@@ -24,6 +25,9 @@ namespace Bishop.Config;
 /// </summary>
 public class DiscordClientGenerator
 {
+    private static readonly ILog Log = LogManager
+        .GetLogger(MethodBase.GetCurrentMethod()?
+            .DeclaringType);
     /// <summary>
     ///     Can be overriden by environment variables. See <see cref="Program" />.
     /// </summary>
@@ -33,7 +37,7 @@ public class DiscordClientGenerator
     private static readonly string DiscordToken = Environment
         .GetEnvironmentVariable("DISCORD_TOKEN")!;
 
-    private readonly CommandsNextExtension _commands;
+    private readonly SlashCommandsExtension _commands;
 
     private readonly string[] _sigil;
 
@@ -42,11 +46,15 @@ public class DiscordClientGenerator
         _sigil = new[] {BaseSigil};
         Client = new DiscordClient(AssembleConfig());
 
-        _commands = Client.UseCommandsNext(AssembleCommands(AssembleServiceCollection()));
-        _commands.SetHelpFormatter<DefaultHelpFormatter>();
+        _commands = Client.UseSlashCommands(AssembleCommands(AssembleServiceCollection()));
+        _commands.SlashCommandErrored += (_, args) =>
+        {
+            Log.Error($"[{DateTime.Now}][{args.Context}]: {args.Exception}");
+            return Task.CompletedTask;
+        };
 
-        _commands.RegisterConverter(new MeterKeysConverter());
-        _commands.RegisterConverter(new WeatherMetricConverter());
+        //_commands.RegisterConverter(new MeterKeysConverter());
+        //_commands.RegisterConverter(new WeatherMetricConverter());
     }
 
     public DiscordClient Client { get; }
@@ -110,12 +118,11 @@ public class DiscordClientGenerator
             .AddSingleton<HoroscopeRepository>();
     }
 
-    private CommandsNextConfiguration AssembleCommands(IServiceCollection services)
+    private SlashCommandsConfiguration AssembleCommands(IServiceCollection services)
     {
-        return new CommandsNextConfiguration
+        return new SlashCommandsConfiguration
         {
-            Services = services.BuildServiceProvider(),
-            StringPrefixes = _sigil
+            Services = services.BuildServiceProvider()
         };
     }
 
@@ -131,9 +138,6 @@ public class DiscordClientGenerator
 
     public void RegisterBulk(params Type[] types)
     {
-        foreach (var type in types)
-        {
-            _commands.RegisterCommands(type);
-        }
+        foreach (var type in types) _commands.RegisterCommands(type);
     }
 }

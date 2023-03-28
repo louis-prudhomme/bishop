@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bishop.Helper;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+using Bishop.Helper.Extensions;
+
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Dump;
 
 /// <summary>
 ///     Provide a command to send help to @users.
 /// </summary>
-public class Aled : BaseCommandModule
+public class Aled : ApplicationCommandModule
 {
     private const string AledFilePath = "aleds.json";
 
@@ -20,12 +21,9 @@ public class Aled : BaseCommandModule
 
     private readonly Random _rand = new();
 
-
-    [Command("aled")]
-    [Aliases("suicide", "oskour", "halp", "pls")]
-    [Description("Help @someone in need")]
-    public async Task Help(CommandContext context)
+    [SlashCommand("aled", "Help @someone in need")]
+    public async Task Help(InteractionContext context)
     {
-        await context.RespondAsync($"{Aleds[_rand.Next(Aleds.Count)]}");
+        await context.CreateResponseAsync($"{Aleds.Random()}");
     }
 }

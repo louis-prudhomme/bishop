@@ -8,7 +8,6 @@ namespace Bishop.Commands.Weather.Service;
 
 public class WeatherService
 {
-
     public IKeyBasedCache<string, WeatherEntity> Cache { private get; set; } = null!;
 
     private async Task<WeatherEntity?> CurrentFor(string city)
@@ -22,7 +21,7 @@ public class WeatherService
     {
         var currentWeather = await CurrentFor(city);
         if (currentWeather == null) return new Dictionary<WeatherMetric, string>();
-        
+
         return WeatherBeaconsHolder.Types
             .Select(type => (type, WeatherBeaconsHolder.GetTypeBeacon(type)
                 .Ratio(currentWeather.Get(type)) * 100))

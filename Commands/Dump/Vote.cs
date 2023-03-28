@@ -1,16 +1,19 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DSharpPlus;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Dump;
 
+//FIXME: i do not work as of right now
 /// <summary>
 ///     Provides a command to ease voting between options.
 /// </summary>
-public class Vote : BaseCommandModule
+public class Vote : ApplicationCommandModule
 {
     private const string EmojiPrefix = ":regional_indicator_*:";
     private const char EmojiPrefixPlaceholder = '*';
@@ -22,33 +25,38 @@ public class Vote : BaseCommandModule
     /// </summary>
     private const int MaxPollChoice = 20;
 
-    [Command("referendum")]
-    [Aliases("vote", "v")]
-    [Description("Create a poll with the specified options. There must not be more than 20 options.")]
-    public async Task Referendum(CommandContext context,
-        [Description("Options to choose from")]
-        params string[] args)
+    [SlashCommand("referendum", "Create a poll with the specified options. There must not be more than 20 options.")]
+    public async Task Referendum(InteractionContext context,
+        [OptionAttribute("args", "Options to choose from")]
+        string args) // FIXME: not very practical
     {
-        switch (args.Length)
+        switch (args.Split(' ').Length)
         {
             case 1:
-                await context.RespondAsync("…Not an easy choice, eh ?");
+                await context.CreateResponseAsync("…Not an easy choice, eh ?");
                 break;
             case > MaxPollChoice:
-                await context.RespondAsync(
+                await context.CreateResponseAsync(
                     $"Too much voting options ! Maximum is {MaxPollChoice}, got {args.Length}");
                 return;
         }
 
-        var messageBuilder = new StringBuilder(MessageBase);
-
+        var contentBuilder = new StringBuilder();
         for (var i = 0; i < args.Length; i++)
-            messageBuilder.Append($"\n{args[i]} ⇒ {RegionalIndicatorFromIndex(context.Client, i)}");
+            contentBuilder.Append($"\n{args[i]} ⇒ {RegionalIndicatorFromIndex(context.Client, i)}");
 
-        var sentMessage = await context.RespondAsync(messageBuilder.ToString());
+        var builder = new DiscordInteractionResponseBuilder
+        {
+            Content = MessageBase,
+        };
 
-        for (var i = 0; i < args.Length; i++)
-            await sentMessage.CreateReactionAsync(RegionalIndicatorFromIndex(context.Client, i));
+        var buttons = args.Split(' ').Select((arg, i) => (Option: arg, Emoji: RegionalIndicatorFromIndex(context.Client, i)))
+                .Select(tuple => (tuple.Option, Emoji: new DiscordComponentEmoji(tuple.Emoji)))
+                .Select(tuple => new DiscordButtonComponent(ButtonStyle.Primary, tuple.Option, string.Empty, false, tuple.Emoji))
+                .Chunk(5)
+            .Select(buttons => new DiscordActionRowComponent(buttons));
+        builder.AddComponents(buttons);
+        await context.CreateResponseAsync(builder);
     }
 
     /// <summary>
@@ -57,9 +65,8 @@ public class Vote : BaseCommandModule
     /// <param name="client">Discord client.</param>
     /// <param name="index">Index of the reaction emoji.</param>
     /// <returns>Valid Discord emoji.</returns>
-    private DiscordEmoji RegionalIndicatorFromIndex(DiscordClient client, int index)
+    private string RegionalIndicatorFromIndex(DiscordClient client, int index)
     {
-        return DiscordEmoji.FromName(client,
-            EmojiPrefix.Replace(EmojiPrefixPlaceholder, (char) (AAsciiIndex + index)));
+        return EmojiPrefix.Replace(EmojiPrefixPlaceholder, (char) (AAsciiIndex + index));
     }
 }

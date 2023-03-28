@@ -5,7 +5,7 @@ namespace Bishop.Helper.Extensions;
 public static class StringExtensions
 {
     /// <summary>
-    /// From https://stackoverflow.com/questions/1879395/how-do-i-generate-a-stream-from-a-string
+    ///     From https://stackoverflow.com/questions/1879395/how-do-i-generate-a-stream-from-a-string
     /// </summary>
     /// <param name="s">To streamify</param>
     /// <returns>a stream that can be `using`ed</returns>
@@ -19,7 +19,13 @@ public static class StringExtensions
         return stream;
     }
 
-    public static bool IsEmpty(this string s) => s.Length == 0;
+    public static bool IsEmpty(this string s)
+    {
+        return s.Length == 0;
+    }
 
-    public static string IfEmpty(this string s, string placeholder) => s.IsEmpty() ? placeholder : s;
+    public static string IfEmpty(this string s, string placeholder)
+    {
+        return s.IsEmpty() ? placeholder : s;
+    }
 }

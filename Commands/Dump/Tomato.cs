@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bishop.Helper;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Dump;
 
 /// <summary>
 ///     Provide a command to send tomatoes to @users.
 /// </summary>
-public class Tomato : BaseCommandModule
+public class Tomato : ApplicationCommandModule
 {
     private const string TomatoFilePath = "tomatoes.json";
 
@@ -21,13 +21,11 @@ public class Tomato : BaseCommandModule
 
     private readonly Random _rand = new();
 
-    [Command("tomato")]
-    [Aliases("t")]
-    [Description("Throw a tomato to @someone")]
-    public async Task Throw(CommandContext context,
-        [Description("User to throw the tomato at!")]
-        DiscordMember member)
+    [SlashCommand("tomato", "Throw a tomato to @someone")]
+    public async Task Throw(InteractionContext context,
+        [OptionAttribute("member", "User to throw the tomato at!")]
+        DiscordUser member)
     {
-        await context.RespondAsync($"{member.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
+        await context.CreateResponseAsync($"{member.Mention} 🍅 ! {Tomatoes[_rand.Next(Tomatoes.Count)]}");
     }
 }

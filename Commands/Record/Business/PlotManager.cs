@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
 using Bishop.Helper;
 using Bishop.Helper.Extensions;
-using DSharpPlus.Entities;
 using Microsoft.FSharp.Core;
 using Plotly.NET;
 using Plotly.NET.TraceObjects;
@@ -23,9 +21,6 @@ public class PlotManager
             .OrderBy(date => date)
             .ToList();
     }
-
-
-    private record Countach(string Key, int Count);
 
     private List<Countach> GetCountOfAdditionsByDay(IReadOnlyCollection<DateTime> allDates)
     {
@@ -113,4 +108,7 @@ public class PlotManager
 
         return new PlotImage(chart);
     }
+
+
+    private record Countach(string Key, int Count);
 }

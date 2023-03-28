@@ -1,47 +1,46 @@
 ﻿using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+
+
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Record.Controller.Aliases;
 
-public class MalfoyCounterController : BaseCommandModule
+[SlashCommandGroup("malfoy", "placeholder")]
+public class MalfoyCounterController : ApplicationCommandModule
 {
     public RecordController Controller { private get; set; } = null!;
 
-    [Command("malfoy")]
-    [Description("Adds a provided value to @someone’s malfoy score")]
-    public async Task ScoreMalfoy(CommandContext context,
-        [Description("User to increment the malfoy score of")]
-        DiscordMember member,
-        [Description("To increment by")] int nb)
+    [SlashCommand("addmany", "Adds a provided value to @someone’s malfoy score")]
+    public async Task ScoreMalfoy(InteractionContext context,
+        [OptionAttribute("member", "User to increment the malfoy score of")]
+        DiscordUser member,
+        [OptionAttribute("nb", "To increment by")]
+        long nb)
     {
         await Controller.Score(context, member, CounterCategory.Malfoy, nb);
     }
 
-    [Command("malfoy")]
-    [Description("Returns the value of @someone’s malfoy score")]
-    public async Task ScoreMalfoy(CommandContext context,
-        [Description("User to know the malfoy score of")]
-        DiscordMember member)
+    [SlashCommand("consult", "Returns the value of @someone’s malfoy score")]
+    public async Task ScoreMalfoy(InteractionContext context,
+        [OptionAttribute("member", "User to know the malfoy score of")]
+        DiscordUser member)
     {
-        await Controller.Consult(context, member, CounterCategory.Malfoy, null);
+        await Controller.Consult(context, member, CounterCategory.Malfoy);
     }
 
-    [Command("malfoy")]
-    [Description("Returns all malfoy scores")]
-    public async Task ScoreMalfoy(CommandContext context)
+    [SlashCommand("all", "Returns all malfoy scores")]
+    public async Task ScoreMalfoy(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Malfoy);
     }
 
-    [Command("malfoy")]
-    [Description("Adds a provided value to @someone’s malfoy score")]
-    public async Task ScoreMalfoy(CommandContext context,
-        [Description("User to increment the malfoy score of by 1")]
-        DiscordMember member,
-        [RemainingText] [Description("Reason for the increment")]
+    [SlashCommand("add", "Adds a provided value to @someone’s malfoy score")]
+    public async Task ScoreMalfoy(InteractionContext context,
+        [OptionAttribute("member", "User to increment the malfoy score of by 1")]
+        DiscordUser member,
+        [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
         await Controller.Score(context, member, CounterCategory.Malfoy, reason);

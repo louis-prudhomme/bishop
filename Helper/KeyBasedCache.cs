@@ -6,34 +6,38 @@ using Bishop.Helper.Extensions;
 namespace Bishop.Helper;
 
 /// <summary>
-/// Interface denoting an asynchronous key-based cache. Its purpose is to
-/// hold values and mark the last time they were updated.
-/// Identification of values is made through a key which is supposed unique.
-/// Value update is left at the discretion of implementations.
-/// <seealso cref="AutoUpdatingKeyBasedCache{TKey,TValue}"/>
+///     Interface denoting an asynchronous key-based cache. Its purpose is to
+///     hold values and mark the last time they were updated.
+///     Identification of values is made through a key which is supposed unique.
+///     Value update is left at the discretion of implementations.
+///     <seealso cref="AutoUpdatingKeyBasedCache{TKey,TValue}" />
 /// </summary>
 /// <typeparam name="TKey">Unique key</typeparam>
 /// <typeparam name="TValue">Values to cache away</typeparam>
 public interface IKeyBasedCache<TKey, TValue> where TKey : notnull
 {
+    public Task<Cache> Get(TKey key);
+
+    public async Task<TValue?> GetValue(TKey key)
+    {
+        return (await Get(key)).Value;
+    }
+
     /// <summary>
-    /// Real cache type ; shows the value as well as the last time it was updated.
+    ///     Real cache type ; shows the value as well as the last time it was updated.
     /// </summary>
     /// <param name="Value">To save</param>
     /// <param name="FetchAt">Unix timestamp (seconds)</param>
     public record Cache(TValue? Value, long FetchAt);
-
-    public Task<Cache> Get(TKey key);
-    public async Task<TValue?> GetValue(TKey key) => (await Get(key)).Value;
 }
 
 /// <summary>
-/// A key-based cache relying on a <see cref="ConcurrentDictionary{TKey,TValue}"/>.
-/// Allows to update values.
+///     A key-based cache relying on a <see cref="ConcurrentDictionary{TKey,TValue}" />.
+///     Allows to update values.
 /// </summary>
 /// <typeparam name="TKey">Unique identifier.</typeparam>
 /// <typeparam name="TValue">Values cached away.</typeparam>
-internal class ConcurrentKeyBasedCache<TKey, TValue>: IKeyBasedCache<TKey, TValue> where TKey : notnull
+internal class ConcurrentKeyBasedCache<TKey, TValue> : IKeyBasedCache<TKey, TValue> where TKey : notnull
 {
     private readonly ConcurrentDictionary<TKey, IKeyBasedCache<TKey, TValue>.Cache> _underlying = new();
 
@@ -44,9 +48,9 @@ internal class ConcurrentKeyBasedCache<TKey, TValue>: IKeyBasedCache<TKey, TValu
     }
 
     /// <summary>
-    /// Relies on <see cref="ConcurrentDictionaryAdditions.AddOrUpdate{TKey,TValue}"/>.
-    /// Regardless of key existence, the provided value will be added to the dictionary.
-    /// Timestamp is computed before insertion.
+    ///     Relies on <see cref="ConcurrentDictionaryAdditions.AddOrUpdate{TKey,TValue}" />.
+    ///     Regardless of key existence, the provided value will be added to the dictionary.
+    ///     Timestamp is computed before insertion.
     /// </summary>
     /// <param name="key">Identifier</param>
     /// <param name="value">Value to cache</param>
@@ -60,18 +64,17 @@ internal class ConcurrentKeyBasedCache<TKey, TValue>: IKeyBasedCache<TKey, TValu
 }
 
 /// <summary>
-/// A readonly <see cref="IKeyBasedCache{TKey,TValue}"/> implementation which also takes a generator to automatically
-/// update values when cache is due.
-/// No other update is allowed.
+///     A readonly <see cref="IKeyBasedCache{TKey,TValue}" /> implementation which also takes a generator to automatically
+///     update values when cache is due.
+///     No other update is allowed.
 /// </summary>
 /// <typeparam name="TKey">Identifier</typeparam>
 /// <typeparam name="TValue">Values to cache away</typeparam>
 public class AutoUpdatingKeyBasedCache<TKey, TValue> : IKeyBasedCache<TKey, TValue> where TKey : notnull
 {
-    private readonly ConcurrentKeyBasedCache<TKey, TValue> _underlying = new();
-    
     private readonly long _cacheFor;
     private readonly Func<TKey, Task<TValue>> _fetcher;
+    private readonly ConcurrentKeyBasedCache<TKey, TValue> _underlying = new();
 
     public AutoUpdatingKeyBasedCache(long cacheFor, Func<TKey, Task<TValue>> fetcher)
     {
@@ -80,9 +83,9 @@ public class AutoUpdatingKeyBasedCache<TKey, TValue> : IKeyBasedCache<TKey, TVal
     }
 
     /// <summary>
-    /// Returns the most up to date cached value. Will update before returning if:
-    /// - cached value is null for given key (which should not happen)
-    /// - cache is expired
+    ///     Returns the most up to date cached value. Will update before returning if:
+    ///     - cached value is null for given key (which should not happen)
+    ///     - cache is expired
     /// </summary>
     /// <param name="key">Identifier</param>
     /// <returns>Currently cached value.</returns>
@@ -91,9 +94,9 @@ public class AutoUpdatingKeyBasedCache<TKey, TValue> : IKeyBasedCache<TKey, TVal
         var cached = await _underlying.Get(key);
         if (cached.Value != null && DateHelper.CurrentEpoch - cached.FetchAt <= _cacheFor)
             return cached;
-        
+
         var newValue = _underlying.Set(key, await _fetcher(key));
-        
+
         return newValue;
     }
 }

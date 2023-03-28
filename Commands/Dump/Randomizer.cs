@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+using Bishop.Helper.Extensions;
+
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Dump;
 
 /// <summary>
 ///     Provides a set of random-based commands.
 /// </summary>
-public class Randomizer : BaseCommandModule
+public class Randomizer : ApplicationCommandModule
 {
     /// <summary>
     ///     Hexadecimal value of the first emoji in UTF-8.
@@ -22,23 +23,19 @@ public class Randomizer : BaseCommandModule
 
     private readonly Random _rand = new();
 
-    [Command("Random")]
-    [Aliases("rand", "r")]
-    [Description("Make a random choice")]
-    public async Task RandomChoice(CommandContext context,
-        [Description("Options to choose from")]
-        params string[] args)
+    [SlashCommand("Random", "Make a random choice")]
+    public async Task RandomChoice(InteractionContext context,
+        [OptionAttribute("args", "Options to choose from, separated with a space")]
+        string args)
     {
-        await context.RespondAsync($"🎲 ⇒ {args[_rand.Next(args.Length)]}");
+        await context.CreateResponseAsync($"🎲 ⇒ {args.Split(' ').Random()}");
     }
 
-    [Command("Randomoji")]
-    [Aliases("randmoji", "rj")]
-    [Description("Picks a random emoji")]
-    public async Task RandomEmoji(CommandContext context)
+    [SlashCommand("Randomoji", "Picks a random emoji")]
+    public async Task RandomEmoji(InteractionContext context)
     {
         var emojiCode = BaseEmojiHex + _rand.Next(0, MaxEmojiHex);
 
-        await context.RespondAsync($"I’ve picked : {char.ConvertFromUtf32(emojiCode)}");
+        await context.CreateResponseAsync($"I’ve picked : {char.ConvertFromUtf32(emojiCode)}");
     }
 }

@@ -5,23 +5,23 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Bishop.Commands.Weather.Domain;
+using Bishop.Commands.Weather.Presenter;
 using Bishop.Commands.Weather.Service;
 using Bishop.Helper;
 using Bishop.Helper.Extensions;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.SlashCommands;
 
-namespace Bishop.Commands.Weather.Presenter;
+namespace Bishop.Commands.Weather.Controller;
 
-public class WeatherController : BaseCommandModule
+public class WeatherController : ApplicationCommandModule
 {
     private static readonly TextInfo Capital = new CultureInfo("en-US", false).TextInfo;
     public WeatherService Service { private get; set; } = null!;
 
-    [Command("weather")]
-    [Aliases("w")]
-    [Description("Gives a complete and accurate weather forecast of a city, as seen by a « parigot »")]
-    public async Task Get(CommandContext context, [Description("City to know the weather of")] string city)
+    [SlashCommand("weather", "placeholder")]
+    public async Task Get(InteractionContext context,
+        [OptionAttribute("city", "placeholder")]
+         string city)
     {
         if (string.IsNullOrEmpty(city)) return;
         try
@@ -33,33 +33,14 @@ public class WeatherController : BaseCommandModule
                 .Select(formatter => formatter.ToString())
                 .JoinWithNewlines();
 
-            await context.RespondAsync($"__Weather forecast for *{Capital.ToTitleCase(city)}* " +
+            await context.CreateResponseAsync($"__Weather forecast for *{Capital.ToTitleCase(city)}* " +
                                        $"the *{DateHelper.FromDateTimeToStringDate(DateTime.Now)} at {DateHelper.FromDateTimeToStringTime(DateTime.Now)}*__" +
                                        $":\n{weatherForecast}");
         }
         catch (HttpRequestException e)
         {
             if (e.StatusCode == HttpStatusCode.BadRequest)
-                await context.RespondAsync($"No city was found with the name {city}");
-        }
-    }
-
-    [Command("weather")]
-    [Description("Displays a specific weather metric of a city at the moment, as seen by a « parigot »")]
-    public async Task Get(CommandContext context, [Description("City to know the weather of")] string city,
-        [Description("Metric to learn about")] WeatherMetric metric)
-    {
-        if (string.IsNullOrEmpty(city)) return;
-        try
-        {
-            var current = await Service.CurrentRatiosByMetrics(city);
-            await context.RespondAsync(
-                $"__Currently in *{Capital.ToTitleCase(city)}*__ {WeatherFormatter.CreateFor(metric, current[metric]).ToString(true)}");
-        }
-        catch (HttpRequestException e)
-        {
-            if (e.StatusCode == HttpStatusCode.BadRequest)
-                await context.RespondAsync($"No city was found with the name « {city} »");
+                await context.CreateResponseAsync($"No city was found with the name {city}");
         }
     }
 }

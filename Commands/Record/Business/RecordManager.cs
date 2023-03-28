@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
-using Bishop.Helper.Database;
 using DSharpPlus.Entities;
 
 namespace Bishop.Commands.Record.Business;
@@ -12,21 +10,33 @@ public class RecordManager
 {
     public RecordRepository Repository { private get; set; } = new();
 
-    public async Task<List<RecordEntity>> GetAllNonNulls() => (await Repository.FindAllAsync())
-        .Where(record => record.Motive != null)
-        .ToList();
+    public async Task<List<RecordEntity>> GetAllNonNulls()
+    {
+        return (await Repository.FindAllAsync())
+            .Where(record => record.Motive != null)
+            .ToList();
+    }
 
-    public async Task<List<RecordEntity>> Find(ulong userId) => (await Repository.FindByUser(userId))
-        .Where(record => record.Motive != null)
-        .ToList();
+    public async Task<List<RecordEntity>> Find(ulong userId)
+    {
+        return (await Repository.FindByUser(userId))
+            .Where(record => record.Motive != null)
+            .ToList();
+    }
 
-    public async Task<List<RecordEntity>> Find(ulong userId, CounterCategory category) => (await Repository.FindByUserAndCategory(userId, category))
-        .Where(record => record.Motive != null)
-        .ToList();
+    public async Task<List<RecordEntity>> Find(ulong userId, CounterCategory category)
+    {
+        return (await Repository.FindByUserAndCategory(userId, category))
+            .Where(record => record.Motive != null)
+            .ToList();
+    }
 
-    public async Task<List<RecordEntity>> Find(CounterCategory category) => (await Repository.FindByCategory(category))
-        .Where(record => record.Motive != null)
-        .ToList();
+    public async Task<List<RecordEntity>> Find(CounterCategory category)
+    {
+        return (await Repository.FindByCategory(category))
+            .Where(record => record.Motive != null)
+            .ToList();
+    }
 
     public async Task<long> FindScore(ulong memberId, CounterCategory category)
     {
@@ -65,12 +75,10 @@ public class RecordManager
         return await Repository.CountByUserAndCategory(userId, category);
     }
 
-    public record SaveRecordResponse(long PreviousScore, long CurrentScore, long NextMilestone);
-
-    public List<RecordEntity> CreateGhostRecords(SnowflakeObject member, CounterCategory category, int nb)
+    public List<RecordEntity> CreateGhostRecords(SnowflakeObject member, CounterCategory category, long nb)
     {
         return Enumerable
-            .Range(0, nb)
+            .Range(0, unchecked((int)nb))
             .Select(_ => new RecordEntity(member.Id, category, null))
             .ToList();
     }
@@ -98,4 +106,6 @@ public class RecordManager
             _ => (current / 100 + 1) * 100
         };
     }
+
+    public record SaveRecordResponse(long PreviousScore, long CurrentScore, long NextMilestone);
 }

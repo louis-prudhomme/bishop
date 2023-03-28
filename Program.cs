@@ -7,7 +7,7 @@ using Bishop.Commands.Dump;
 using Bishop.Commands.Horoscope;
 using Bishop.Commands.Record.Controller;
 using Bishop.Commands.Record.Controller.Aliases;
-using Bishop.Commands.Weather.Presenter;
+using Bishop.Commands.Weather.Controller;
 using Bishop.Config;
 using DSharpPlus;
 using DSharpPlus.Entities;
@@ -32,6 +32,34 @@ internal static class Program
     private static DiscordClient _discord = null!;
     private static DiscordClientGenerator _generator = null!;
 
+    /// <summary>
+    ///     Array containing all the classes that must be registered as commands through
+    ///     the <see cref="DiscordClientGenerator" />.BulkRegister method.
+    /// </summary>
+    private static readonly Type[] CommandClasses = new List<Type>
+    {
+        typeof(Randomizer),
+        typeof(Stalk),
+        typeof(Aled),
+        typeof(Tomato),
+        typeof(Piggies),
+        typeof(Vote),
+        typeof(HoroscopeController),
+        typeof(Quote),
+        typeof(Deleter),
+        typeof(CardGameService),
+        typeof(WeatherController),
+        typeof(RacletteCounterController),
+        typeof(BdmCounterController),
+        typeof(BeaufCounterController),
+        typeof(RassCounterController),
+        typeof(SauceCounterController),
+        typeof(MalfoyCounterController),
+        typeof(SelCounterController),
+        typeof(WindCounterController),
+        typeof(RecordController),
+    }.ToArray();
+
     [STAThread]
     private static void Main()
     {
@@ -41,7 +69,7 @@ internal static class Program
         {
             PuppeteerSharpRendererOptions.localBrowserExecutablePath = ChromiumPath;
             PuppeteerSharpRendererOptions.launchOptions.Args = new[] {"--no-sandbox"};
-        } 
+        }
 
         _generator = new DiscordClientGenerator();
         _generator.RegisterBulk(CommandClasses);
@@ -58,35 +86,7 @@ internal static class Program
 
     private static async Task MainAsync()
     {
-        await _discord.ConnectAsync(new(BotStatus, ActivityType.Competing));
+        await _discord.ConnectAsync(new DiscordActivity(BotStatus, ActivityType.Competing));
         await Task.Delay(-1);
     }
-    
-    /// <summary>
-    /// Array containing all the classes that must be registered as commands through
-    /// the <see cref="DiscordClientGenerator"/>.BulkRegister method.
-    /// </summary>
-    private static readonly Type[] CommandClasses = new List<Type>
-        {
-            typeof(Randomizer),
-            typeof(Stalk),
-            typeof(Tomato),
-            typeof(Aled),
-            typeof(HoroscopeController),
-            typeof(Quote),
-            typeof(Vote),
-            typeof(Piggies),
-            typeof(Deleter),
-            typeof(BdmCounterController),
-            typeof(BeaufCounterController),
-            typeof(SauceCounterController),
-            typeof(MalfoyCounterController),
-            typeof(SelCounterController),
-            typeof(WindCounterController),
-            typeof(RassCounterController),
-            typeof(RecordController),
-            typeof(CardGameService),
-            typeof(WeatherController),
-            typeof(RacletteCounterController)
-        }.ToArray();
 }

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Bishop.Commands.Record.Domain;
@@ -24,16 +23,16 @@ public static class EnumRelations
 {
     public static readonly Dictionary<CounterCategory, string> CounterCategoryToDisplayName = new()
     {
-        { CounterCategory.Bdm, "BDM" },
-        { CounterCategory.Sauce, "sauce" },
-        { CounterCategory.Sel, "sel" },
-        { CounterCategory.Beauf, "beauf" },
-        { CounterCategory.Rass, "rass" },
-        { CounterCategory.Malfoy, "malfoy" },
-        { CounterCategory.Wind, "wind" },
-        { CounterCategory.Raclette, "raclette" },
+        {CounterCategory.Bdm, "BDM"},
+        {CounterCategory.Sauce, "sauce"},
+        {CounterCategory.Sel, "sel"},
+        {CounterCategory.Beauf, "beauf"},
+        {CounterCategory.Rass, "rass"},
+        {CounterCategory.Malfoy, "malfoy"},
+        {CounterCategory.Wind, "wind"},
+        {CounterCategory.Raclette, "raclette"}
     };
-    
+
     public static string DisplayName(this CounterCategory category)
     {
         return CounterCategoryToDisplayName.GetValueOrDefault(category) ?? throw new ArgumentNullException(nameof(category));

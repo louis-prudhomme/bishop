@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bishop.Helper;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+
+
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Dump;
 
-public class Stalk : BaseCommandModule
+public class Stalk : ApplicationCommandModule
 {
     private const string StalkFilePath = "slenders.json";
 
@@ -18,12 +19,11 @@ public class Stalk : BaseCommandModule
             .Get()
             .Result;
 
-    [Command("stalk")]
-    [Description("Invoke a discussion between you and one of the five Slenders")]
-    public async Task Discuss(CommandContext context,
-        [Description("Slender to talk with")] [RemainingText]
+    [SlashCommand("stalk", "Invoke a discussion between you and one of the five Slenders")]
+    public async Task Discuss(InteractionContext context,
+        [OptionAttribute("Name", "Slender to talk with")]
         string name)
     {
-        await context.RespondAsync(Lines[name]);
+        await context.CreateResponseAsync(Lines[name]);
     }
 }
