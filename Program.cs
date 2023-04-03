@@ -43,7 +43,7 @@ internal static class Program
         typeof(Aled),
         typeof(Tomato),
         typeof(Piggies),
-        typeof(Vote),
+        typeof(Referendum),
         typeof(HoroscopeController),
         typeof(Quote),
         typeof(Deleter),

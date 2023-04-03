@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Bishop.Commands.CardGame;
+using Bishop.Commands.Dump;
 using Bishop.Commands.Horoscope;
 using Bishop.Commands.Record.Business;
 using Bishop.Commands.Record.Controller;
@@ -39,6 +40,9 @@ public class DiscordClientGenerator
 
     private readonly SlashCommandsExtension _commands;
 
+    private readonly VoteAnswerEventHandler _booth = new();
+
+    // TODO: remove this shit
     private readonly string[] _sigil;
 
     public DiscordClientGenerator()
@@ -46,15 +50,13 @@ public class DiscordClientGenerator
         _sigil = new[] {BaseSigil};
         Client = new DiscordClient(AssembleConfig());
 
+        Client.ComponentInteractionCreated += _booth.Handle;
         _commands = Client.UseSlashCommands(AssembleCommands(AssembleServiceCollection()));
         _commands.SlashCommandErrored += (_, args) =>
         {
             Log.Error($"[{DateTime.Now}][{args.Context}]: {args.Exception}");
             return Task.CompletedTask;
         };
-
-        //_commands.RegisterConverter(new MeterKeysConverter());
-        //_commands.RegisterConverter(new WeatherMetricConverter());
     }
 
     public DiscordClient Client { get; }
@@ -105,6 +107,7 @@ public class DiscordClientGenerator
         };
 
         return new ServiceCollection()
+            .AddSingleton(_booth)
             .AddSingleton(nestedRecordsController)
             .AddSingleton(nestedWeatherService)
             .AddSingleton<IKeyBasedCache<GriveDirectory, ImmutableList<string>>>(nestedGriveCache)

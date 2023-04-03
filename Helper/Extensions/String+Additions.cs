@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Bishop.Helper.Extensions;
 
@@ -17,6 +21,13 @@ public static class StringExtensions
         writer.Flush();
         stream.Position = 0;
         return stream;
+    }
+
+    public static IEnumerable<string> SplitArguments(this string self)
+    {
+        return Regex
+            .Matches(self, @"(?<match>\w+)|\""(?<match>[\w\s]*)""")
+            .Select(m => m.Groups["match"].Value);
     }
 
     public static bool IsEmpty(this string s)
