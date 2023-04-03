@@ -76,7 +76,6 @@ internal static class Program
 
         _discord = _generator.Client;
 
-        Log.Info($"Sigil is {_generator.Sigil}");
         Log.Info("Awaiting commands");
 
         MainAsync()

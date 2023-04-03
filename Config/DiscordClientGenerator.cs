@@ -29,11 +29,6 @@ public class DiscordClientGenerator
     private static readonly ILog Log = LogManager
         .GetLogger(MethodBase.GetCurrentMethod()?
             .DeclaringType);
-    /// <summary>
-    ///     Can be overriden by environment variables. See <see cref="Program" />.
-    /// </summary>
-    private static readonly string BaseSigil = Environment
-        .GetEnvironmentVariable("COMMAND_SIGIL") ?? ";";
 
     private static readonly string DiscordToken = Environment
         .GetEnvironmentVariable("DISCORD_TOKEN")!;
@@ -42,12 +37,8 @@ public class DiscordClientGenerator
 
     private readonly VoteAnswerEventHandler _booth = new();
 
-    // TODO: remove this shit
-    private readonly string[] _sigil;
-
     public DiscordClientGenerator()
     {
-        _sigil = new[] {BaseSigil};
         Client = new DiscordClient(AssembleConfig());
 
         Client.ComponentInteractionCreated += _booth.Handle;
@@ -60,7 +51,6 @@ public class DiscordClientGenerator
     }
 
     public DiscordClient Client { get; }
-    public string Sigil => string.Join(" ", _sigil);
 
     private IServiceCollection AssembleServiceCollection()
     {
