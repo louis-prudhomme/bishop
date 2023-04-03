@@ -1,105 +1,72 @@
 ﻿using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Record.Controller.Aliases;
 
-public class WindCounterController : BaseCommandModule
+[SlashCommandGroup("wind", "Interact with wind history")]
+public class WindCounterController : ApplicationCommandModule
 {
     public RecordController Controller { private get; set; } = null!;
 
-    [Command("wind")]
-    [Description("Adds a provided value to @someone’s wind score")]
-    public async Task ScoreWind(CommandContext context,
-        [Description("User to increment the wind score of")]
-        DiscordMember member,
-        [Description("To increment by")] int nb)
+    [SlashCommand("rots", "Add a record to someone's rot history")]
+    public async Task ScoreRot(InteractionContext context,
+        [OptionAttribute("user", "User to increment the rot score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
+        long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, nb);
+        await Controller.Score(context, user, CounterCategory.Wind, nb);
     }
 
-    [Command("rot")]
-    [Description("Adds a provided value to @someone’s rot score")]
-    public async Task ScoreRot(CommandContext context,
-        [Description("User to increment the rot score of")]
-        DiscordMember member,
-        [Description("To increment by")] int nb)
+    [SlashCommand("pets", "Add a record to someone's pet history")]
+    public async Task ScorePetWind(InteractionContext context,
+        [OptionAttribute("user", "User to increment the pet score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
+        long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, nb);
+        await Controller.Score(context, user, CounterCategory.Wind, nb);
     }
 
-    [Command("pet")]
-    [Description("Adds a provided value to @someone’s pet score")]
-    public async Task ScorePetWind(CommandContext context,
-        [Description("User to increment the pet score of")]
-        DiscordMember member,
-        [Description("To increment by")] int nb)
-    {
-        await Controller.Score(context, member, CounterCategory.Wind, nb);
-    }
-
-    [Command("wind")]
-    [Description("Returns the value of @someone’s wind score")]
-    public async Task ScoreWind(CommandContext context,
-        [Description("User to know the wind score of")]
-        DiscordMember member)
-    {
-        await Controller.Consult(context, member, CounterCategory.Wind, null);
-    }
-
-    [Command("wind")]
-    [Description("Returns all wind scores")]
-    public async Task ScoreWind(CommandContext context)
+    [SlashCommand("all", "Get all wind scores")]
+    public async Task ScoreWind(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Wind);
     }
 
-    [Command("rot")]
-    [Description("Returns all wind scores")]
-    public async Task ScoreRot(CommandContext context)
-    {
-        await ScoreWind(context);
-    }
-
-    [Command("pet")]
-    [Description("Returns all wind scores")]
-    public async Task ScorePet(CommandContext context)
-    {
-        await ScoreWind(context);
-    }
-
-    [Command("wind")]
-    [Description("Adds a record to @someone’s wind history and increments their score")]
-    public async Task ScoreWind(CommandContext context,
-        [Description("User to increment the wind score of by 1")]
-        DiscordMember member,
-        [RemainingText] [Description("Reason for the increment")]
+    [SlashCommand("add", "Adds a record to someone’s wind history and increments their score")]
+    public async Task ScoreWind(InteractionContext context,
+        [OptionAttribute("user", "User to increment the wind score of by 1")]
+        DiscordUser user,
+        [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, reason);
+        await Controller.Score(context, user, CounterCategory.Wind, reason);
     }
 
-    [Command("rot")]
-    [Description("Adds a rot to @someone’s wind history and increments their score")]
-    public async Task ScoreRot(CommandContext context,
-        [Description("User to increment the wind score of by 1")]
-        DiscordMember member,
-        [RemainingText] [Description("Reason for the increment")]
+    [SlashCommand("rot", "Adds a rot to someone’s wind history and increments their score")]
+    public async Task ScoreRot(InteractionContext context,
+        [OptionAttribute("user", "User to increment the wind score of by 1")]
+        DiscordUser user,
+        [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, "(rot) " + reason);
+        await Controller.Score(context, user, CounterCategory.Wind, "(rot) " + reason);
     }
 
-    [Command("pet")]
-    [Description("Adds a pet to @someone’s wind history and increments their score")]
-    public async Task ScorePet(CommandContext context,
-        [Description("User to increment the wind score of by 1")]
-        DiscordMember member,
-        [RemainingText] [Description("Reason for the increment")]
+    [SlashCommand("pet", "Adds a pet to someone’s wind history and increments their score")]
+    public async Task ScorePet(InteractionContext context,
+        [OptionAttribute("user", "User to increment the wind score of by 1")]
+        DiscordUser user,
+        [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Wind, "(pet) " + reason);
+        await Controller.Score(context, user, CounterCategory.Wind, "(pet) " + reason);
     }
 }

@@ -52,6 +52,7 @@
         <PackageReference Include="DSharpPlus" Version="4.3.0" />
         <PackageReference Include="DSharpPlus.CommandsNext" Version="4.3.0" />
         <PackageReference Include="DSharpPlus.Interactivity" Version="4.3.0" />
+        <PackageReference Include="DSharpPlus.SlashCommands" Version="4.3.0" />
         <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
         <PackageReference Include="log4net" Version="2.0.12" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
@@ -68,7 +69,7 @@
         <Resource Include="Resources\Slenders.png" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Resources\grive" />
+        <Folder Include="Resources\grive" />
         <Content Include="Resources\grive\pigtures\pink.png" />
         <Content Include="Resources\grive\helluvazbin\red.png" />
         <Content Include="Resources\grive\music\sample.ogg" />

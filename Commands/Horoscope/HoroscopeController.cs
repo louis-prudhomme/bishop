@@ -3,33 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Helper;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+
+
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Horoscope;
 
 /// <summary>
 ///     Provide a command to send horoscopes to @users.
 /// </summary>
-public class HoroscopeController : BaseCommandModule
+public class HoroscopeController : ApplicationCommandModule
 {
-    public HoroscopeRepository Repository { private get; set; } = null!;
-
     private const string HoroscopeFilePath = "horoscopes.json";
 
     private static readonly HoroscopeDb Db = new JsonDeserializer<HoroscopeDb>(HoroscopeFilePath)
         .Get()
         .Result;
 
-    private readonly HoroscopeScraper _scraperService = new();
-
     private readonly Random _rand = new();
 
-    [Command("horoscope")]
-    [Aliases("Irma", "ho")]
-    [Description("Prints a horoscope for @sign")]
-    public async Task Predicting(CommandContext context,
-        [Description("Horoscope sign")] [RemainingText]
+    private readonly HoroscopeScraper _scraperService = new();
+    public HoroscopeRepository Repository { private get; set; } = null!;
+
+
+    private static List<string> Links => Db.Links;
+    private static List<HoroscopeSign> Signs => Db.Signs;
+
+    [SlashCommand("horoscope", "Prints a horoscope for @sign")]
+    public async Task Predicting(InteractionContext context,
+        [OptionAttribute("Sign", "plcaeholder")]
         string userSign)
     {
         var horoscopes = await Repository.FindAllAsync();
@@ -77,12 +79,8 @@ public class HoroscopeController : BaseCommandModule
             }
         }
 
-        await context.RespondAsync(response);
+        await context.CreateResponseAsync(response);
     }
-
-
-    private static List<string> Links => Db.Links;
-    private static List<HoroscopeSign> Signs => Db.Signs;
 
     private record HoroscopeDb(List<string> Links, List<HoroscopeSign> Signs);
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bishop.Helper.Extensions;
@@ -22,8 +21,11 @@ public static class EnumerableAdditions
         return acc;
     }
 
-    public static string JoinWithNewlines(this IEnumerable<string> source) => source.JoinWith("\n");
-    
+    public static string JoinWithNewlines(this IEnumerable<string> source)
+    {
+        return source.JoinWith("\n");
+    }
+
     public static string JoinWith(this IEnumerable<string> source, string separator)
     {
         if (source == null)
@@ -38,17 +40,17 @@ public static class EnumerableAdditions
             acc = string.Join(separator, acc, enumerator.Current);
         return acc;
     }
-    
+
     public static IEnumerable<int> CumulativeSum(this IEnumerable<int> sequence)
     {
         var sum = 0;
-        foreach(var item in sequence)
+        foreach (var item in sequence)
         {
             sum += item;
             yield return sum;
-        }        
+        }
     }
-    
+
     public static async Task<TResult> WhenAll<TSource, TResult>(this IEnumerable<Task<TSource>> self, Func<IEnumerable<TSource>, TResult> action)
     {
         if (self == null)

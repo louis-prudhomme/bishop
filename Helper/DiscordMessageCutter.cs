@@ -5,7 +5,8 @@ using DSharpPlus.Entities;
 
 namespace Bishop.Helper;
 
-public delegate Task<DiscordMessage> FollowUp(string paragraph);
+//FIXME: i do not work as of right now
+public delegate Task FollowUp(string paragraph);
 
 public static class DiscordMessageCutter
 {
@@ -32,6 +33,6 @@ public static class DiscordMessageCutter
         var paragraphs = DispatchIntoParagraphs(toSend);
 
         var next = initialNext;
-        foreach (var paragraph in paragraphs) next = (await next(paragraph)).RespondAsync;
+        //foreach (var paragraph in paragraphs) next = (await next(paragraph)).CreateResponseAsync;
     }
 }

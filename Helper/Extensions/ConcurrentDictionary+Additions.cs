@@ -14,4 +14,15 @@ public static class ConcurrentDictionaryAdditions
             (_, _) => value);
         return value;
     }
+
+    public static TValue? TryGet<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> self, TKey key) where TKey : notnull
+    {
+        self.TryGetValue(key, out var value);
+        return value;
+    }
+
+    public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> self, TKey key) where TKey : notnull
+    {
+        return self.TryRemove(key, out _);
+    }
 }

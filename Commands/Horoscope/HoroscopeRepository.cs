@@ -9,5 +9,7 @@ public class HoroscopeRepository : Repository<HoroscopeEntity>
 {
     private const string CollectionName = "horoscopes";
 
-    public HoroscopeRepository() : base(CollectionName){}
+    public HoroscopeRepository() : base(CollectionName)
+    {
+    }
 }

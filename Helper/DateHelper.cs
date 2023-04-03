@@ -12,6 +12,8 @@ public class DateHelper
     /// <returns><see cref="DateTime" /> representing the Bishop Epoch.</returns>
     public static readonly DateTime BishopEpoch = new(2021, 5, 28, 0, 0, 0, 0, DateTimeKind.Utc);
 
+    public static long CurrentEpoch => FromDateTimeToTimestamp(DateTime.Now);
+
     /// <summary>
     ///     Converts a unix timestamp to a <see cref="DateTime" />.
     ///     Should not be useful unless for debug purposes.
@@ -24,8 +26,6 @@ public class DateHelper
             .FromUnixTimeSeconds(timestamp)
             .LocalDateTime;
     }
-
-    public static long CurrentEpoch => FromDateTimeToTimestamp(DateTime.Now);
 
     /// <summary>
     ///     Converts a unix timestamp to a formatted date of the <c>dd/mm/yyyy</c> representation.

@@ -1,57 +1,51 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
-using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+
+
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 
 namespace Bishop.Commands.Record.Controller.Aliases;
 
-public class RassCounterController : BaseCommandModule
+[SlashCommandGroup("rass", "Interact with rass history")]
+public class RassCounterController : ApplicationCommandModule
 {
     public RecordController Controller { private get; set; } = null!;
 
-    [Command("rass")]
-    [Description("Adds a provided value to @someone’s rass score")]
-    public async Task ScoreRass(CommandContext context,
-        [Description("User to increment the rass score of")]
-        DiscordMember member,
-        [Description("To increment by")] int nb)
+    [SlashCommand("addmany", "Add many points to someone's rass history")]
+    public async Task ScoreRass(InteractionContext context,
+        [OptionAttribute("user", "User to increment the rass score of")]
+        DiscordUser user,
+        [OptionAttribute("points", "How many points ?")]
+        [Maximum(10)]
+        [Minimum(1)]
+        long nb)
     {
-        await Controller.Score(context, member, CounterCategory.Rass, nb);
+        await Controller.Score(context, user, CounterCategory.Rass, nb);
     }
 
-    [Command("rass")]
-    [Description("Returns the value of @someone’s rass score")]
-    public async Task ScoreRass(CommandContext context,
-        [Description("User to know the rass score of")]
-        DiscordMember member)
+    [SlashCommand("consult", "Get someone’s rass score")]
+    public async Task ScoreRass(InteractionContext context,
+        [OptionAttribute("user", "User to know the rass score of")]
+        DiscordUser user)
     {
-        await Controller.Consult(context, member, CounterCategory.Rass, null);
+        await Controller.Consult(context, user, CounterCategory.Rass);
     }
 
-    [Command("rass")]
-    [Description("Returns all rass scores")]
-    public async Task ScoreRass(CommandContext context)
+    [SlashCommand("all", "Get all rass scores")]
+    public async Task ScoreRass(InteractionContext context)
     {
-        try
-        {
-            await Controller.Score(context, CounterCategory.Rass);
-        }
-        catch (Exception e)
-        {
-            await context.RespondAsync(e.Message);
-        }
+        await Controller.Score(context, CounterCategory.Rass);
     }
 
-    [Command("rass")]
-    [Description("Adds a provided value to @someone’s rass score")]
-    public async Task ScoreRass(CommandContext context,
-        [Description("User to increment the rass score of by 1")]
-        DiscordMember member,
-        [RemainingText] [Description("Reason for the increment")]
+    [SlashCommand("add", "Add a record to someone's rass history")]
+    public async Task ScoreRass(InteractionContext context,
+        [OptionAttribute("user", "User to increment the rass score of by 1")]
+        DiscordUser user,
+        [OptionAttribute("reason", "Reason for the increment")]
         string reason)
     {
-        await Controller.Score(context, member, CounterCategory.Rass, reason);
+        await Controller.Score(context, user, CounterCategory.Rass, reason);
     }
 }

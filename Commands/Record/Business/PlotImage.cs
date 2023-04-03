@@ -7,9 +7,9 @@ namespace Bishop.Commands.Record.Business;
 
 public class PlotImage
 {
+    private readonly Guid _guid = new();
     private GenericChart.GenericChart _underlying;
-    private Guid _guid = new();
-    
+
     public PlotImage(GenericChart.GenericChart chart)
     {
         _underlying = chart;

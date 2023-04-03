@@ -13,35 +13,61 @@ public class RecordFormatter
 {
     public const string TabulatedNewline = "\n\t";
 
-    private string Singular(int number, string yes, string no) => number == 1 ? yes : no;
-
-    public string FormatRecordRankingUpdate(DiscordMember member, CounterCategory category, long score, long previousScore, string reason) =>
-        $"{member.Mention}'s {category.DisplayName()} score went from {previousScore} to **{score}** because {reason}";
-
-    public string FormatScoreUpdate(string motive) =>
-        $"«*{motive}*» was added to their history.";
-
-    public string FormatGhostScoreUpdate(int count) =>
-        $"**{count}** record{Singular(count, "", "s")} {Singular(count, "was", "were")} added to their history, for unknown reasons.";
-
-    public string FormatBrokenMilestone(long milestone) => $"A new milestone has been broken through: {milestone}! 🎉";
-
-    public string FormatRecordRanking(DiscordMember member, CounterCategory category, long score) =>
-        FormatRecordRanking(member.Username, category, score, null);
-
-    public string FormatRecordRanking(string username, CounterCategory category, long score, int? rank) =>
-        $"{GetFormattedRank(rank).IfEmpty("\t  ")}{username}’s {category.DisplayName()} ⇒ {score}";
-
-    private string GetFormattedRank(int? rank) => rank switch
+    private string Singular(int number, string yes, string no)
     {
-        0 => "🥇",
-        1 => "🥈",
-        2 => "🥉",
-        _ => string.Empty
-    };
+        return number == 1 ? yes : no;
+    }
 
-    public string FormatRecordWithCategory(RecordEntity toFormat) => FormatRecord(toFormat, true);
-    public string FormatRecord(RecordEntity toFormat) => FormatRecord(toFormat, false);
+    public string FormatRecordRankingUpdate(DiscordUser user, CounterCategory category, long score, long previousScore, string reason)
+    {
+        return $"{user.Mention}'s {category.DisplayName()} score went from {previousScore} to **{score}** because {reason}";
+    }
+
+    public string FormatScoreUpdate(string motive)
+    {
+        return $"«*{motive}*» was added to their history.";
+    }
+
+    public string FormatGhostScoreUpdate(int count)
+    {
+        return $"**{count}** record{Singular(count, "", "s")} {Singular(count, "was", "were")} added to their history, for unknown reasons.";
+    }
+
+    public string FormatBrokenMilestone(long milestone)
+    {
+        return $"A new milestone has been broken through: {milestone}! 🎉";
+    }
+
+    public string FormatRecordRanking(DiscordUser user, CounterCategory category, long score)
+    {
+        return FormatRecordRanking(user.Username, category, score, null);
+    }
+
+    public string FormatRecordRanking(string username, CounterCategory category, long score, int? rank)
+    {
+        return $"{GetFormattedRank(rank).IfEmpty("\t  ")}{username}’s {category.DisplayName()} ⇒ {score}";
+    }
+
+    private string GetFormattedRank(int? rank)
+    {
+        return rank switch
+        {
+            0 => "🥇",
+            1 => "🥈",
+            2 => "🥉",
+            _ => string.Empty
+        };
+    }
+
+    public string FormatRecordWithCategory(RecordEntity toFormat)
+    {
+        return FormatRecord(toFormat, true);
+    }
+
+    public string FormatRecord(RecordEntity toFormat)
+    {
+        return FormatRecord(toFormat, false);
+    }
 
     private string FormatRecord(RecordEntity toFormat, bool shouldIncludeCategory)
     {
@@ -59,21 +85,24 @@ public class RecordFormatter
             : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";
     }
 
-    public string FormatLongRecord(DiscordMember member, CounterCategory category, int ranking, long score, IEnumerable<RecordEntity> records)
+    public string FormatLongRecord(DiscordUser user, CounterCategory category, int ranking, long score, IEnumerable<RecordEntity> records)
     {
         var rank = GetFormattedRank(ranking);
         var formattedRank = rank.IsEmpty()
             ? $"**#{ranking + 1}**"
             : $"**#{ranking + 1}** {rank}";
 
-        return $"*{member.Mention}* has accumulated **{score}** points and ranks {formattedRank} in **{category.DisplayName()}**"
+        return $"*{user.Mention}* has accumulated **{score}** points and ranks {formattedRank} in **{category.DisplayName()}**"
                + "\n__Their last records are:__"
                + $"{TabulatedNewline}{records.Select(FormatRecord).JoinWith(TabulatedNewline)}";
     }
 
-    public string FormatProgression(DiscordMember member, CounterCategory category, double ratio, int recordsSince, DateTime since) => ratio switch
+    public string FormatProgression(DiscordUser user, CounterCategory category, double ratio, int recordsSince, DateTime since)
     {
-        0 => $"There's no progression for you in {category.DisplayName()} since {DateHelper.FromDateTimeToStringDate(since)}. How sad...",
-        _ => $"{member.Mention} gained {recordsSince} in {category.DisplayName()} points since {DateHelper.FromDateTimeToStringDate(since)}"
-    };
+        return ratio switch
+        {
+            0 => $"There's no progression for you in {category.DisplayName()} since {DateHelper.FromDateTimeToStringDate(since)}. How sad...",
+            _ => $"{user.Mention} gained {recordsSince} in {category.DisplayName()} points since {DateHelper.FromDateTimeToStringDate(since)}"
+        };
+    }
 }

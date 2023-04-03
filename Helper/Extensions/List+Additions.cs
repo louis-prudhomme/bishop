@@ -6,8 +6,8 @@ namespace Bishop.Helper.Extensions;
 
 public static class ListAdditions
 {
-    private static readonly Random Rand = new ();
-    
+    private static readonly Random Rand = new();
+
     public static T? Random<T>(this IList<T> self)
     {
         if (self == null)
@@ -16,5 +16,8 @@ public static class ListAdditions
         return self.Count == 0 ? default : self[Rand.Next(0, self.Count)];
     }
 
-    public static bool IsEmpty(this IList self) => self.Count == 0;
+    public static bool IsEmpty(this IList self)
+    {
+        return self.Count == 0;
+    }
 }
