@@ -32,7 +32,7 @@ public class MalfoyCounterController : ApplicationCommandModule
         await Controller.Consult(context, user, CounterCategory.Malfoy);
     }
 
-    [SlashCommand("all", "Get all malfoy scores")]
+    [SlashCommand("podium", "Get all malfoy scores")]
     public async Task ScoreMalfoy(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Malfoy);

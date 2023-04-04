@@ -32,7 +32,7 @@ public class SelCounterController : ApplicationCommandModule
         await Controller.Consult(context, user, CounterCategory.Sel);
     }
 
-    [SlashCommand("all", "Get all sel scores")]
+    [SlashCommand("podium", "Get all sel scores")]
     public async Task ScoreSel(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Sel);

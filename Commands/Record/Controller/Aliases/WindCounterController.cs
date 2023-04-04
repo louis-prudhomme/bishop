@@ -34,7 +34,7 @@ public class WindCounterController : ApplicationCommandModule
         await Controller.Score(context, user, CounterCategory.Wind, nb);
     }
 
-    [SlashCommand("all", "Get all wind scores")]
+    [SlashCommand("podium", "Get all wind scores")]
     public async Task ScoreWind(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Wind);

@@ -22,7 +22,7 @@ public class RacletteCounterController : ApplicationCommandModule
         await Controller.Consult(context, user, CounterCategory.Raclette);
     }
 
-    [SlashCommand("all", "Get all raclette scores")]
+    [SlashCommand("podium", "Get all raclette scores")]
     public async Task ScoreRaclette(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Raclette);

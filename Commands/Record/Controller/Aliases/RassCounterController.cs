@@ -33,7 +33,7 @@ public class RassCounterController : ApplicationCommandModule
         await Controller.Consult(context, user, CounterCategory.Rass);
     }
 
-    [SlashCommand("all", "Get all rass scores")]
+    [SlashCommand("podium", "Get all rass scores")]
     public async Task ScoreRass(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Rass);

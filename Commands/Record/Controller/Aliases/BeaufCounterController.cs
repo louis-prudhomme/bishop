@@ -32,7 +32,7 @@ public class BeaufCounterController : ApplicationCommandModule
         await Controller.Consult(context, user, CounterCategory.Beauf);
     }
 
-    [SlashCommand("all", "Get all beauf scores")]
+    [SlashCommand("podium", "Get all beauf scores")]
     public async Task ScoreBeauf(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Beauf);
