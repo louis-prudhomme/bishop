@@ -32,7 +32,7 @@ public class SauceCounterController : ApplicationCommandModule
         await Controller.Consult(context, user, CounterCategory.Sauce);
     }
 
-    [SlashCommand("all", "Get all sauce scores")]
+    [SlashCommand("podium", "Get all sauce scores")]
     public async Task ScoreSauce(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Sauce);

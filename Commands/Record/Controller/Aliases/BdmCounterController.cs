@@ -30,7 +30,7 @@ public class BdmCounterController : ApplicationCommandModule
         await Controller.Consult(context, user, CounterCategory.Bdm);
     }
 
-    [SlashCommand("all", "Get all bdm scores")]
+    [SlashCommand("podium", "Get all bdm scores")]
     public async Task ScoreBdm(InteractionContext context)
     {
         await Controller.Score(context, CounterCategory.Bdm);
