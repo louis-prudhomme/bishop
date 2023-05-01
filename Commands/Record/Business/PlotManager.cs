@@ -6,7 +6,6 @@ using Bishop.Helper;
 using Bishop.Helper.Extensions;
 using Microsoft.FSharp.Core;
 using Plotly.NET;
-using Plotly.NET.TraceObjects;
 
 namespace Bishop.Commands.Record.Business;
 
@@ -65,9 +64,9 @@ public class PlotManager
         var tags = GetListOfTagsForAbnormalBumps(allAdditions);
 
         var chart = Chart2D.Chart.Line(
-            x: allAdditions.Select(tuple => tuple.Date),
-            y: allAdditions.Select(tuple => tuple.Additions).CumulativeSum(),
-            ShowMarkers: true,
+            allAdditions.Select(tuple => tuple.Date),
+            allAdditions.Select(tuple => tuple.Additions).CumulativeSum(),
+            true,
             ShowLegend: false,
             MultiText: FSharpOption<IEnumerable<string>>.Some(tags),
             TextPosition: StyleParam.TextPosition.TopCenter);
@@ -75,10 +74,14 @@ public class PlotManager
         return new PlotImage(chart);
     }
 
-    public PlotImage CumulativeByCategory(List<RecordEntity> records)
+
+    public PlotImage CumulativeBy<TGroupedBy>(List<RecordEntity> records,
+        Func<RecordEntity, TGroupedBy> discriminator,
+        Func<TGroupedBy, string> getDisplayName,
+        Func<TGroupedBy, Color> getDisplayColor)
     {
         var charts = new List<GenericChart.GenericChart>();
-        var recordsByCategories = records.GroupBy(record => record.Category).ToList();
+        var recordsByCategories = records.GroupBy(discriminator).ToList();
         var timestamps = records.Select(record => record.Timestamp).ToList();
 
         var minimumDate = DateHelper.FromTimestampToDateTime(timestamps.Min());
@@ -93,11 +96,11 @@ public class PlotManager
                 allAdditions.Select(tuple => tuple.Date),
                 allAdditions.Select(tuple => tuple.Additions).CumulativeSum(),
                 false,
-                Name: recordsByCategory.Key.DisplayName(),
-                ShowLegend: true,
+                getDisplayName(recordsByCategory.Key),
+                true,
                 MultiText: FSharpOption<IEnumerable<string>>.Some(tags),
                 TextPosition: StyleParam.TextPosition.TopCenter,
-                LineColor: recordsByCategory.Key.ToColor());
+                LineColor: getDisplayColor(recordsByCategory.Key));
 
             charts.Add(chart);
         }
@@ -113,8 +116,8 @@ public class PlotManager
         var tags = GetListOfTagsForAbnormalBumps(allAdditions);
 
         var chart = Chart2D.Chart.Column(
-            values: allAdditions.Select(tuple => tuple.Additions),
-            Keys: FSharpOption<IEnumerable<string>>.Some(allAdditions.Select(tuple => tuple.Date)),
+            allAdditions.Select(tuple => tuple.Additions),
+            FSharpOption<IEnumerable<string>>.Some(allAdditions.Select(tuple => tuple.Date)),
             ShowLegend: false,
             MultiText: FSharpOption<IEnumerable<string>>.Some(tags),
             Base: FSharpOption<int>.None,
@@ -128,7 +131,7 @@ public class PlotManager
 
 internal static class CounterCategoryColorExtension
 {
-    internal static Color ToColor(this CounterCategory self)
+    internal static Color DisplayColor(this CounterCategory self)
     {
         return self switch
         {

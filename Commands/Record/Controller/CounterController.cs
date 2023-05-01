@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bishop.Commands.Record.Business;
 using Bishop.Commands.Record.Controller.Aliases;
 using Bishop.Commands.Record.Domain;
 using Bishop.Helper.Extensions;
@@ -41,7 +42,11 @@ public partial class RecordController
             };
             await context.CreateResponseAsync(builder);
 
-            using var figure = PlotManager.Cumulative(records).Image();
+            using var figure = PlotManager.CumulativeBy(
+                records,
+                record => record.Category,
+                record => record.DisplayName(),
+                record => record.DisplayColor()).Image();
             builder.AddFile(figure.Stream());
             await context.EditResponseAsync(new DiscordWebhookBuilder(builder));
         }
