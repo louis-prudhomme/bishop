@@ -148,6 +148,12 @@ public partial class RecordController
         [OptionAttribute("reason", "Context for the point")]
         string motive)
     {
+        if (int.TryParse(motive, out var result))
+        {
+            if (result is > 0 and < 11) await Score(context, user, category, result);
+            return;
+        }
+
         var record = new RecordEntity(user.Id, category, motive);
         await RecordAndCreateResponseAsync(context, user, category, new List<RecordEntity> {record});
     }
