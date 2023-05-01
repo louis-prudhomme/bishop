@@ -17,25 +17,33 @@ namespace Bishop.Commands.Record.Controller;
 /// </summary>
 public partial class RecordController
 {
-    // TODO give rank of user for each metric
     [SlashCommand("recap", "See every score of a user")]
     public async Task Score(InteractionContext context,
         [OptionAttribute("user", "User to know the scores of")]
         DiscordUser user)
     {
+        var records = await Manager.Find(user.Id);
         var scores = await Manager.FindScores(user.Id);
 
-        if (!scores.Any())
+        if (!records.Any())
         {
             await context.CreateResponseAsync($"No scores for user {user.Username}");
         }
         else
         {
-            var lines = scores
-                .Select(group => Formatter.FormatRecordRanking(user, group.Key, group.Value))
-                .JoinWith(RecordFormatter.TabulatedNewline);
+            var lines = await scores
+                .Select(async pair => (Category: pair.Key, Score: pair.Value, Rank: await Manager.FindRank(user.Id, pair.Key)))
+                .WhenAll(rankings => rankings.Select(ranking => Formatter.FormatSimpleRecordRanking(ranking.Rank, ranking.Category, ranking.Score)));
 
-            await context.CreateResponseAsync(lines);
+            var builder = new DiscordInteractionResponseBuilder
+            {
+                Content = Formatter.FormatRecap(user, lines)
+            };
+            await context.CreateResponseAsync(builder);
+
+            using var figure = PlotManager.Cumulative(records).Image();
+            builder.AddFile(figure.Stream());
+            await context.EditResponseAsync(new DiscordWebhookBuilder(builder));
         }
     }
 
