@@ -12,6 +12,7 @@ namespace Bishop.Commands.Record.Controller;
 public class RecordFormatter
 {
     public const string TabulatedNewline = "\n\t";
+    public const string RankTabulation = "\t  ";
 
     private string Singular(int number, string yes, string no)
     {
@@ -38,6 +39,13 @@ public class RecordFormatter
         return $"A new milestone has been broken through: {milestone}! 🎉";
     }
 
+    public string FormatSimpleRecordRanking(int rank, CounterCategory category, long score)
+    {
+        var formattedRank = GetFormattedRank(rank);
+        formattedRank = formattedRank == string.Empty ? RankTabulation : $"{formattedRank}";
+        return $"{formattedRank} **#{rank + 1}** in **{category.DisplayName()}** with **{score}** points";
+    }
+
     public string FormatRecordRanking(DiscordUser user, CounterCategory category, long score)
     {
         return FormatRecordRanking(user.Username, category, score, null);
@@ -45,7 +53,7 @@ public class RecordFormatter
 
     public string FormatRecordRanking(string username, CounterCategory category, long score, int? rank)
     {
-        return $"{GetFormattedRank(rank).IfEmpty("\t  ")}{username}’s {category.DisplayName()} ⇒ {score}";
+        return $"{GetFormattedRank(rank).IfEmpty(RankTabulation)}{username}’s {category.DisplayName()} ⇒ {score}";
     }
 
     private string GetFormattedRank(int? rank)
@@ -104,5 +112,10 @@ public class RecordFormatter
             0 => $"There's no progression for you in {category.DisplayName()} since {DateHelper.FromDateTimeToStringDate(since)}. How sad...",
             _ => $"{user.Mention} gained {recordsSince} in {category.DisplayName()} points since {DateHelper.FromDateTimeToStringDate(since)}"
         };
+    }
+
+    public string FormatRecap(DiscordUser user, IEnumerable<string> lines)
+    {
+        return $"__{user.Mention}'s full recap:__\n\t" + lines.JoinWith(TabulatedNewline);
     }
 }

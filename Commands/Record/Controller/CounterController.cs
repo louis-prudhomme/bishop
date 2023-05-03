@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bishop.Commands.Record.Business;
 using Bishop.Commands.Record.Controller.Aliases;
 using Bishop.Commands.Record.Domain;
 using Bishop.Helper.Extensions;
@@ -17,25 +18,37 @@ namespace Bishop.Commands.Record.Controller;
 /// </summary>
 public partial class RecordController
 {
-    // TODO give rank of user for each metric
     [SlashCommand("recap", "See every score of a user")]
     public async Task Score(InteractionContext context,
         [OptionAttribute("user", "User to know the scores of")]
         DiscordUser user)
     {
+        var records = await Manager.Find(user.Id);
         var scores = await Manager.FindScores(user.Id);
 
-        if (!scores.Any())
+        if (!records.Any())
         {
             await context.CreateResponseAsync($"No scores for user {user.Username}");
         }
         else
         {
-            var lines = scores
-                .Select(group => Formatter.FormatRecordRanking(user, group.Key, group.Value))
-                .JoinWith(RecordFormatter.TabulatedNewline);
+            var lines = await scores
+                .Select(async pair => (Category: pair.Key, Score: pair.Value, Rank: await Manager.FindRank(user.Id, pair.Key)))
+                .WhenAll(rankings => rankings.Select(ranking => Formatter.FormatSimpleRecordRanking(ranking.Rank, ranking.Category, ranking.Score)));
 
-            await context.CreateResponseAsync(lines);
+            var builder = new DiscordInteractionResponseBuilder
+            {
+                Content = Formatter.FormatRecap(user, lines)
+            };
+            await context.CreateResponseAsync(builder);
+
+            using var figure = PlotManager.CumulativeBy(
+                records,
+                record => record.Category,
+                record => record.DisplayName(),
+                record => record.DisplayColor()).Image();
+            builder.AddFile(figure.Stream());
+            await context.EditResponseAsync(new DiscordWebhookBuilder(builder));
         }
     }
 
@@ -135,6 +148,12 @@ public partial class RecordController
         [OptionAttribute("reason", "Context for the point")]
         string motive)
     {
+        if (int.TryParse(motive, out var result))
+        {
+            if (result is > 0 and < 11) await Score(context, user, category, result);
+            return;
+        }
+
         var record = new RecordEntity(user.Id, category, motive);
         await RecordAndCreateResponseAsync(context, user, category, new List<RecordEntity> {record});
     }
