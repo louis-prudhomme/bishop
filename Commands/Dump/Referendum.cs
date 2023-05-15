@@ -39,7 +39,7 @@ public class Referendum : ApplicationCommandModule
     public async Task Vote(InteractionContext context,
         [OptionAttribute("options", "Options to choose from, separated with spaces")]
         string args,
-        [Maximum(10)] [Minimum(1)] [OptionAttribute("while", "Time for the vote, in minutes (< 10)")]
+        [Maximum(15)] [Minimum(1)] [OptionAttribute("while", "Time for the vote, in minutes (< 15)")]
         long during)
     {
         try
@@ -75,10 +75,9 @@ public class Referendum : ApplicationCommandModule
             };
             announcement.AddComponents(buttons);
 
-            options.ForEach(option => Booth.Register(option.Id));
             await context.CreateResponseAsync(announcement);
 
-            await PressurePeopleForSomeTime(context, TimeSpan.FromSeconds(60));
+            await PressurePeopleForSomeTime(context, TimeSpan.FromMinutes(during));
 
             var (winners, max) = Booth.GetWinnersWithinAndScrap(options.Select(option => option.Id).ToList());
             var announcementModifier = new DiscordWebhookBuilder(announcement.WithContent(announcement.Content + "\n*This vote is closed.*"));
@@ -136,7 +135,8 @@ public class Referendum : ApplicationCommandModule
                 ? $"{remains.TotalSeconds} seconds"
                 : $"{remains.TotalMinutes} minutes";
 
-            var message = await context.FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent(formattedRemaining + " left"));
+            var message = await context.FollowUpAsync(new DiscordFollowupMessageBuilder()
+                .WithContent(formattedRemaining + " left"));
             await Task.Delay(wait);
             await context.DeleteFollowupAsync(message.Id);
 
@@ -152,11 +152,6 @@ internal record VoteAnswer(string OptionId, ulong UserId);
 public class VoteAnswerEventHandler
 {
     private readonly List<VoteAnswer> _answers = new();
-
-    public void Register(string id)
-    {
-        //_answers.Add(new (id, ));
-    }
 
     public (List<string>, int) GetWinnersWithinAndScrap(List<string> ids)
     {
@@ -174,9 +169,9 @@ public class VoteAnswerEventHandler
             ordered.First().Total);
     }
 
-    public Task Handle(DiscordClient client, ComponentInteractionCreateEventArgs args)
+    public async Task Handle(DiscordClient client, ComponentInteractionCreateEventArgs args)
     {
         _answers.Add(new VoteAnswer(args.Id, args.User.Id));
-        return Task.CompletedTask;
+        await args.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
     }
 }
