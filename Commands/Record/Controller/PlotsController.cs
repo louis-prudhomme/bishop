@@ -26,7 +26,8 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory category)
     {
         var records = await Manager.Find(user.Id, category);
@@ -47,7 +48,8 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory category)
     {
         var records = await Manager.Find(user.Id, category);

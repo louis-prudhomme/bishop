@@ -5,7 +5,6 @@ namespace Bishop.Commands.Record.Domain;
 
 /// <summary>
 ///     Represent every possible category for <see cref="RecordEntity" />.
-///     <remarks>ORDERS OF THE KEYS MUST NOT CHANGE AS ENUMS ARE CONVERTED TO INT WITH KEY POSITION</remarks>
 /// </summary>
 public enum CounterCategory
 {
@@ -16,7 +15,9 @@ public enum CounterCategory
     Rass = 4,
     Malfoy = 5,
     Wind = 6,
-    Raclette = 7
+    Raclette = 7,
+    Rot = 8,
+    Pet = 9,
 }
 
 public static class EnumRelations
@@ -30,7 +31,9 @@ public static class EnumRelations
         {CounterCategory.Rass, "rass"},
         {CounterCategory.Malfoy, "malfoy"},
         {CounterCategory.Wind, "wind"},
-        {CounterCategory.Raclette, "raclette"}
+        {CounterCategory.Raclette, "raclette"},
+        {CounterCategory.Rot, "rot"},
+        {CounterCategory.Pet, "pet"},
     };
 
     public static string DisplayName(this CounterCategory category)

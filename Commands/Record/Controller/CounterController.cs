@@ -63,7 +63,8 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory category)
     {
         var scores = await Manager.FindScores(category);
@@ -100,7 +101,8 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory category)
     {
         var score = await Manager.Count(user.Id, category);
@@ -121,7 +123,8 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory category,
         [OptionAttribute("points", "How many points ?")] [Maximum(10)] [Minimum(1)]
         long nb)
@@ -143,7 +146,6 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category,
         [OptionAttribute("reason", "Context for the point")]
         string motive)
