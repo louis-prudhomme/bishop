@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Bishop.Commands.Record.Domain;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 
@@ -31,5 +32,17 @@ public class WindCounterController : ApplicationCommandModule
         long nb = 1)
     {
         await Controller.Score(context, user, CounterCategory.Pet, nb);
+    }
+
+    [ContextMenu(ApplicationCommandType.UserContextMenu, "Add a rot")]
+    public async Task AddRot(ContextMenuContext context)
+    {
+        await Controller.AddMany(context, context.TargetUser, CounterCategory.Rot, 1);
+    }
+
+    [ContextMenu(ApplicationCommandType.UserContextMenu, "Add a pet")]
+    public async Task AddPet(ContextMenuContext context)
+    {
+        await Controller.AddMany(context, context.TargetUser, CounterCategory.Rot, 1);
     }
 }

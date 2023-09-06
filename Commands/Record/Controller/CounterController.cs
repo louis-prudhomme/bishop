@@ -130,8 +130,7 @@ public partial class RecordController
         [OptionAttribute("points", "How many points ?")] [Maximum(10)] [Minimum(1)]
         long nb)
     {
-        var records = Manager.CreateGhostRecords(user, category, nb);
-        await RecordAndCreateResponseAsync(context, user, category, records);
+        await AddMany(context, user, category, nb);
     }
 
     [SlashCommand("add", "Add a record to someone's history")]
@@ -161,7 +160,13 @@ public partial class RecordController
         await RecordAndCreateResponseAsync(context, user, category, new List<RecordEntity> {record});
     }
 
-    private async Task RecordAndCreateResponseAsync(InteractionContext context, DiscordUser user, CounterCategory category, List<RecordEntity> records)
+    public async Task AddMany(BaseContext context, DiscordUser user, CounterCategory category, long nb)
+    {
+        var records = Manager.CreateGhostRecords(user, category, nb);
+        await RecordAndCreateResponseAsync(context, user, category, records);
+    }
+
+    private async Task RecordAndCreateResponseAsync(BaseContext context, DiscordUser user, CounterCategory category, List<RecordEntity> records)
     {
         var (previous, current, nextMilestone) = await Manager.Save(user.Id, category, records);
 
