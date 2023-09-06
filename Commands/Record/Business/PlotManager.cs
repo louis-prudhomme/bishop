@@ -141,8 +141,9 @@ internal static class CounterCategoryColorExtension
             CounterCategory.Beauf => Color.fromKeyword(ColorKeyword.Chartreuse),
             CounterCategory.Rass => Color.fromKeyword(ColorKeyword.Tan),
             CounterCategory.Malfoy => Color.fromKeyword(ColorKeyword.Crimson),
-            CounterCategory.Wind => Color.fromKeyword(ColorKeyword.Brown),
             CounterCategory.Raclette => Color.fromKeyword(ColorKeyword.Beige),
+            CounterCategory.Pet => Color.fromKeyword(ColorKeyword.Brown),
+            CounterCategory.Rot => Color.fromKeyword(ColorKeyword.Olive),
             _ => throw new ArgumentOutOfRangeException(nameof(self), self, null)
         };
     }

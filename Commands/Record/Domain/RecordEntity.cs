@@ -9,12 +9,12 @@ namespace Bishop.Commands.Record.Domain;
 /// </summary>
 public class RecordEntity : DbEntity
 {
-    public RecordEntity(ulong DiscordUserId, CounterCategory category, string? motive)
+    public RecordEntity(ulong discordUserId, CounterCategory category, string? motive)
     {
         RecordedAt = DateTime.Now;
         Timestamp = DateHelper.FromDateTimeToTimestamp(RecordedAt);
 
-        UserId = DiscordUserId;
+        UserId = discordUserId;
         Category = category;
         Motive = motive;
     }
