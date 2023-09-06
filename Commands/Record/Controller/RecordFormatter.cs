@@ -21,6 +21,7 @@ public class RecordFormatter
 
     public string FormatRecordRankingUpdate(DiscordUser user, CounterCategory category, long score, long previousScore, string reason)
     {
+        if (category == CounterCategory.Rot || category == CounterCategory.Pet) return $"{user.Mention}'s {category.DisplayName()} score went from {previousScore} to **{score}**.";
         return $"{user.Mention}'s {category.DisplayName()} score went from {previousScore} to **{score}** because {reason}";
     }
 
@@ -39,11 +40,12 @@ public class RecordFormatter
         return $"A new milestone has been broken through: {milestone}! 🎉";
     }
 
-    public string FormatSimpleRecordRanking(int rank, CounterCategory category, long score)
+    public string FormatSimpleRecordRanking(int? rank, CounterCategory category, long score)
     {
         var formattedRank = GetFormattedRank(rank);
         formattedRank = formattedRank == string.Empty ? RankTabulation : $"{formattedRank}";
-        return $"{formattedRank} **#{rank + 1}** in **{category.DisplayName()}** with **{score}** points";
+        var numericRank = rank == null ? "Not ranked" : $"**#{rank + 1}**";
+        return $"{formattedRank} {numericRank} in **{category.DisplayName()}** with **{score}** points";
     }
 
     public string FormatRecordRanking(DiscordUser user, CounterCategory category, long score)
@@ -93,12 +95,13 @@ public class RecordFormatter
             : $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)}";
     }
 
-    public string FormatLongRecord(DiscordUser user, CounterCategory category, int ranking, long score, IEnumerable<RecordEntity> records)
+    public string FormatLongRecord(DiscordUser user, CounterCategory category, int? ranking, long score, IEnumerable<RecordEntity> records)
     {
         var rank = GetFormattedRank(ranking);
+        var numericRank = ranking == null ? "Not ranked" : $"**#{rank + 1}**";
         var formattedRank = rank.IsEmpty()
-            ? $"**#{ranking + 1}**"
-            : $"**#{ranking + 1}** {rank}";
+            ? $"{numericRank}"
+            : $"{numericRank} {rank}";
 
         return $"*{user.Mention}* has accumulated **{score}** points and ranks {formattedRank} in **{category.DisplayName()}**"
                + "\n__Their last records are:__"

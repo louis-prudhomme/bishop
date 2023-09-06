@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,12 +44,14 @@ public class RecordManager
         return (await Repository.CountByUserGroupByCategory(userId)).GetValueOrDefault(category);
     }
 
-    public async Task<int> FindRank(ulong userId, CounterCategory category)
+    public async Task<int?> FindRank(ulong userId, CounterCategory category)
     {
-        return RankScores((await Repository.CountByCategoryGroupByUser(category))
+        var namedRanking = RankScores((await Repository.CountByCategoryGroupByUser(category))
                 .Select(pair => (UserId: pair.Key, Score: pair.Value)))
-            .First(tuple => tuple.Key == userId)
-            .Ranking;
+            .FirstOrDefault(tuple => tuple.Key == userId);
+        return namedRanking.Equals(default)
+            ? null
+            : namedRanking.Ranking;
     }
 
     public async Task<Dictionary<CounterCategory, long>> FindScores(ulong userId)

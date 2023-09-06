@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bishop.Commands.Record.Business;
@@ -63,7 +64,8 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory category)
     {
         var scores = await Manager.FindScores(category);
@@ -100,7 +102,8 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory category)
     {
         var score = await Manager.Count(user.Id, category);
@@ -121,13 +124,13 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory category,
         [OptionAttribute("points", "How many points ?")] [Maximum(10)] [Minimum(1)]
         long nb)
     {
-        var records = Manager.CreateGhostRecords(user, category, nb);
-        await RecordAndCreateResponseAsync(context, user, category, records);
+        await AddMany(context, user, category, nb);
     }
 
     [SlashCommand("add", "Add a record to someone's history")]
@@ -143,7 +146,6 @@ public partial class RecordController
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category,
         [OptionAttribute("reason", "Context for the point")]
         string motive)
@@ -158,7 +160,13 @@ public partial class RecordController
         await RecordAndCreateResponseAsync(context, user, category, new List<RecordEntity> {record});
     }
 
-    private async Task RecordAndCreateResponseAsync(InteractionContext context, DiscordUser user, CounterCategory category, List<RecordEntity> records)
+    public async Task AddMany(BaseContext context, DiscordUser user, CounterCategory category, long nb)
+    {
+        var records = Manager.CreateGhostRecords(user, category, nb);
+        await RecordAndCreateResponseAsync(context, user, category, records);
+    }
+
+    private async Task RecordAndCreateResponseAsync(BaseContext context, DiscordUser user, CounterCategory category, List<RecordEntity> records)
     {
         var (previous, current, nextMilestone) = await Manager.Save(user.Id, category, records);
 

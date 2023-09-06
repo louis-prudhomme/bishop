@@ -47,7 +47,6 @@ public partial class RecordController : ApplicationCommandModule
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category)
     {
         var picked = (await Manager.Find(category)).Random();
@@ -69,7 +68,6 @@ public partial class RecordController : ApplicationCommandModule
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category
     )
     {
@@ -108,7 +106,8 @@ public partial class RecordController : ApplicationCommandModule
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
+        [Choice("Rot", (int) CounterCategory.Rot)]
+        [Choice("Pet", (int) CounterCategory.Pet)]
         CounterCategory counterCategory,
         [OptionAttribute("since", "Date from which compute progression")]
         TimeSpan? span
@@ -165,7 +164,6 @@ public partial class RecordController : ApplicationCommandModule
         [Choice("Rass", (int) CounterCategory.Rass)]
         [Choice("Sauce", (int) CounterCategory.Sauce)]
         [Choice("Sel", (int) CounterCategory.Sel)]
-        [Choice("Wind", (int) CounterCategory.Wind)]
         CounterCategory category
     )
     {
