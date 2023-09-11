@@ -150,7 +150,7 @@ public partial class RecordController
         [OptionAttribute("reason", "Context for the point")]
         string motive)
     {
-        if (int.TryParse(motive, out var result))
+        if (int.TryParse(motive, out var result) && category != CounterCategory.Raclette)
         {
             if (result is > 0 and < 11) await Score(context, user, category, result);
             return;
