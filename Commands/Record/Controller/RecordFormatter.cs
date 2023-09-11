@@ -21,7 +21,7 @@ public class RecordFormatter
 
     public string FormatRecordRankingUpdate(DiscordUser user, CounterCategory category, long score, long previousScore, string reason)
     {
-        if (category == CounterCategory.Rot || category == CounterCategory.Pet) return $"{user.Mention}'s {category.DisplayName()} score went from {previousScore} to **{score}**.";
+        if (category == CounterCategory.Rot || category == CounterCategory.Pet || category == CounterCategory.Raclette) return $"{user.Mention}'s {category.DisplayName()} score went from {previousScore} to **{score}**.";
         return $"{user.Mention}'s {category.DisplayName()} score went from {previousScore} to **{score}** because {reason}";
     }
 
@@ -87,8 +87,8 @@ public class RecordFormatter
 
         if (toFormat.Category == CounterCategory.Raclette)
             reason = TryParse(toFormat.Motive, out var motiveLong)
-                ? "*Unknown Raclette*"
-                : $"*« Raclette of {DateHelper.FromTimestampToStringDate(motiveLong)} »*";
+                ? $"*« Raclette of {DateHelper.FromTimestampToStringDate(motiveLong)} »*"
+                : "*Unknown Raclette*";
 
         return shouldIncludeCategory
             ? $"{reason} – {DateHelper.FromDateTimeToStringDate(toFormat.RecordedAt)} in **{toFormat.Category.DisplayName()}**"
